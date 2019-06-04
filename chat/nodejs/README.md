@@ -1,4 +1,4 @@
-# Browser based chat
+# Nodejs based chat
 
 ## Setup
 ```sh
