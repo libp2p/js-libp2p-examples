@@ -3,6 +3,21 @@ import createLibp2p from './libp2p-bundle'
 import pull from 'pull-stream'
 import Chat from '../../common/chat'
 
+const getOrCreatePeerInfo = () => {
+  let peerId = null
+  try {
+    peerId = JSON.parse(localStorage.getItem('peerId'))
+  } catch (err) {
+    console.log('Could not get the stored peer id, a new one will be generated')
+  }
+
+  PeerInfo.create(peerId || peerInfoCreatedHandler, peerInfoCreatedHandler)
+}
+
+export async function libp2p () {
+
+}
+
 (() => {
   let peerId = null
   try {

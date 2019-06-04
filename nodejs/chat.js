@@ -1,9 +1,25 @@
 const protons = require('protons')
 
-const { Message } = protons(`
-message Message {
-  optional bytes data = 1;
-  optional int64 created = 2;
+const { Request } = protons(`
+message Request {
+  enum Type {
+    SEND_MESSAGE = 0;
+    UPDATE_PEER = 1;
+  }
+
+  required Type type = 0;
+  optional SendMessage sendMessage = 1;
+  optional UpdatePeer updatePeer = 2;
+}
+
+message SendMessage {
+  required bytes data = 0;
+  required int64 created = 1;
+  required bytes id = 2;
+}
+
+message UpdatePeer {
+  optional bytes userHandle = 0;
 }
 `)
 
@@ -20,14 +36,23 @@ class Chat {
     this.messageHandler = messageHandler
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
+
+    // Join if libp2p is already on
+    if (this.libp2p.isStarted()) this.join()
   }
 
+  /**
+   * Handler that is run when `this.libp2p` starts
+   */
   onStart () {
     this.join()
   }
 
+  /**
+   * Handler that is run when `this.libp2p` stops
+   */
   onStop () {
-    // TODO: Do we need to do anything here?
+    this.leave()
   }
 
   /**
@@ -38,11 +63,16 @@ class Chat {
   join () {
     this.libp2p.pubsub.subscribe(this.topic, null, (message) => {
       try {
-        const msg = Message.decode(message.data)
-        this.messageHandler({
-          from: message.from,
-          message: msg
-        })
+        const request = Request.decode(message.data)
+        switch (request.type) {
+          case Request.Type.UPDATE_PEER:
+            // TODO: Add username update
+          default:
+            this.messageHandler({
+              from: message.from,
+              message: request.sendMessage
+            })
+        }
       } catch (err) {
         console.error(err)
       }
@@ -65,12 +95,14 @@ class Chat {
    * @param {function(Error)} callback Called once the publish is complete
    */
   send (message, callback) {
-    const msg = Message.encode({
-      data: Buffer.from(message),
-      created: Date.now()
+    const msg = Request.encode({
+      type: Request.Type.SEND_MESSAGE,
+      sendMessage: {
+        id: (~~(Math.random() * 1e9)).toString(36) + Date.now(),
+        data: Buffer.from(message),
+        created: Date.now()
+      }
     })
-
-    console.log('Send:', msg)
 
     this.libp2p.pubsub.publish(this.topic, msg, (err) => {
       if (err) return callback(err)

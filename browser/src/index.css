@@ -1,0 +1,19 @@
+@import 'tachyons';
+
+@font-face {
+  font-family: 'Nexa';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Nexa_Free_Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Nexa';
+  font-style: bold;
+  font-weight: 700;
+  src: url('fonts/Nexa_Free_Bold.otf') format('opentype');
+}
+
+.nexa { font-family: 'Nexa', 'Verdana', system-ui, sans-serif; }
+
+.bg-dark-blue { background-color: #14162D; }
