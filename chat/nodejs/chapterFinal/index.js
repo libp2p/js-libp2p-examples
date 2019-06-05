@@ -15,10 +15,12 @@ const MDNS = require('libp2p-mdns')
 // DHT
 const KademliaDHT = require('libp2p-kad-dht')
 
-const pull = require('pull-stream')
 const PeerInfo = require('peer-info')
 const idJSON = require('../id.json')
 const Chat = require('./chat')
+
+// Chat protocol
+const ChatProtocol = require('./chat-protocol')
 
 const TOPIC = '/libp2p/chat/ipfs-camp/2019'
 let chat
@@ -31,29 +33,35 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
   peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/63786/ws')
 
   // Create the node
-  const bootstrapNode = createBootstrapNode(peerInfo)
+  const libp2p = createBootstrapNode(peerInfo)
 
-  bootstrapNode.handle('/libp2p/chat/1.0.0', (_, stream) => {
-    pull(
-      pull.values([Buffer.from('response')]),
-      stream,
-      pull.collect((err, message) => {
-        if (err) return console.error(err)
-        console.log(String(message))
+  // Add chat handler
+  libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
+
+  // Set up our input handler
+  process.stdin.on('data', (message) => {
+    // Iterate over all peers, and send messages to peers we are connected to
+    libp2p.peerBook.getAllArray().forEach(peerInfo => {
+      // Don't send messages if we're not connected
+      if (!peerInfo.isConnected()) return
+
+      libp2p.dialProtocol(peerInfo, ChatProtocol.PROTOCOL, (err, stream) => {
+        if (err) return console.error('Could not negotiate chat protocol stream with peer', err)
+        ChatProtocol.send(message, stream)
       })
-    )
+    })
   })
 
-  chat = new Chat(bootstrapNode, TOPIC, ({ from, message }) => {
+  chat = new Chat(libp2p, TOPIC, ({ from, message }) => {
     console.log(`${from.substring(0, 6)}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
   })
 
   // Start the node
-  bootstrapNode.start((err) => {
+  libp2p.start((err) => {
     if (err) throw err
 
     console.log('Node started with addresses:')
-    bootstrapNode.peerInfo.multiaddrs.forEach(ma => console.log(ma.toString()))
+    libp2p.peerInfo.multiaddrs.forEach(ma => console.log(ma.toString()))
   })
 
   process.stdin.on('data', (message) => {
