@@ -57,8 +57,11 @@ PeerInfo.create((err, peerInfo) => {
 
   const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
     let fromMe = from === libp2p.peerInfo.id.toB58String()
-    let user = fromMe ? 'Me' : from.substring(0, 6)
-    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}${PubsubChat.CLEARLINE}`)
+    let user = from.substring(0, 6)
+    if (pubsubChat.userHandles.has(from)) {
+      user = pubsubChat.userHandles.get(from)
+    }
+    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
   })
 
   // Listener for peer connection events
@@ -68,6 +71,10 @@ PeerInfo.create((err, peerInfo) => {
 
   // Set up our input handler
   process.stdin.on('data', (message) => {
+    message = message.slice(0, -1)
+    // If there was a command, exit early
+    if (pubsubChat.checkCommand(message)) return
+
     // Publish the message
     pubsubChat.send(message, (err) => {
       if (err) console.error('Could not publish chat', err)

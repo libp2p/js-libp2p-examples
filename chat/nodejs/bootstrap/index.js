@@ -17,12 +17,12 @@ const KademliaDHT = require('libp2p-kad-dht')
 
 const PeerInfo = require('peer-info')
 const idJSON = require('../id.json')
-const Chat = require('./chat')
+const PubsubChat = require('./chat')
 
 // Chat protocol
 const ChatProtocol = require('./chat-protocol')
 
-let chat
+let pubsubChat
 
 PeerInfo.create(idJSON, (err, peerInfo) => {
   if (err) throw err
@@ -51,9 +51,13 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
     })
   })
 
-  chat = new Chat(libp2p, Chat.TOPIC, ({ from, message }) => {
-    let user = from === libp2p.peerInfo.id.toB58String() ? 'Me' : from.substring(0, 6)
-    console.log(`${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
+  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
+    let fromMe = from === libp2p.peerInfo.id.toB58String()
+    let user = from.substring(0, 6)
+    if (pubsubChat.userHandles.has(from)) {
+      user = pubsubChat.userHandles.get(from)
+    }
+    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
   })
 
   // Start the node
@@ -64,11 +68,15 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
     libp2p.peerInfo.multiaddrs.forEach(ma => console.log(ma.toString()))
   })
 
+  // Set up our input handler
   process.stdin.on('data', (message) => {
-    chat.send(message, (err) => {
-      if (err) {
-        console.error('Publish error', err)
-      }
+    message = message.slice(0, -1)
+    // If there was a command, exit early
+    if (pubsubChat.checkCommand(message)) return
+
+    // Publish the message
+    pubsubChat.send(message, (err) => {
+      if (err) console.error('Could not publish chat', err)
     })
   })
 })
