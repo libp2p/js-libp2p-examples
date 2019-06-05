@@ -6,6 +6,8 @@ npm ci
 ```
 
 ## Run
+Each chapter can be run via:
+
 ```sh
-npm start
+node index.js
 ```

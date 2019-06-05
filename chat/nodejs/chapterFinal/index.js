@@ -17,7 +17,7 @@ const KademliaDHT = require('libp2p-kad-dht')
 
 const pull = require('pull-stream')
 const PeerInfo = require('peer-info')
-const idJSON = require('./id.json')
+const idJSON = require('../id.json')
 const Chat = require('./chat')
 
 const TOPIC = '/libp2p/chat/ipfs-camp/2019'
