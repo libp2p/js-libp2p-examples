@@ -22,7 +22,6 @@ const Chat = require('./chat')
 // Chat protocol
 const ChatProtocol = require('./chat-protocol')
 
-const TOPIC = '/libp2p/chat/ipfs-camp/2019'
 let chat
 
 PeerInfo.create(idJSON, (err, peerInfo) => {
@@ -42,8 +41,8 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
   process.stdin.on('data', (message) => {
     // Iterate over all peers, and send messages to peers we are connected to
     libp2p.peerBook.getAllArray().forEach(peerInfo => {
-      // Don't send messages if we're not connected
-      if (!peerInfo.isConnected()) return
+      // Don't send messages if we're not connected or they dont support the chat protocol
+      if (!peerInfo.isConnected() || !peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
 
       libp2p.dialProtocol(peerInfo, ChatProtocol.PROTOCOL, (err, stream) => {
         if (err) return console.error('Could not negotiate chat protocol stream with peer', err)
@@ -52,8 +51,9 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
     })
   })
 
-  chat = new Chat(libp2p, TOPIC, ({ from, message }) => {
-    console.log(`${from.substring(0, 6)}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
+  chat = new Chat(libp2p, Chat.TOPIC, ({ from, message }) => {
+    let user = from === libp2p.peerInfo.id.toB58String() ? 'Me' : from.substring(0, 6)
+    console.log(`${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
   })
 
   // Start the node
