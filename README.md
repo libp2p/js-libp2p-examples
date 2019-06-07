@@ -1,4 +1,4 @@
-Chat Example
+JS Libp2p Examples
 ======
 
-TODO
+- [Chat](./chat)

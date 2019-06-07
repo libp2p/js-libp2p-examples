@@ -110,7 +110,7 @@ class Chat {
   }
 
   /**
-   *
+   * Publishes the given `message` to pubsub peers
    * @param {Buffer|string} message The chat message to send
    * @param {function(Error)} callback Called once the publish is complete
    */

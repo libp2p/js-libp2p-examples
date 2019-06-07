@@ -1,7 +1,7 @@
 'use strict'
 
 // Libp2p Core
-const Libp2p = require('libp2p')
+const { createLibp2p } = require('libp2p')
 // Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
@@ -10,27 +10,21 @@ const Mplex = require('pull-mplex')
 // Connection Encryption
 const Secio = require('libp2p-secio')
 
-// PeerInfo, required when creating a libp2p instance
-const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
 
-// Generate our PeerInfo
-PeerInfo.create((err, peerInfo) => {
+// Create the Node
+createLibp2p({
+  modules: {
+    transport: [ TCP, Websockets ],
+    streamMuxer: [ Mplex ],
+    connEncryption: [ Secio ]
+  }
+}, (err, libp2p) => {
   if (err) throw err
 
   // Wildcard listen on TCP and Websocket
-  peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
-  peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
-
-  // Create the node
-  const libp2p = new Libp2p({
-    peerInfo,
-    modules: {
-      transport: [ TCP, Websockets ],
-      streamMuxer: [ Mplex ],
-      connEncryption: [ Secio ]
-    }
-  })
+  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
+  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
 
   // Listener for peer connection events
   libp2p.on('peer:connect', (peerInfo) => {

@@ -115,6 +115,11 @@ class Chat {
     return false
   }
 
+  /**
+   * Sends a message over pubsub to update the user handle
+   * to the provided `name`.
+   * @param {Buffer|string} name Username to change to
+   */
   updatePeer (name) {
     const msg = Request.encode({
       type: Request.Type.UPDATE_PEER,
@@ -129,7 +134,7 @@ class Chat {
   }
 
   /**
-   *
+   * Publishes the given `message` to pubsub peers
    * @param {Buffer|string} message The chat message to send
    * @param {function(Error)} callback Called once the publish is complete
    */
