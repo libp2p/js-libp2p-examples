@@ -6,7 +6,7 @@ and includes an overview of Transports.
 
 ## Setup
 ```sh
-npm ci
+npm i
 ```
 
 ## Run
