@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "libp2p": "^0.25.3",
+    "libp2p": "^0.25.4",
     "libp2p-bootstrap": "^0.9.7",
     "libp2p-floodsub": "^0.16.1",
     "libp2p-kad-dht": "^0.15.2",
