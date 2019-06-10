@@ -15,5 +15,22 @@
 }
 
 .nexa { font-family: 'Nexa', 'Verdana', system-ui, sans-serif; }
-
 .bg-dark-blue { background-color: #14162D; }
+
+
+.chat-header {
+  font-size: 0.8em;
+}
+.chat-body {
+  margin: 1em 0;
+}
+.chat-body p {
+  margin: 0.25em 0;
+}
+.chat-time {
+  float: right;
+}
+.right { text-align: right; }
+.right .chat-time {
+  float: left;
+}

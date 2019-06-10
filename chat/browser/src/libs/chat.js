@@ -36,6 +36,9 @@ class Chat {
     this.messageHandler = messageHandler
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
+    this.userHandles = new Map([
+      [libp2p.peerInfo.id.toB58String(), 'Me']
+    ])
 
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
@@ -66,7 +69,10 @@ class Chat {
         const request = Request.decode(message.data)
         switch (request.type) {
           case Request.Type.UPDATE_PEER:
-            // TODO: Add username update
+            const newHandle = request.updatePeer.userHandle.toString()
+            console.info(`System: ${message.from} is now ${newHandle}.`)
+            this.userHandles.set(message.from, newHandle)
+            break
           default:
             this.messageHandler({
               from: message.from,
@@ -90,7 +96,45 @@ class Chat {
   }
 
   /**
-   *
+   * Crudely checks the input for a command. If no command is
+   * found `false` is returned. If the input contains a command,
+   * that command will be processed and `true` will be returned.
+   * @param {Buffer|string} input Text submitted by the user
+   * @returns {boolean} Whether or not there was a command
+   */
+  checkCommand (input) {
+    const str = input.toString()
+    if (str.startsWith('/')) {
+      const args = str.slice(1).split(' ')
+      switch (args[0]) {
+        case 'name':
+          this.updatePeer(args[1])
+          return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Sends a message over pubsub to update the user handle
+   * to the provided `name`.
+   * @param {Buffer|string} name Username to change to
+   */
+  updatePeer (name) {
+    const msg = Request.encode({
+      type: Request.Type.UPDATE_PEER,
+      updatePeer: {
+        userHandle: Buffer.from(name)
+      }
+    })
+
+    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
+      if (err) return console.error('Could not publish name change')
+    })
+  }
+
+  /**
+   * Publishes the given `message` to pubsub peers
    * @param {Buffer|string} message The chat message to send
    * @param {function(Error)} callback Called once the publish is complete
    */
@@ -112,3 +156,4 @@ class Chat {
 }
 
 module.exports = Chat
+module.exports.TOPIC = '/libp2p/example/chat/1.0.0'
