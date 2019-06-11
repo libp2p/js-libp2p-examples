@@ -15,12 +15,19 @@ function handler (protocol, stream) {
     pull.collect((err, message) => {
       if (err) return console.error(err)
       console.info(String(message))
+
+      // Replies are done on new streams, so let's close this stream so we don't leak it
+      pull(
+        pull.empty(),
+        stream
+      )
     })
   )
 }
 
 /**
- * Writes the `message` over the given `stream`
+ * Writes the `message` over the given `stream`. Any direct replies
+ * will be written to the console.
  *
  * @param {Buffer|String} message The message to send over `stream`
  * @param {PullStream} stream A stream over the muxed Connection to our peer
@@ -28,7 +35,11 @@ function handler (protocol, stream) {
 function send (message, stream) {
   pull(
     pull.values([ message ]),
-    stream
+    stream,
+    pull.collect((err, message) => {
+      if (err) return console.error(err)
+      console.info(String(message))
+    })
   )
 }
 

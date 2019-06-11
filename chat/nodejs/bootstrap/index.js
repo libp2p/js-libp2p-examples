@@ -39,6 +39,8 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
 
   // Set up our input handler
   process.stdin.on('data', (message) => {
+    // remove the newline
+    message = message.slice(0, -1)
     // Iterate over all peers, and send messages to peers we are connected to
     libp2p.peerBook.getAllArray().forEach(peerInfo => {
       // Don't send messages if we're not connected or they dont support the chat protocol
@@ -70,6 +72,7 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
 
   // Set up our input handler
   process.stdin.on('data', (message) => {
+    // remove the newline
     message = message.slice(0, -1)
     // If there was a command, exit early
     if (pubsubChat.checkCommand(message)) return

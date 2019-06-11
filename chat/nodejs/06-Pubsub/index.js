@@ -55,6 +55,8 @@ createLibp2p({
 
   // Set up our input handler
   process.stdin.on('data', (message) => {
+    // remove the newline
+    message = message.slice(0, -1)
     // Iterate over all peers, and send messages to peers we are connected to
     libp2p.peerBook.getAllArray().forEach(peerInfo => {
       // Don't send messages if we're not connected
