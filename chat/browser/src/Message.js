@@ -4,8 +4,8 @@ import React from 'react'
  * Message renderer
  * @param {object} param0
  */
-export default function Message ({ chat, chatClient }) {
-  const from = chatClient.userHandles.get(chat.from) || chat.from.substring(0, 20)
+export default function Message ({ peers, chat }) {
+  const from = peers[chat.from] ? peers[chat.from].name : chat.from.substring(0, 20)
 
   return (
     <li>

@@ -1,4 +1,5 @@
 const protons = require('protons')
+const EventEmitter = require('events')
 
 const { Request } = protons(`
 message Request {
@@ -23,22 +24,19 @@ message UpdatePeer {
 }
 `)
 
-class Chat {
+class Chat extends EventEmitter {
   /**
    *
    * @param {Libp2p} libp2p A Libp2p node to communicate through
    * @param {string} topic The topic to subscribe to
-   * @param {function(Message)} messageHandler Called with every `Message` received on `topic`
    */
-  constructor(libp2p, topic, messageHandler) {
+  constructor(libp2p, topic) {
+    super()
+
     this.libp2p = libp2p
     this.topic = topic
-    this.messageHandler = messageHandler
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
-    this.userHandles = new Map([
-      [libp2p.peerInfo.id.toB58String(), 'Me']
-    ])
 
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
@@ -69,12 +67,13 @@ class Chat {
         const request = Request.decode(message.data)
         switch (request.type) {
           case Request.Type.UPDATE_PEER:
-            const newHandle = request.updatePeer.userHandle.toString()
-            console.info(`System: ${message.from} is now ${newHandle}.`)
-            this.userHandles.set(message.from, newHandle)
+            this.emit('peer:update', {
+              id: message.from,
+              name: request.updatePeer.userHandle.toString()
+            })
             break
           default:
-            this.messageHandler({
+            this.emit('message', {
               from: message.from,
               message: request.sendMessage
             })
