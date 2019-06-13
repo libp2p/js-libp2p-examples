@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Message from './Message'
 
 // Chat over Pubsub
-import PubsubChat from './libs/chat'
+import PubsubChat from '../libs/chat'
 
 export default function Chat ({
   libp2p
