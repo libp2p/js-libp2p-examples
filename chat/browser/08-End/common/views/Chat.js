@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Message from './Message'
 
 // Chat over Pubsub
-import PubsubChat from '../libs/chat'
+import PubsubChat from '../../../common/libs/chat'
 
 export default function Chat ({
-  libp2p,
-  ChatProtocol
+  libp2p
 }) {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
@@ -19,6 +18,11 @@ export default function Chat ({
   const sendMessage = () => {
     setMessage('')
     if (!message) return
+
+    if (chatClient.checkCommand(message)) return
+    chatClient.send(message, (err) => {
+      console.info('Publish done', err)
+    })
   }
 
   /**
@@ -37,6 +41,29 @@ export default function Chat ({
   useEffect(() => {
     // Wait for libp2p
     if (!libp2p) return
+
+    // Create the pubsub chatClient
+    if (!chatClient) {
+      const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC)
+
+      // Listen for messages
+      pubsubChat.on('message', (message) => {
+        if (message.from === libp2p.peerInfo.id.toB58String()) {
+          message.isMine = true
+        }
+        setMessages((messages) => [...messages, message])
+      })
+      // Listen for peer updates
+      pubsubChat.on('peer:update', ({ id, name }) => {
+        setPeers((peers) => {
+          let newPeers = { ...peers }
+          newPeers[id] = { name }
+          return newPeers
+        })
+      })
+
+      setChatClient(pubsubChat)
+    }
   })
 
   return (

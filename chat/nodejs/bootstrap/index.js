@@ -5,6 +5,12 @@ const Libp2p = require('libp2p')
 // Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
+const WebrtcStar = require('libp2p-webrtc-star')
+// wrtc for node to supplement WebrtcStar
+const wrtc = require('wrtc')
+// Signaling Server for webrtc
+const SignalingServer = require('libp2p-webrtc-star/src/sig-server')
+
 // Stream Multiplexers
 const Mplex = require('pull-mplex')
 // Encryption
@@ -24,12 +30,19 @@ const ChatProtocol = require('./chat-protocol')
 
 let pubsubChat
 
-PeerInfo.create(idJSON, (err, peerInfo) => {
+PeerInfo.create(idJSON, async (err, peerInfo) => {
   if (err) throw err
 
   // Wildcard listen on TCP and Websocket
   peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/63785')
   peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/63786/ws')
+
+  const signalingServer = await SignalingServer.start({
+    port: 15555
+  })
+  const ssAddr = `/ip4/${signalingServer.info.host}/tcp/${signalingServer.info.port}/ws/p2p-webrtc-star`
+  console.info(`Signaling server running at ${ssAddr}`)
+  peerInfo.multiaddrs.add(`${ssAddr}/p2p/${peerInfo.id.toB58String()}`)
 
   // Create the node
   const libp2p = createBootstrapNode(peerInfo)
@@ -53,13 +66,13 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
     })
   })
 
-  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
+  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, created, id, data }) => {
     let fromMe = from === libp2p.peerInfo.id.toB58String()
     let user = from.substring(0, 6)
     if (pubsubChat.userHandles.has(from)) {
       user = pubsubChat.userHandles.get(from)
     }
-    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
+    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(created).toLocaleTimeString()}): ${data}`)
   })
 
   // Start the node
@@ -85,10 +98,12 @@ PeerInfo.create(idJSON, (err, peerInfo) => {
 })
 
 const createBootstrapNode = (peerInfo) => {
+  const webrtcStar = new WebrtcStar({ wrtc: wrtc })
+
   return new Libp2p({
     peerInfo,
     modules: {
-      transport: [ TCP, Websockets ],
+      transport: [ webrtcStar, TCP, Websockets ],
       streamMuxer: [ Mplex ],
       connEncryption: [ Secio ],
       peerDiscovery: [ Bootstrap, MDNS ],

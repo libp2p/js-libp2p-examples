@@ -5,6 +5,8 @@ const { createLibp2p } = require('libp2p')
 // Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
+const WebrtcStar = require('libp2p-webrtc-star')
+const wrtc = require('wrtc')
 // Stream Muxer
 const Mplex = require('pull-mplex')
 // Connection Encryption
@@ -12,12 +14,15 @@ const Secio = require('libp2p-secio')
 
 const multiaddr = require('multiaddr')
 
+const wrtcStar = new WebrtcStar({ wrtc })
+
 // Create the Node
 createLibp2p({
   modules: {
-    transport: [ TCP, Websockets ],
+    transport: [ TCP, Websockets, wrtcStar ],
     streamMuxer: [ Mplex ],
-    connEncryption: [ Secio ]
+    connEncryption: [ Secio ],
+    peerDiscovery: [ wrtcStar.discovery ]
   }
 }, (err, libp2p) => {
   if (err) throw err

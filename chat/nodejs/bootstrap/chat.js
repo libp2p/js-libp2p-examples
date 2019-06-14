@@ -76,7 +76,7 @@ class Chat {
           default:
             this.messageHandler({
               from: message.from,
-              message: request.sendMessage
+              ...request.sendMessage
             })
         }
       } catch (err) {

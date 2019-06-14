@@ -75,7 +75,7 @@ class Chat extends EventEmitter {
           default:
             this.emit('message', {
               from: message.from,
-              message: request.sendMessage
+              ...request.sendMessage
             })
         }
       } catch (err) {

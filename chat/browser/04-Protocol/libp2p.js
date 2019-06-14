@@ -1,14 +1,29 @@
+// Libp2p Core
 import Libp2p from 'libp2p'
+// Transports
 import Websockets from 'libp2p-websockets'
+import WebrtcStar from 'libp2p-webrtc-star'
+// Multiaddr creation
 import multiaddr from 'multiaddr'
+// Stream Muxer
+import Mplex from 'pull-mplex'
+// Connection Encryption
+import Secio from 'libp2p-secio'
 
 const createLibp2p = (peerInfo) => {
   // Create the Node
   const libp2p = new Libp2p({
     peerInfo,
     modules: {
-      transport: [ Websockets ],
+      transport: [ Websockets, WebrtcStar ],
+      streamMuxer: [ Mplex ],
+      connEncryption: [ Secio ]
     }
+  })
+
+  // Listener for peer connection events
+  libp2p.on('peer:connect', (peerInfo) => {
+    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
   })
 
   // Automatically start libp2p
