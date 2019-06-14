@@ -2,7 +2,7 @@
 
 The chapters in this example are organized sequentially by folder name. The names also include the overall topic. For example, `01-Transports` is the first chapter and includes an overview of Transports.
 
-The `common` folder contains the UI code leveraged across each of the chapters. Some chapters may require you to update code in `common` as you progress, in order to bind the latest features you've added to libp2p to the UI.
+The `common` folder contains the UI code leveraged across each of the chapters. Some chapters may require you to update code in `common` as you progress, in order to bind the latest features you've added to libp2p to the UI. If you get stuck and aren't sure what to update, you can use the [help README][help] to see the needed changes.
 
 ## Setup
 ```sh
@@ -27,3 +27,4 @@ npm start
 
 [parcel]: https://parceljs.org
 [setup]: #setup
+[help]: ./help/README.md

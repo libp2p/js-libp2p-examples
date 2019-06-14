@@ -5,13 +5,9 @@ also include the overall topic. For example, `01-Transports` is the first chapte
 and includes an overview of Transports.
 
 ## Setup
-```sh
-npm ci
-```
+
+Install the node modules via `npm ci`.
 
 ## Run
-Each chapter can be run via:
 
-```sh
-node index.js
-```
+Each chapter can be run in its respective directory via `node index.js`
