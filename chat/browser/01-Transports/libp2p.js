@@ -1,11 +1,12 @@
 import Libp2p from 'libp2p'
+/* TODO: import `libp2p-websockets` and `libp2p-webrtc-star` */
 
 const createLibp2p = (peerInfo) => {
   // Create the Node
   const libp2p = new Libp2p({
     peerInfo,
     modules: {
-      transport: [ /* TODO: add `libp2p-websockets` */ ],
+      transport: [ /* TODO: add `libp2p-websockets` and `libp2p-webrtc-star` */ ],
     }
   })
 
