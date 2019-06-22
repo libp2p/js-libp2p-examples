@@ -37,9 +37,11 @@ const sendMessage = () => {
     libp2p.dialProtocol(peerInfo, ChatProtocol.PROTOCOL, (err, stream) => {
       if (err) return console.error('Could not negotiate chat protocol stream with peer', err)
       ChatProtocol.send(message, stream)
-      setMessages((messages) => [...messages, message])
     })
   })
+
+  // Update the messages for the view
+  setMessages((messages) => [...messages, message])
 }
 ```
 

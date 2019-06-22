@@ -19,7 +19,10 @@ export default function Chat ({
   const sendMessage = () => {
     setMessage('')
     if (!message) return
-    /* TODO: add send */
+    // TODO: Iterate over all peers, and send messages to peers we are connected to.
+
+    // Update the messages for the view
+    setMessages((messages) => [...messages, message])
   }
 
   /**
@@ -38,6 +41,14 @@ export default function Chat ({
   useEffect(() => {
     // Wait for libp2p
     if (!libp2p) return
+
+    if (!chatClient) {
+      // TODO: Add the chat handler to libp2p
+
+      // Set the chat client to so the handler add code doesn't run again
+      setChatClient(true)
+      return
+    }
   })
 
   return (
