@@ -40,7 +40,7 @@ export default function Metrics ({
   })
 
   return (
-    <div className="flex flex-column w-50 pa3 h-100">
+    <div className="flex flex-column w-25 pa3 h-100">
       <p>Peers Known: {peerCount}</p>
       <p>Peers Connected: {peersConnected}</p>
     </div>

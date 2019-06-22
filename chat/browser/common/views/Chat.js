@@ -19,6 +19,7 @@ export default function Chat ({
   const sendMessage = () => {
     setMessage('')
     if (!message) return
+    /* TODO: add send */
   }
 
   /**
@@ -40,7 +41,7 @@ export default function Chat ({
   })
 
   return (
-    <div className="flex flex-column w-50 pa3 h-100 bl b--black-10">
+    <div className="flex flex-column w-75 pa3 h-100 bl b--black-10">
       <div className="w-100 flex-auto">
         <ul className="list pa0">
           {messages.map((message, index) => {

@@ -5,12 +5,11 @@ The chapters in this example are organized sequentially by folder name. The name
 The `common` folder contains the UI code leveraged across each of the chapters. Some chapters may require you to update code in `common` as you progress, in order to bind the latest features you've added to libp2p to the UI. If you get stuck and aren't sure what to update, you can use the [help README][help] to see the needed changes.
 
 ## Setup
-```sh
-npm ci
-```
+
+1. Install node modules via `npm clean-install`
 
 ### Running the Bootstrap node
-This works with the Bootstrap node located at [../nodejs/bootstrap](../nodejs/bootstrap). It can be run via `node index.js` from that directory.
+This works with the Bootstrap node located at [../nodejs/bootstrap](../nodejs/bootstrap). See the instructions there for its setup.
 
 ## Running the Chapters
 
@@ -18,7 +17,7 @@ This works with the Bootstrap node located at [../nodejs/bootstrap](../nodejs/bo
 
 For the particular chapter you are doing, you will need to `cd` into the directory and execute `npm start` from there. This ensures that the libp2p code for that particular chapter is served up by the [parcel][parcel] bundler.
 
-For example, starting the lesson you will cd into the `01-Transports` directory and run `npm start`.
+For example, starting the Transports lesson you will cd into the [./01-Transports](./01-Transports) directory and run `npm start`.
 
 ```sh
 cd ./01-Transports
