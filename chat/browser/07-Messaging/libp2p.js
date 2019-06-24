@@ -13,7 +13,7 @@ import KadDHT from 'libp2p-kad-dht'
 
 const createLibp2p = (peerInfo) => {
   // Listen on the signaling server
-  peerInfo.multiaddrs.add(`/ip4/0.0.0.0/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
+  peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
 
   // Create webrtcStar here, so we can pass `webrtcStar.discovery`
   // to the peerDiscovery configuration
