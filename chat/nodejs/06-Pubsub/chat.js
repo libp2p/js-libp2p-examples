@@ -66,12 +66,18 @@ class Chat {
         const request = Request.decode(message.data)
         switch (request.type) {
           case Request.Type.UPDATE_PEER:
-            // TODO: Add username update
-          default:
+            const newHandle = request.updatePeer.userHandle.toString()
+            console.info(`System: ${message.from} is now ${newHandle}.`)
+            this.userHandles.set(message.from, newHandle)
+            break
+          case Request.Type.SEND_MESSAGE:
             this.messageHandler({
               from: message.from,
               message: request.sendMessage
             })
+            break
+          default:
+            // Do nothing
         }
       } catch (err) {
         console.error(err)

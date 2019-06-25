@@ -174,8 +174,6 @@ class Chat {
       }
     })
 
-    console.log('Publish', connectedPeers.length)
-
     this.libp2p.pubsub.publish(this.topic, msg, (err) => {
       if (err) return console.error('Could not publish stats update')
     })

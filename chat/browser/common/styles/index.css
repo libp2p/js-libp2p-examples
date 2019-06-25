@@ -34,3 +34,27 @@
 .right .chat-time {
   float: left;
 }
+
+.dot {
+  height: 18px;
+  width: 18px;
+  background-color: #999;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.bg-libp2p-dark-aqua {
+  background-color: #22616A;
+}
+
+.bg-libp2p-dark-purple {
+  background-color: #791B89;
+}
+
+.bg-libp2p-dark-orange {
+  background-color: #E88900;
+}
+
+.bg-libp2p-dark-green {
+  background-color: #A3AA12;
+}

@@ -1,15 +1,17 @@
 const protons = require('protons')
 
-const { Request } = protons(`
+const { Request, Stats } = protons(`
 message Request {
   enum Type {
     SEND_MESSAGE = 0;
     UPDATE_PEER = 1;
+    STATS = 2;
   }
 
   required Type type = 0;
   optional SendMessage sendMessage = 1;
   optional UpdatePeer updatePeer = 2;
+  optional Stats stats = 3;
 }
 
 message SendMessage {
@@ -20,6 +22,17 @@ message SendMessage {
 
 message UpdatePeer {
   optional bytes userHandle = 0;
+}
+
+message Stats {
+  enum NodeType {
+    GO = 0;
+    NODEJS = 1;
+    BROWSER = 2;
+  }
+
+  repeated bytes connectedPeers = 0;
+  optional NodeType nodeType = 1;
 }
 `)
 
@@ -36,6 +49,21 @@ class Chat {
     this.messageHandler = messageHandler
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
+    this.userHandles = new Map([
+      [libp2p.peerInfo.id.toB58String(), 'Me']
+    ])
+
+    this.connectedPeers = new Set()
+    this.libp2p.on('peer:connect', (peerInfo) => {
+      if (this.connectedPeers.has(peerInfo.id.toB58String())) return
+      this.connectedPeers.add(peerInfo.id.toB58String())
+      this.sendStats(Array.from(this.connectedPeers))
+    })
+    this.libp2p.on('peer:disconnect', (peerInfo) => {
+      if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
+        this.sendStats(Array.from(this.connectedPeers))
+      }
+    })
 
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
@@ -66,12 +94,18 @@ class Chat {
         const request = Request.decode(message.data)
         switch (request.type) {
           case Request.Type.UPDATE_PEER:
-            // TODO: Add username update
-          default:
+            const newHandle = request.updatePeer.userHandle.toString()
+            console.info(`System: ${message.from} is now ${newHandle}.`)
+            this.userHandles.set(message.from, newHandle)
+            break
+          case Request.Type.SEND_MESSAGE:
             this.messageHandler({
               from: message.from,
               message: request.sendMessage
             })
+            break
+          default:
+            // Do nothing
         }
       } catch (err) {
         console.error(err)
@@ -102,11 +136,47 @@ class Chat {
       const args = str.slice(1).split(' ')
       switch (args[0]) {
         case 'name':
-          console.log(args)
+          this.updatePeer(args[1])
           return true
       }
     }
     return false
+  }
+
+  /**
+   * Sends a message over pubsub to update the user handle
+   * to the provided `name`.
+   * @param {Buffer|string} name Username to change to
+   */
+  updatePeer (name) {
+    const msg = Request.encode({
+      type: Request.Type.UPDATE_PEER,
+      updatePeer: {
+        userHandle: Buffer.from(name)
+      }
+    })
+
+    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
+      if (err) return console.error('Could not publish name change')
+    })
+  }
+
+  /**
+   * Sends the updated stats to the pubsub network
+   * @param {Array<Buffer>} connectedPeers
+   */
+  sendStats (connectedPeers) {
+    const msg = Request.encode({
+      type: Request.Type.STATS,
+      stats: {
+        connectedPeers,
+        nodeType: Stats.NodeType.NODEJS
+      }
+    })
+
+    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
+      if (err) return console.error('Could not publish stats update')
+    })
   }
 
   /**

@@ -66,13 +66,13 @@ PeerInfo.create(idJSON, async (err, peerInfo) => {
     })
   })
 
-  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, created, id, data }) => {
+  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
     let fromMe = from === libp2p.peerInfo.id.toB58String()
     let user = from.substring(0, 6)
     if (pubsubChat.userHandles.has(from)) {
       user = pubsubChat.userHandles.get(from)
     }
-    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(created).toLocaleTimeString()}): ${data}`)
+    console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}`)
   })
 
   // Start the node
