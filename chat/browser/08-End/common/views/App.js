@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import React, { useState, useEffect } from 'react'
+import EventEmitter from 'events'
 import Header from '../../../common/views/Header'
 import Metrics from './Metrics'
 import Chat from './Chat'
@@ -12,6 +13,7 @@ export default function App ({
   const [peerInfo, setPeerInfo] = useState(null)
   const [libp2p, setLibp2p] = useState(null)
   const [started, setStarted] = useState(false)
+  const eventBus = new EventEmitter()
 
   /**
    * Leverage use effect to act on state changes
@@ -45,8 +47,8 @@ export default function App ({
         <Header started={started} />
       </div>
       <div className='flex h-100'>
-        <Metrics libp2p={libp2p} />
-        <Chat libp2p={libp2p} />
+        <Metrics libp2p={libp2p} eventBus={eventBus} />
+        <Chat libp2p={libp2p} eventBus={eventBus} />
       </div>
     </div>
   )

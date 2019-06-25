@@ -5,7 +5,8 @@ import Message from './Message'
 import PubsubChat from '../../../common/libs/chat'
 
 export default function Chat ({
-  libp2p
+  libp2p,
+  eventBus
 }) {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
@@ -61,13 +62,15 @@ export default function Chat ({
           return newPeers
         })
       })
+      // Forward stats events to the eventBus
+      pubsubChat.on('stats', (stats) => eventBus.emit('stats', stats))
 
       setChatClient(pubsubChat)
     }
   })
 
   return (
-    <div className="flex flex-column w-75 pa3 h-100 bl b--black-10">
+    <div className="flex flex-column w-50 pa3 h-100 bl b--black-10">
       <div className="w-100 flex-auto">
         <ul className="list pa0">
           {messages.map((message, index) => {

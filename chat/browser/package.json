@@ -11,6 +11,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "cytoscape": "^3.7.3",
+    "cytoscape-euler": "^1.2.1",
     "libp2p": "^0.25.4",
     "libp2p-bootstrap": "^0.9.7",
     "libp2p-floodsub": "^0.16.1",

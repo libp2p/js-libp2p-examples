@@ -1,16 +1,18 @@
 const protons = require('protons')
 const EventEmitter = require('events')
 
-const { Request } = protons(`
+const { Request, Stats } = protons(`
 message Request {
   enum Type {
     SEND_MESSAGE = 0;
     UPDATE_PEER = 1;
+    STATS = 2;
   }
 
   required Type type = 1;
   optional SendMessage sendMessage = 2;
   optional UpdatePeer updatePeer = 3;
+  optional Stats stats = 4;
 }
 
 message SendMessage {
@@ -21,6 +23,17 @@ message SendMessage {
 
 message UpdatePeer {
   optional bytes userHandle = 1;
+}
+
+message Stats {
+  enum NodeType {
+    GO = 0;
+    NODEJS = 1;
+    BROWSER = 2;
+  }
+
+  repeated bytes connectedPeers = 0;
+  optional NodeType nodeType = 1;
 }
 `)
 
@@ -37,6 +50,19 @@ class Chat extends EventEmitter {
     this.topic = topic
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
+
+    this.connectedPeers = new Set()
+    this.stats = new Map()
+    this.libp2p.on('peer:connect', (peerInfo) => {
+      if (this.connectedPeers.has(peerInfo.id.toB58String())) return
+      this.connectedPeers.add(peerInfo.id.toB58String())
+      this.sendStats(Array.from(this.connectedPeers))
+    })
+    this.libp2p.on('peer:disconnect', (peerInfo) => {
+      if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
+        this.sendStats(Array.from(this.connectedPeers))
+      }
+    })
 
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
@@ -71,6 +97,11 @@ class Chat extends EventEmitter {
               id: message.from,
               name: request.updatePeer.userHandle.toString()
             })
+            break
+          case Request.Type.STATS:
+            this.stats.set(message.from, request.stats)
+            console.log('Incoming Stats:', message.from, request.stats)
+            this.emit('stats', this.stats)
             break
           default:
             this.emit('message', {
@@ -129,6 +160,24 @@ class Chat extends EventEmitter {
 
     this.libp2p.pubsub.publish(this.topic, msg, (err) => {
       if (err) return console.error('Could not publish name change')
+    })
+  }
+
+  /**
+   * Sends the updated stats to the pubsub network
+   * @param {Array<Buffer>} connectedPeers
+   */
+  sendStats (connectedPeers) {
+    const msg = Request.encode({
+      type: Request.Type.STATS,
+      stats: {
+        connectedPeers,
+        nodeType: Stats.NodeType.BROWSER
+      }
+    })
+
+    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
+      if (err) return console.error('Could not publish stats update')
     })
   }
 
