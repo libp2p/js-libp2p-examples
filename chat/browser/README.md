@@ -13,7 +13,7 @@ This works with the Bootstrap node located at [../nodejs/bootstrap](../nodejs/bo
 
 ## Running the Chapters
 
-**Important Note**: All modules you need will be installed in the [setup][setup] phase. If a chapter asks for you to add a module to libp2p, you will only need to declare it in the code.
+**Important Note**: All modules you need will be installed in the [setup][setup] phase. If a chapter asks for you to add a module to libp2p, you will **only** need to declare it in the code.
 
 For the particular chapter you are doing, you will need to `cd` into the directory and execute `npm start` from there. This ensures that the libp2p code for that particular chapter is served up by the [parcel][parcel] bundler.
 
