@@ -8,7 +8,7 @@ const PROTOCOL = '/libp2p/chat/1.0.0'
  * Returns the chat protocol handler that will use the provided
  * `setMessages` useEffect function to update the UI
  *
- * @param {function(func)} setMessages Contains a reference to the handlerFunc and matchFunc for the protocol
+ * @param {function(func)} setMessages The react state update function for messages
  * @returns {function} The protocol handler
  */
 function createHandler (setMessages) {
@@ -41,11 +41,16 @@ function createHandler (setMessages) {
  *
  * @param {Buffer|String} message The message to send over `stream`
  * @param {PullStream} stream A stream over the muxed Connection to our peer
+ * @param {function(func)} setMessages The react state update function for messages
  */
-function send (message, stream) {
+function send (message, stream, setMessages) {
   pull(
     pull.values([ message ]),
-    stream
+    stream,
+    pull.collect((err, message) => {
+      if (err) return console.error(err)
+      setMessages((messages) => [...messages, String(message)])
+    })
   )
 }
 
