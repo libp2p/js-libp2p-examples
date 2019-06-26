@@ -40,7 +40,8 @@ const createLibp2p = (peerInfo) => {
         randomWalk: {
           enabled: true
         }
-      }
+      },
+      // TODO: set `EXPERIMENTAL.pubsub` to true
     }
   })
 
