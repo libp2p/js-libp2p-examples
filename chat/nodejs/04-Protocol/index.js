@@ -7,12 +7,12 @@ const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
 const WebrtcStar = require('libp2p-webrtc-star')
 const wrtc = require('wrtc')
+// Multiaddr
+const multiaddr = require('multiaddr')
 // Stream Muxer
 const Mplex = require('pull-mplex')
 // Connection Encryption
 const Secio = require('libp2p-secio')
-
-const multiaddr = require('multiaddr')
 
 const wrtcStar = new WebrtcStar({ wrtc })
 
@@ -21,20 +21,22 @@ createLibp2p({
   modules: {
     transport: [ TCP, Websockets, wrtcStar ],
     streamMuxer: [ Mplex ],
-    connEncryption: [ Secio ],
-    peerDiscovery: [ wrtcStar.discovery ]
+    connEncryption: [ Secio ]
   }
 }, (err, libp2p) => {
   if (err) throw err
 
-  // Wildcard listen on TCP and Websocket
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
-
-  // Listener for peer connection events
+  // Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
   libp2p.on('peer:connect', (peerInfo) => {
     console.info(`Connected to ${peerInfo.id.toB58String()}!`)
   })
+
+  // Add a TCP listen address on port 0
+  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
+  // Add a Websockets listen address on port 0
+  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
+  // Add the signaling server multiaddr to the peerInfo multiaddrs list
+  libp2p.peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${libp2p.peerInfo.id.toB58String()}`)
 
   // Start libp2p
   libp2p.start((err) => {
