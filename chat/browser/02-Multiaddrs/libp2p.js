@@ -18,7 +18,7 @@ const createLibp2p = (peerInfo) => {
   libp2p.start((err) => {
     if (err) throw err
 
-    // TODO: Create the multiaddr to the Bootstrap node
+    // TODO: Create the multiaddr to the Bootstrap's Websocket address
     // TODO: Dial the multiaddr and log any errors
     // TODO: log a success message if there are no errors, we're connected! */
   })
