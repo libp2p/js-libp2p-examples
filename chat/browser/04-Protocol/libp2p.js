@@ -11,6 +11,9 @@ import Mplex from 'pull-mplex'
 import Secio from 'libp2p-secio'
 
 const createLibp2p = (peerInfo) => {
+  // Add the signaling server multiaddr to the peerInfo multiaddrs list
+  peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
+
   // Create the Node
   const libp2p = new Libp2p({
     peerInfo,
