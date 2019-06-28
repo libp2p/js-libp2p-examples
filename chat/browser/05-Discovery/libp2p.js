@@ -32,20 +32,26 @@ const createLibp2p = (peerInfo) => {
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value
       dht: undefined
     },
-    config: {
-      peerDiscovery: {
-        bootstrap: {
-          // TODO: Update the IP address to match the bootstrap peer
-          list: [ '/ip4/127.0.0.1/tcp/63786/ws/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
-        }
-      },
-      dht: {
-        enabled: true,
-        randomWalk: {
-          enabled: true
-        }
-      }
-    }
+    // TODO: Uncomment the config code below
+    // config: {
+    //   peerDiscovery: {
+    //     bootstrap: {
+    //       // TODO: Update the IP address to match the bootstrap peer
+    //       list: [ '/ip4/127.0.0.1/tcp/63786/ws/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
+    //     }
+    //   },
+    //   dht: {
+    //     enabled: true,
+    //     randomWalk: {
+    //       enabled: true
+    //     }
+    //   }
+    // }
+  })
+
+  // Listener for peer connection events
+  libp2p.on('peer:connect', (peerInfo) => {
+    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
   })
 
   // Automatically start libp2p

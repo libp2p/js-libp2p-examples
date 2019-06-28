@@ -32,8 +32,8 @@ message Stats {
     BROWSER = 2;
   }
 
-  repeated bytes connectedPeers = 0;
-  optional NodeType nodeType = 1;
+  repeated bytes connectedPeers = 1;
+  optional NodeType nodeType = 2;
 }
 `)
 
