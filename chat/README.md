@@ -4,6 +4,10 @@ This example will guide you through creating a basic Chat application with libp2
 
 Both examples will benefit from you using the provided [Bootstrap][bootstrap] node. You can view the README there.
 
+## Resources
+
+You can follow along with the [IPFS Camp 2019 Workshop slide deck](https://docs.google.com/presentation/d/1a_BjIM4ORQchnMNjOMO-wCDW2VS5nXeKXIbWSEqf9jY) if you'd like more information. Make sure to view the speaker notes if the slides aren't clear.
+
 ## Setup
 **Important**: If you are running through this example by yourself you will need to run the Bootstrap node. If you are doing this with others on a local network (such as IPFS Camp), only 1 person should run the bootstrap server as its Peer ID is static.
 
