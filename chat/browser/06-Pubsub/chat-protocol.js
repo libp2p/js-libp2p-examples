@@ -1,5 +1,5 @@
 'use strict'
-const pull = require('pull-stream')
+const pip2 = require('it-pipe')
 
 // Define the codec of our chat protocol
 const PROTOCOL = '/libp2p/chat/1.0.0'
@@ -13,26 +13,26 @@ const PROTOCOL = '/libp2p/chat/1.0.0'
  */
 function createHandler (setMessages) {
   /**
-   * A simple handler to print incoming messages to the console
-   * @param {Object} protocol Contains a reference to the handlerFunc and matchFunc for the protocol
-   * @param {Stream} stream A pull-stream based stream to the peer
-   */
-  return (protocol, stream) => {
-    pull(
-      stream,
-      pull.collect((err, message) => {
-        if (err) return console.log(err)
+ * A simple handler to print incoming messages to the console
+ * @param {Object} params
+ * @param {Stream} params.stream A pull-stream based stream to the peer
+ */
+  return async ({ stream }) => {
+    try {
+      await pipe(
+        stream,
+        async function (source) {
+          for await (const message of source) {
+            setMessages((messages) => [...messages, message])
+          }
+        }
+      )
 
-        // Add the new message to the existing list of messages
-        setMessages((messages) => [...messages, message])
-
-        // Replies are done on new streams, so let's close this stream so we don't leak it
-        pull(
-          pull.empty(),
-          stream
-        )
-      })
-    )
+      // Replies are done on new streams, so let's close this stream so we don't leak it
+      await pipe([], stream)
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
@@ -43,15 +43,20 @@ function createHandler (setMessages) {
  * @param {PullStream} stream A stream over the muxed Connection to our peer
  * @param {function(func)} setMessages The react state update function for messages
  */
-function send (message, stream, setMessages) {
-  pull(
-    pull.values([ message ]),
-    stream,
-    pull.collect((err, message) => {
-      if (err) return console.error(err)
-      setMessages((messages) => [...messages, String(message)])
-    })
-  )
+async function send (message, stream, setMessages) {
+  try {
+    await pipe(
+      [ message ],
+      stream,
+      async function (source) {
+        for await (const message of source) {
+          setMessages((messages) => [...messages, String(message)])
+        }
+      }
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 module.exports = {

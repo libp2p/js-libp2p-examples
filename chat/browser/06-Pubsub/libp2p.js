@@ -4,35 +4,34 @@ import Libp2p from 'libp2p'
 import Websockets from 'libp2p-websockets'
 import WebrtcStar from 'libp2p-webrtc-star'
 // Stream Muxer
-import Mplex from 'pull-mplex'
+import Mplex from 'libp2p-mplex'
 // Connection Encryption
 import Secio from 'libp2p-secio'
 // Peer Discovery
-const Bootstrap = require('libp2p-bootstrap')
-const KadDHT = require('libp2p-kad-dht')
+import Bootstrap from 'libp2p-bootstrap'
+import KadDHT from 'libp2p-kad-dht'
+// TODO: import 'libp2p-gossipsub'
 
-const createLibp2p = (peerInfo) => {
+const createLibp2p = async (peerInfo) => {
   // Listen on the signaling server
   peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
 
-  // Create webrtc here, so we can pass `WebrtcStar.discovery`
-  // to the peerDiscovery configuration
-  const webrtcStar = new WebrtcStar()
-
   // Create the Node
-  const libp2p = new Libp2p({
+  const libp2p = await Libp2p.create({
     peerInfo,
     modules: {
-      transport: [ Websockets, webrtcStar ],
-      streamMuxer: [ Mplex ],
-      connEncryption: [ Secio ],
-      peerDiscovery: [ Bootstrap, webrtcStar.discovery ],
-      dht: KadDHT
+      transport: [Websockets, WebrtcStar],
+      streamMuxer: [Mplex],
+      connEncryption: [Secio],
+      peerDiscovery: [Bootstrap],
+      dht: KadDHT,
+      // TODO: set pubsub to the imported 'libp2p-gossipsub'
+      pubsub: undefined
     },
     config: {
       peerDiscovery: {
         bootstrap: {
-          list: [ '/ip4/127.0.0.1/tcp/63786/ws/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
+          list: ['/ip4/127.0.0.1/tcp/63786/ws/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d']
         }
       },
       dht: {
@@ -40,15 +39,12 @@ const createLibp2p = (peerInfo) => {
         randomWalk: {
           enabled: true
         }
-      },
-      // TODO: set `EXPERIMENTAL.pubsub` to true
+      }
     }
   })
 
   // Automatically start libp2p
-  libp2p.start((err) => {
-    if (err) throw err
-  })
+  await libp2p.start()
 
   return libp2p
 }

@@ -85,8 +85,8 @@ module.exports.layout = {
   boundingBox: undefined,
 
   // Layout event callbacks; equivalent to `layout.one('layoutready', callback)` for example
-  ready: function(){}, // on layoutready
-  stop: function(){}, // on layoutstop
+  ready: function () {}, // on layoutready
+  stop: function () {}, // on layoutstop
 
   // Whether to randomize the initial positions of the nodes
   // true : Use random positions within the bounding box
@@ -117,7 +117,7 @@ module.exports.style = [{
 }, {
   selector: 'edge',
   style: {
-    'width': 1,
+    width: 1,
     'line-color': '#ccc',
     'target-arrow-color': '#ccc'
   }
