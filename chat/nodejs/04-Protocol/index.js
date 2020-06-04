@@ -46,6 +46,9 @@ const Libp2p = require('libp2p')
   // Add the signaling server multiaddr to the peerInfo multiaddrs list
   libp2p.peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${libp2p.peerInfo.id.toB58String()}`)
 
+  // TODO: Add chat handler
+  // libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
+
   // start libp2p
   await libp2p.start()
 
