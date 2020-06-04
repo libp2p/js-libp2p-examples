@@ -3,18 +3,24 @@
 // TODO: require `wrtc`
 
 // Libp2p Core
-const { createLibp2p } = require('libp2p')
+const Libp2p = require('libp2p')
 
-// TODO: Create a new instance of `libp2p-webrtc-star`, and pass it { wrtc }
-
-// Create the Node
-createLibp2p({
-  modules: {
-    transport: [/* TODO: add `libp2p-tcp`, `libp2p-websockets`, and your `libp2p-webrtc-star` instance */]
-  }
-}, (err, libp2p) => {
-  if (err) throw err
+;(async () => {
+  // Create the Node
+  const libp2p = await Libp2p.create({
+    modules: {
+      transport: [/* TODO: add `libp2p-tcp`, `libp2p-websockets`, and your `libp2p-webrtc-star` instance */]
+    },
+    config: {
+      transport : {
+        // WebrtcStar should match the exported name of the `libp2p-webrtc-star` transport
+        [WebRTCStar.prototype[Symbol.toStringTag]]: {
+          wrtc
+        }
+      }
+    }
+  })
 
   // All done for now, exit
   process.exit(0)
-})
+})()

@@ -1,15 +1,17 @@
 const protons = require('protons')
 
-const { Request } = protons(`
+const { Request, Stats } = protons(`
 message Request {
   enum Type {
     SEND_MESSAGE = 0;
     UPDATE_PEER = 1;
+    STATS = 2;
   }
 
   required Type type = 1;
   optional SendMessage sendMessage = 2;
   optional UpdatePeer updatePeer = 3;
+  optional Stats stats = 4;
 }
 
 message SendMessage {
@@ -20,6 +22,17 @@ message SendMessage {
 
 message UpdatePeer {
   optional bytes userHandle = 1;
+}
+
+message Stats {
+  enum NodeType {
+    GO = 0;
+    NODEJS = 1;
+    BROWSER = 2;
+  }
+
+  repeated bytes connectedPeers = 1;
+  optional NodeType nodeType = 2;
 }
 `)
 
@@ -36,6 +49,21 @@ class Chat {
     this.messageHandler = messageHandler
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
+    this.userHandles = new Map([
+      [libp2p.peerInfo.id.toB58String(), 'Me']
+    ])
+
+    this.connectedPeers = new Set()
+    this.libp2p.on('peer:connect', (peerInfo) => {
+      if (this.connectedPeers.has(peerInfo.id.toB58String())) return
+      this.connectedPeers.add(peerInfo.id.toB58String())
+      this.sendStats(Array.from(this.connectedPeers))
+    })
+    this.libp2p.on('peer:disconnect', (peerInfo) => {
+      if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
+        this.sendStats(Array.from(this.connectedPeers))
+      }
+    })
 
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
@@ -61,7 +89,7 @@ class Chat {
    * @private
    */
   join () {
-    this.libp2p.pubsub.subscribe(this.topic, null, (message) => {
+    this.libp2p.pubsub.subscribe(this.topic, (message) => {
       try {
         const request = Request.decode(message.data)
         switch (request.type) {
@@ -82,8 +110,6 @@ class Chat {
       } catch (err) {
         console.error(err)
       }
-    }, (err) => {
-      console.log(`Subscribed to ${this.topic}`, err)
     })
   }
 
@@ -96,11 +122,71 @@ class Chat {
   }
 
   /**
-   *
-   * @param {Buffer|string} message The chat message to send
-   * @param {function(Error)} callback Called once the publish is complete
+   * Crudely checks the input for a command. If no command is
+   * found `false` is returned. If the input contains a command,
+   * that command will be processed and `true` will be returned.
+   * @param {Buffer|string} input Text submitted by the user
+   * @returns {boolean} Whether or not there was a command
    */
-  send (message, callback) {
+  checkCommand (input) {
+    const str = input.toString()
+    if (str.startsWith('/')) {
+      const args = str.slice(1).split(' ')
+      switch (args[0]) {
+        case 'name':
+          this.updatePeer(args[1])
+          return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Sends a message over pubsub to update the user handle
+   * to the provided `name`.
+   * @param {Buffer|string} name Username to change to
+   */
+  async updatePeer (name) {
+    const msg = Request.encode({
+      type: Request.Type.UPDATE_PEER,
+      updatePeer: {
+        userHandle: Buffer.from(name)
+      }
+    })
+
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish name change', err)
+    }
+  }
+
+  /**
+   * Sends the updated stats to the pubsub network
+   * @param {Array<Buffer>} connectedPeers
+   */
+  async sendStats (connectedPeers) {
+    const msg = Request.encode({
+      type: Request.Type.STATS,
+      stats: {
+        connectedPeers,
+        nodeType: Stats.NodeType.NODEJS
+      }
+    })
+
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish stats update', err)
+    }
+  }
+
+  /**
+   * Publishes the given `message` to pubsub peers
+   * @throws
+   * @param {Buffer|string} message The chat message to send
+   */
+  async send (message) {
     const msg = Request.encode({
       type: Request.Type.SEND_MESSAGE,
       sendMessage: {
@@ -110,10 +196,7 @@ class Chat {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return callback(err)
-      callback()
-    })
+    await this.libp2p.pubsub.publish(this.topic, msg)
   }
 }
 
