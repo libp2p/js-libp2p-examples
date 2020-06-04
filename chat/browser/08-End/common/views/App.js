@@ -29,14 +29,12 @@ export default function App ({
 
     // If the libp2p instance is not created, create it with our PeerInfo instance
     if (!libp2p) {
-      console.info('Creating our Libp2p instance')
-      setLibp2p(
-        // bind event listeners on the new libp2p instance
-        // so we can let the user know it's state
-        createLibp2p(peerInfo)
-          .on('start', () => setStarted(true))
-          .on('stop', () => setStarted(false))
-      )
+      ;(async () => {
+        console.info('Creating our Libp2p instance')
+        const node = await createLibp2p(peerInfo)
+        setStarted(true)
+        setLibp2p(node)
+      })()
       return
     }
   })

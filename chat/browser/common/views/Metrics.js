@@ -19,8 +19,8 @@ export default function Metrics ({
   const [listening, setListening] = useState(false)
   const [peerCount, setPeerCount] = useState(0)
   const [stats, setStats] = useState(new Map())
-  let _graphRoot = createRef()
-  cytoscape.use( euler )
+  const _graphRoot = createRef()
+  cytoscape.use(euler)
 
   /**
    * Leverage use effect to act on state changes
@@ -44,14 +44,14 @@ export default function Metrics ({
       return
     }
 
-    let nodes = {}
-    let edges = []
+    const nodes = {}
+    const edges = []
     Array.from(stats).forEach(([peerId, stat], index) => {
       let { connectedPeers, nodeType } = stat
       if (peerId === libp2p.peerInfo.id.toB58String()) {
         nodeType = 'me'
       }
-      let classname = `node-type-${nodeType}`
+      const classname = `node-type-${nodeType}`
 
       nodes[peerId] = {
         data: { id: peerId },
@@ -88,13 +88,13 @@ export default function Metrics ({
   })
 
   return (
-    <div className="flex flex-column w-50 pa3 h-100">
-      <div className="dt dt--fixed w-100">
-        <p className="dtc"><span className="dot bg-libp2p-dark-purple"></span> Me</p>
-        <p className="dtc"><span className="dot bg-libp2p-dark-aqua"></span> Go</p>
-        <p className="dtc"><span className="dot bg-libp2p-dark-orange"></span> Browser</p>
-        <p className="dtc"><span className="dot bg-libp2p-dark-green"></span> Node.js</p>
-        <p className="dtc"><span className="dot"></span> Unknown</p>
+    <div className='flex flex-column w-50 pa3 h-100'>
+      <div className='dt dt--fixed w-100'>
+        <p className='dtc'><span className='dot bg-libp2p-dark-purple' /> Me</p>
+        <p className='dtc'><span className='dot bg-libp2p-dark-aqua' /> Go</p>
+        <p className='dtc'><span className='dot bg-libp2p-dark-orange' /> Browser</p>
+        <p className='dtc'><span className='dot bg-libp2p-dark-green' /> Node.js</p>
+        <p className='dtc'><span className='dot' /> Unknown</p>
       </div>
       <h3>Peers Known: {peerCount}</h3>
       <Graph graphRoot={_graphRoot} />

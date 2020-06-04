@@ -9,10 +9,10 @@ export default function Message ({ peers, message }) {
 
   return (
     <li>
-      <div className={"chat-body " + (message.isMine ? "right" : "")}>
-        <div className="chat-header">
-          <strong className="chat-name">{from}</strong>
-          <small className="chat-time">{new Date(message.created).toLocaleTimeString()}</small>
+      <div className={'chat-body ' + (message.isMine ? 'right' : '')}>
+        <div className='chat-header'>
+          <strong className='chat-name'>{from}</strong>
+          <small className='chat-time'>{new Date(message.created).toLocaleTimeString()}</small>
         </div>
         <p>{message.data.toString()}</p>
       </div>

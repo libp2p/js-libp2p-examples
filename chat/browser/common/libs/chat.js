@@ -43,22 +43,22 @@ class Chat extends EventEmitter {
    * @param {Libp2p} libp2p A Libp2p node to communicate through
    * @param {string} topic The topic to subscribe to
    */
-  constructor(libp2p, topic) {
+  constructor (libp2p, topic) {
     super()
 
     this.libp2p = libp2p
     this.topic = topic
-    this.libp2p.on('start', this.onStart.bind(this))
-    this.libp2p.on('stop', this.onStop.bind(this))
 
     this.connectedPeers = new Set()
     this.stats = new Map()
     this.libp2p.on('peer:connect', (peerInfo) => {
+      console.log('Connected to', peerInfo.id.toB58String())
       if (this.connectedPeers.has(peerInfo.id.toB58String())) return
       this.connectedPeers.add(peerInfo.id.toB58String())
       this.sendStats(Array.from(this.connectedPeers))
     })
     this.libp2p.on('peer:disconnect', (peerInfo) => {
+      console.log('Disconnected from', peerInfo.id.toB58String())
       if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
         this.sendStats(Array.from(this.connectedPeers))
       }
@@ -69,26 +69,12 @@ class Chat extends EventEmitter {
   }
 
   /**
-   * Handler that is run when `this.libp2p` starts
-   */
-  onStart () {
-    this.join()
-  }
-
-  /**
-   * Handler that is run when `this.libp2p` stops
-   */
-  onStop () {
-    this.leave()
-  }
-
-  /**
    * Subscribes to `Chat.topic`. All messages will be
    * forwarded to `messageHandler`
    * @private
    */
   join () {
-    this.libp2p.pubsub.subscribe(this.topic, null, (message) => {
+    this.libp2p.pubsub.subscribe(this.topic, (message) => {
       try {
         const request = Request.decode(message.data)
         switch (request.type) {
@@ -112,8 +98,6 @@ class Chat extends EventEmitter {
       } catch (err) {
         console.error(err)
       }
-    }, (err) => {
-      console.log(`Subscribed to ${this.topic}`, err)
     })
   }
 
@@ -150,7 +134,7 @@ class Chat extends EventEmitter {
    * to the provided `name`.
    * @param {Buffer|string} name Username to change to
    */
-  updatePeer (name) {
+  async updatePeer (name) {
     const msg = Request.encode({
       type: Request.Type.UPDATE_PEER,
       updatePeer: {
@@ -158,16 +142,18 @@ class Chat extends EventEmitter {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return console.error('Could not publish name change')
-    })
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish name change')
+    }
   }
 
   /**
    * Sends the updated stats to the pubsub network
    * @param {Array<Buffer>} connectedPeers
    */
-  sendStats (connectedPeers) {
+  async sendStats (connectedPeers) {
     const msg = Request.encode({
       type: Request.Type.STATS,
       stats: {
@@ -176,17 +162,18 @@ class Chat extends EventEmitter {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return console.error('Could not publish stats update')
-    })
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish stats update')
+    }
   }
 
   /**
    * Publishes the given `message` to pubsub peers
    * @param {Buffer|string} message The chat message to send
-   * @param {function(Error)} callback Called once the publish is complete
    */
-  send (message, callback) {
+  async send (message) {
     const msg = Request.encode({
       type: Request.Type.SEND_MESSAGE,
       sendMessage: {
@@ -196,10 +183,7 @@ class Chat extends EventEmitter {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return callback(err)
-      callback()
-    })
+    await this.libp2p.pubsub.publish(this.topic, msg)
   }
 }
 
