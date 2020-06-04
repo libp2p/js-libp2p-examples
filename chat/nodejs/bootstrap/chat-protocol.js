@@ -1,5 +1,5 @@
 'use strict'
-const pull = require('pull-stream')
+const pipe = require('it-pipe')
 
 // Define the codec of our chat protocol
 const PROTOCOL = '/libp2p/chat/1.0.0'
@@ -20,21 +20,27 @@ const AutoReplies = [
 
 /**
  * A simple handler to print incoming messages to the console
- * @param {Object} protocol Contains a reference to the handlerFunc and matchFunc for the protocol
- * @param {Stream} stream A pull-stream based stream to the peer
+ * @param {Object} params
+ * @param {Connection} params.connection The connection the stream belongs to
+ * @param {Stream} params.stream A stream to the peer
  */
-function handler (protocol, stream) {
-  pull(
-    stream,
-    pull.collect((err, message) => {
-      if (err) return console.error(err)
-      console.info(String(message))
+async function handler ({ connection, stream }) {
+  try {
+    await pipe(
+      stream,
+      (source) => (async function * () {
+        for await (const message of source) {
+          console.info(`${connection.remotePeer.toB58String().slice(0, 8)}: ${String(message)}`)
 
-      // Auto reply on the same stream, this will also close the stream
-      const randomReply = AutoReplies[Math.floor(Math.random() * AutoReplies.length)]
-      send(randomReply, stream)
-    })
-  )
+          // Auto reply on the same stream
+          yield AutoReplies[Math.floor(Math.random() * AutoReplies.length)]
+        }
+      })(),
+      stream
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 /**
@@ -44,15 +50,20 @@ function handler (protocol, stream) {
  * @param {Buffer|String} message The message to send over `stream`
  * @param {PullStream} stream A stream over the muxed Connection to our peer
  */
-function send (message, stream) {
-  pull(
-    pull.values([ message ]),
-    stream,
-    pull.collect((err, message) => {
-      if (err) return console.error(err)
-      if (message) console.info(String(message))
-    })
-  )
+async function send (message, stream) {
+  try {
+    await pipe(
+      [ message ],
+      stream,
+      async function (source) {
+        for await (const message of source) {
+          console.info(String(message))
+        }
+      }
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 module.exports = {

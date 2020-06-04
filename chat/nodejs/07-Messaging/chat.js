@@ -89,7 +89,7 @@ class Chat {
    * @private
    */
   join () {
-    this.libp2p.pubsub.subscribe(this.topic, null, (message) => {
+    this.libp2p.pubsub.subscribe(this.topic, (message) => {
       try {
         const request = Request.decode(message.data)
         switch (request.type) {
@@ -110,8 +110,6 @@ class Chat {
       } catch (err) {
         console.error(err)
       }
-    }, (err) => {
-      console.log(`Subscribed to ${this.topic}`, err)
     })
   }
 
@@ -148,7 +146,7 @@ class Chat {
    * to the provided `name`.
    * @param {Buffer|string} name Username to change to
    */
-  updatePeer (name) {
+  async updatePeer (name) {
     const msg = Request.encode({
       type: Request.Type.UPDATE_PEER,
       updatePeer: {
@@ -156,16 +154,18 @@ class Chat {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return console.error('Could not publish name change')
-    })
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish name change', err)
+    }
   }
 
   /**
    * Sends the updated stats to the pubsub network
    * @param {Array<Buffer>} connectedPeers
    */
-  sendStats (connectedPeers) {
+  async sendStats (connectedPeers) {
     const msg = Request.encode({
       type: Request.Type.STATS,
       stats: {
@@ -174,17 +174,19 @@ class Chat {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return console.error('Could not publish stats update')
-    })
+    try {
+      await this.libp2p.pubsub.publish(this.topic, msg)
+    } catch (err) {
+      console.error('Could not publish stats update', err)
+    }
   }
 
   /**
    * Publishes the given `message` to pubsub peers
+   * @throws
    * @param {Buffer|string} message The chat message to send
-   * @param {function(Error)} callback Called once the publish is complete
    */
-  send (message, callback) {
+  async send (message) {
     const msg = Request.encode({
       type: Request.Type.SEND_MESSAGE,
       sendMessage: {
@@ -194,10 +196,7 @@ class Chat {
       }
     })
 
-    this.libp2p.pubsub.publish(this.topic, msg, (err) => {
-      if (err) return callback(err)
-      callback()
-    })
+    await this.libp2p.pubsub.publish(this.topic, msg)
   }
 }
 

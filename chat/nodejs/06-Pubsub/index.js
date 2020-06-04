@@ -1,14 +1,14 @@
 'use strict'
 
 // Libp2p Core
-const { createLibp2p } = require('libp2p')
+const Libp2p = require('libp2p')
 // Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
-const WebrtcStar = require('libp2p-webrtc-star')
+const WebRTCStar = require('libp2p-webrtc-star')
 const wrtc = require('wrtc')
 // Stream Muxer
-const Mplex = require('pull-mplex')
+const Mplex = require('libp2p-mplex')
 // Connection Encryption
 const Secio = require('libp2p-secio')
 // Chat protocol
@@ -19,34 +19,38 @@ const PubsubChat = require('./chat')
 const Bootstrap = require('libp2p-bootstrap')
 const MDNS = require('libp2p-mdns')
 const KadDHT = require('libp2p-kad-dht')
+// TODO: import `libp2p-gossipsub`
 
-const wrtcStar = new WebrtcStar({ wrtc })
-
-// Create the Node
-createLibp2p({
-  modules: {
-    transport: [ TCP, Websockets, wrtcStar ],
-    streamMuxer: [ Mplex ],
-    connEncryption: [ Secio ],
-    peerDiscovery: [ Bootstrap, MDNS, wrtcStar.discovery ],
-    dht: KadDHT
-  },
-  config: {
-    peerDiscovery: {
-      bootstrap: {
-        list: [ '/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
-      }
+;(async () => {
+  // Create the Node
+  const libp2p = await Libp2p.create({
+    modules: {
+      transport: [ TCP, Websockets, WebRTCStar ],
+      streamMuxer: [ Mplex ],
+      connEncryption: [ Secio ],
+      peerDiscovery: [ Bootstrap, MDNS ],
+      dht: KadDHT
+      // TODO: set pubsub
     },
-    dht: {
-      enabled: true,
-      randomWalk: {
-        enabled: true
+    config: {
+      transport : {
+        [WebRTCStar.prototype[Symbol.toStringTag]]: {
+          wrtc
+        }
+      },
+      peerDiscovery: {
+        bootstrap: {
+          list: [ '/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
+        }
+      },
+      dht: {
+        enabled: true,
+        randomWalk: {
+          enabled: true
+        }
       }
     }
-    // TODO: set `EXPERIMENTAL.pubsub` to true
-  }
-}, (err, libp2p) => {
-  if (err) throw err
+  })
 
   // Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
   libp2p.on('peer:connect', (peerInfo) => {
@@ -60,6 +64,13 @@ createLibp2p({
   // Add the signaling server multiaddr to the peerInfo multiaddrs list
   libp2p.peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${libp2p.peerInfo.id.toB58String()}`)
 
+  // TODO: remove the handle code
+  // Add chat handler
+  libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
+
+  // Start libp2p
+  await libp2p.start()
+
   // Create our PubsubChat client
   // TODO: uncomment the following code
   // const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
@@ -67,10 +78,6 @@ createLibp2p({
   //   let user = fromMe ? 'Me' : from.substring(0, 6)
   //   console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}${PubsubChat.CLEARLINE}`)
   // })
-
-  // TODO: remove the handle code
-  // Add chat handler
-  libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
 
   // Set up our input handler
   process.stdin.on('data', (message) => {
@@ -80,19 +87,20 @@ createLibp2p({
     // TODO: replace the dial logic below with pubsub, `pubsubChat.send(message, (err) => {})`
 
     // Iterate over all peers, and send messages to peers we are connected to
-    libp2p.peerBook.getAllArray().forEach(peerInfo => {
-      // Don't send messages if we're not connected or they dont support the chat protocol
-      if (!peerInfo.isConnected() || !peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+    libp2p.peerStore.peers.forEach(async (peerInfo) => {
+      // If they dont support the chat protocol, ignore
+      if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
 
-      libp2p.dialProtocol(peerInfo, ChatProtocol.PROTOCOL, (err, stream) => {
-        if (err) return console.error('Could not negotiate chat protocol stream with peer', err)
-        ChatProtocol.send(message, stream)
-      })
+      // If we're not connected, ignore
+      const connection = libp2p.registrar.getConnection(peerInfo)
+      if (!connection) return
+
+      try {
+        const { stream } = await connection.newStream([ChatProtocol.PROTOCOL])
+        await ChatProtocol.send(message, stream)
+      } catch (err) {
+        console.error('Could not negotiate chat protocol stream with peer', err)
+      }
     })
   })
-
-  // Start libp2p
-  libp2p.start((err) => {
-    if (err) throw err
-  })
-})
+})()

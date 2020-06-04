@@ -1,22 +1,28 @@
 'use strict'
-
-// Libp2p Core
-const { createLibp2p } = require('libp2p')
-// Transports
+// require `libp2p-tcp`, `libp2p-websockets`, and `libp2p-webrtc-star`
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
 const WebRTCStar = require('libp2p-webrtc-star')
+// require `wrtc`
 const wrtc = require('wrtc')
 
-const webRTCStar = new WebRTCStar({ wrtc })
+// Libp2p Core
+const Libp2p = require('libp2p')
 
-// Create the Node
-createLibp2p({
-  modules: {
-    transport: [ TCP, Websockets, webRTCStar ]
-  }
-}, (err, libp2p) => {
-  if (err) throw err
+;(async () => {
+  // Create the Node
+  const libp2p = await Libp2p.create({
+    modules: {
+      transport: [ TCP, Websockets, WebRTCStar ]
+    },
+    config: {
+      transport : {
+        [WebRTCStar.prototype[Symbol.toStringTag]]: {
+          wrtc
+        }
+      }
+    }
+  })
 
   // TODO: Add a TCP listen address on port 0
   // TODO: Add a Websockets listen address on port 0
@@ -25,6 +31,6 @@ createLibp2p({
   // TODO: remove the exit call
   process.exit(0)
 
-  // TODO: start libp2p, if there is an error in the callback throw it
+  // TODO: start libp2p
   // TODO: once started, use `libp2p.dial` to dial to the Bootstrap node
-})
+})()
