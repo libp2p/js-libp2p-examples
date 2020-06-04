@@ -30,14 +30,20 @@ const sendMessage = () => {
   setMessage('')
   if (!message) return
   // Iterate over all peers, and send messages to peers we are connected to
-  libp2p.peerBook.getAllArray().forEach(peerInfo => {
-    // Don't send messages if we're not connected or they dont support the chat protocol
-    if (!peerInfo.isConnected() || !peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+  libp2p.peerStore.peers.forEach(async (peerInfo) => {
+    // If they dont support the chat protocol, ignore
+    if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
 
-    libp2p.dialProtocol(peerInfo, ChatProtocol.PROTOCOL, (err, stream) => {
-      if (err) return console.error('Could not negotiate chat protocol stream with peer', err)
-      ChatProtocol.send(message, stream)
-    })
+    // If we're not connected, ignore
+    const connection = libp2p.registrar.getConnection(peerInfo)
+    if (!connection) return
+
+    try {
+      const { stream } = await connection.newStream([ChatProtocol.PROTOCOL])
+      await ChatProtocol.send(message, stream)
+    } catch (err) {
+      console.error('Could not negotiate chat protocol stream with peer', err)
+    }
   })
 
   // Update the messages for the view
@@ -73,12 +79,15 @@ TODO: Update the Message.js chat logging code
 
 Replace the `sendMessage` declaration with the following code.
 ```js
-const sendMessage = () => {
+const sendMessage = async () => {
   setMessage('')
   if (!message) return
-  chatClient.send(message, (err) => {
-    console.info('Publish done', err)
-  })
+  try {
+    await chatClient.send(message)
+    console.info('Publish done')
+  } catch (err) {
+    console.error('Could not send message', err)
+  }
 }
 ```
 
@@ -120,15 +129,18 @@ useEffect(() => {
 
 Replace the `sendMessage` declaration with the following code.
 ```js
-const sendMessage = () => {
+const sendMessage = async () => {
   setMessage('')
   if (!message) return
   // Check for commands before sending the message
   // Just return early if a command was found
   if (chatClient.checkCommand(message)) return
   // No commands, send the message!
-  chatClient.send(message, (err) => {
-    console.info('Publish done', err)
-  })
+  try {
+    await chatClient.send(message)
+    console.info('Publish done')
+  } catch (err) {
+    console.error('Could not send message', err)
+  }
 }
 ```
