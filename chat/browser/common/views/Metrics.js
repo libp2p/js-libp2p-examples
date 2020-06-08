@@ -35,8 +35,9 @@ export default function Metrics ({
         setStats(stats)
       })
 
-      libp2p.on('peer:discovery', (peerInfo) => {
-        const num = libp2p.peerBook.getAllArray().length
+      libp2p.peerStore.on('peer', (peerId) => {
+        console.log('peers', libp2p.peerStore.peers.size)
+        const num = libp2p.peerStore.peers.size
         setPeerCount(num)
       })
 
@@ -48,7 +49,7 @@ export default function Metrics ({
     const edges = []
     Array.from(stats).forEach(([peerId, stat], index) => {
       let { connectedPeers, nodeType } = stat
-      if (peerId === libp2p.peerInfo.id.toB58String()) {
+      if (peerId === libp2p.peerId.toB58String()) {
         nodeType = 'me'
       }
       const classname = `node-type-${nodeType}`

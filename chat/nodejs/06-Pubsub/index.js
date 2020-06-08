@@ -60,9 +60,9 @@ const KadDHT = require('libp2p-kad-dht')
     }
   })
 
-  // Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
-  libp2p.on('peer:connect', (peerInfo) => {
-    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
+  // Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
+  libp2p.connectionManager.on('peer:connect', (connection) => {
+    console.info(`Connected to ${connection.remotePeer.toB58String()}!`)
   })
 
   // TODO: remove the handle code
@@ -75,7 +75,7 @@ const KadDHT = require('libp2p-kad-dht')
   // Create our PubsubChat client
   // TODO: uncomment the following code
   // const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
-  //   let fromMe = from === libp2p.peerInfo.id.toB58String()
+  //   let fromMe = from === libp2p.peerId.toB58String()
   //   let user = fromMe ? 'Me' : from.substring(0, 6)
   //   console.info(`${fromMe ? PubsubChat.CLEARLINE : ''}${user}(${new Date(message.created).toLocaleTimeString()}): ${message.data}${PubsubChat.CLEARLINE}`)
   // })

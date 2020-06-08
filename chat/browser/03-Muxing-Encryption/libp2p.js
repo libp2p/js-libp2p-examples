@@ -3,21 +3,25 @@ import Websockets from 'libp2p-websockets'
 import WebrtcStar from 'libp2p-webrtc-star'
 import multiaddr from 'multiaddr'
 // TODO: import `libp2p-mplex`
+// TODO: import `libp2p-noise`
 // TODO: import `libp2p-secio`
 
-const createLibp2p = async (peerInfo) => {
-  // Add the signaling server multiaddr to the peerInfo multiaddrs list
-  peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
-
+const createLibp2p = async (peerId) => {
   // Create the Node
   const libp2p = await Libp2p.create({
-    peerInfo,
+    peerId,
+    addresses: {
+      listen: [
+        // Add the signaling server multiaddr
+        '/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star'
+      ]
+    },
     modules: {
       transport: [Websockets, WebrtcStar]
     }
   })
 
-  // TODO: Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
+  // TODO: Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
 
   // Automatically start libp2p
   await libp2p.start()

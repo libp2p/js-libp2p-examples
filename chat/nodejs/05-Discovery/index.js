@@ -62,9 +62,9 @@ const Libp2p = require('libp2p')
     }
   })
 
-  // Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
-  libp2p.on('peer:connect', (peerInfo) => {
-    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
+  // Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
+  libp2p.connectionManager.on('peer:connect', (connection) => {
+    console.info(`Connected to ${connection.remotePeer.toB58String()}!`)
   })
 
   // Add chat handler

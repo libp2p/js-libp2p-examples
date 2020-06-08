@@ -51,15 +51,15 @@ class Chat extends EventEmitter {
 
     this.connectedPeers = new Set()
     this.stats = new Map()
-    this.libp2p.on('peer:connect', (peerInfo) => {
-      console.log('Connected to', peerInfo.id.toB58String())
-      if (this.connectedPeers.has(peerInfo.id.toB58String())) return
-      this.connectedPeers.add(peerInfo.id.toB58String())
+    this.libp2p.connectionManager.on('peer:connect', (connection) => {
+      console.log('Connected to', connection.remotePeer.toB58String())
+      if (this.connectedPeers.has(connection.remotePeer.toB58String())) return
+      this.connectedPeers.add(connection.remotePeer.toB58String())
       this.sendStats(Array.from(this.connectedPeers))
     })
-    this.libp2p.on('peer:disconnect', (peerInfo) => {
-      console.log('Disconnected from', peerInfo.id.toB58String())
-      if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
+    this.libp2p.connectionManager.on('peer:disconnect', (connection) => {
+      console.log('Disconnected from', connection.remotePeer.toB58String())
+      if (this.connectedPeers.delete(connection.remotePeer.toB58String())) {
         this.sendStats(Array.from(this.connectedPeers))
       }
     })

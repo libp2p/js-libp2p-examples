@@ -3,12 +3,16 @@ import Websockets from 'libp2p-websockets'
 import WebrtcStar from 'libp2p-webrtc-star'
 // TODO: Import the multiaddr module
 
-const createLibp2p = async (peerInfo) => {
-  // TODO: Add the signaling server multiaddr to the peerInfo multiaddrs list
-
+const createLibp2p = async (peerId) => {
   // Create the Node
   const libp2p = await Libp2p.create({
-    peerInfo,
+    peerId,
+    addresses: {
+      // TODO: Add the signaling server multiaddr to listen list
+      listen: [
+
+      ]
+    },
     modules: {
       transport: [Websockets, WebrtcStar]
     }

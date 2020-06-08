@@ -23,7 +23,7 @@ const Libp2p = require('libp2p')
         '/ip4/0.0.0.0/tcp/0',
         // Add a Websockets listen address on port 0
         '/ip4/0.0.0.0/tcp/0/ws',
-        // Add the signaling server multiaddr to the peerInfo multiaddrs list
+        // Add the signaling server multiaddr
         `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
       ]
     },
@@ -41,7 +41,7 @@ const Libp2p = require('libp2p')
     }
   })
 
-  // TODO: Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
+  // TODO: Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
 
   // start libp2p
   await libp2p.start()

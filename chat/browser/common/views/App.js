@@ -4,14 +4,14 @@ import EventEmitter from 'events'
 import Header from './Header'
 import Metrics from './Metrics'
 import Chat from './Chat'
-import { getOrCreatePeerInfo } from '../libs/peer-info'
+import { getOrCreatePeerId } from '../libs/peer-id'
 import '../styles/index.css'
 
 export default function App ({
   createLibp2p,
   ChatProtocol
 }) {
-  const [peerInfo, setPeerInfo] = useState(null)
+  const [peerId, setPeerId] = useState(null)
   const [libp2p, setLibp2p] = useState(null)
   const [started, setStarted] = useState(false)
   const eventBus = new EventEmitter()
@@ -20,21 +20,21 @@ export default function App ({
    * Leverage use effect to act on state changes
    */
   useEffect(() => {
-    // If we don't have a PeerInfo, let's get or create it
+    // If we don't have a PeerId, let's get or create it
     // This will attempt to leverage localStorage so we can reuse our key
-    if (!peerInfo) {
-      console.info('Getting our PeerInfo')
-      getOrCreatePeerInfo().then(setPeerInfo)
+    if (!peerId) {
+      console.info('Getting our PeerId')
+      getOrCreatePeerId().then(setPeerId)
       return
     }
 
-    // If the libp2p instance is not created, create it with our PeerInfo instance
+    // If the libp2p instance is not created, create it with our PeerId instance
     if (!libp2p) {
       ;(async () => {
         console.info('Creating our Libp2p instance')
-        const node = await createLibp2p(peerInfo)
-        setStarted(true)
+        const node = await createLibp2p(peerId)
         setLibp2p(node)
+        setStarted(true)
       })()
       return
     }

@@ -53,7 +53,7 @@ export default function Chat ({
 
       // Listen for messages
       pubsubChat.on('message', (message) => {
-        if (message.from === libp2p.peerInfo.id.toB58String()) {
+        if (message.from === libp2p.peerId.toB58String()) {
           message.isMine = true
         }
         setMessages((messages) => [...messages, message])
