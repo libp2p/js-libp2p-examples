@@ -35,7 +35,7 @@ export default function Chat ({
    * @param {KeyDownEvent} e
    */
   const onKeyDown = (e) => {
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       sendMessage()
     }
   }
