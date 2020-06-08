@@ -1,5 +1,5 @@
 'use strict'
-const pip2 = require('it-pipe')
+const pipe = require('it-pipe')
 
 // Define the codec of our chat protocol
 const PROTOCOL = '/libp2p/chat/1.0.0'
@@ -46,7 +46,7 @@ function createHandler (setMessages) {
 async function send (message, stream, setMessages) {
   try {
     await pipe(
-      [ message ],
+      [message],
       stream,
       async function (source) {
         for await (const message of source) {

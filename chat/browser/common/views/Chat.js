@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Message from './Message'
 
 // Chat over Pubsub
-import PubsubChat from '../libs/chat'
+// import PubsubChat from '../libs/chat'
 
 export default function Chat ({
   libp2p,
@@ -11,6 +11,7 @@ export default function Chat ({
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const [chatClient, setChatClient] = useState(null)
+  // eslint-disable-next-line
   const [peers, setPeers] = useState({})
 
   /**
@@ -30,7 +31,7 @@ export default function Chat ({
    * @param {KeyDownEvent} e
    */
   const onKeyDown = (e) => {
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       sendMessage()
     }
   }

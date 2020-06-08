@@ -35,7 +35,6 @@ export default function App ({
         setLibp2p(node)
         setStarted(true)
       })()
-      return
     }
   })
 
