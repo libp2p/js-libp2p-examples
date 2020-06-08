@@ -4,6 +4,14 @@ This example will guide you through creating a basic Chat application with libp2
 
 Both examples will benefit from you using the provided [Bootstrap][bootstrap] node. You can view the README there.
 
+## js-libp2p Version
+
+This example has been updated for js-libp2p 0.28.0.
+
+For previous versions of js-libp2p, please see their respective branch:
+- [js-libp2p 0.27.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.27.x)
+- [js-libp2p 0.25.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.25.x)
+
 ## Resources
 
 You can follow along with the [IPFS Camp 2019 Workshop slide deck](https://docs.google.com/presentation/d/1a_BjIM4ORQchnMNjOMO-wCDW2VS5nXeKXIbWSEqf9jY) if you'd like more information. Make sure to view the speaker notes if the slides aren't clear.
