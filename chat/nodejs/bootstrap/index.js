@@ -14,6 +14,7 @@ const SignalingServer = require('libp2p-webrtc-star/src/sig-server')
 // Stream Multiplexers
 const Mplex = require('libp2p-mplex')
 // Encryption
+const { NOISE } = require('libp2p-noise')
 const Secio = require('libp2p-secio')
 // Discovery
 const MDNS = require('libp2p-mdns')
@@ -22,7 +23,7 @@ const KademliaDHT = require('libp2p-kad-dht')
 // PubSub
 const Gossipsub = require('libp2p-gossipsub')
 
-const PeerInfo = require('peer-info')
+const PeerId = require('peer-id')
 const idJSON = require('../id.json')
 const PubsubChat = require('./chat')
 
@@ -30,21 +31,23 @@ const PubsubChat = require('./chat')
 const ChatProtocol = require('./chat-protocol')
 
 ;(async () => {
-  const peerInfo = await PeerInfo.create(idJSON)
+  const peerId = await PeerId.createFromJSON(idJSON)
 
   // Wildcard listen on TCP and Websocket
-  peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/63785')
-  peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/63786/ws')
+  const addrs = [
+    '/ip4/0.0.0.0/tcp/63785',
+    '/ip4/0.0.0.0/tcp/63786/ws'
+  ]
 
   const signalingServer = await SignalingServer.start({
     port: 15555
   })
   const ssAddr = `/ip4/${signalingServer.info.host}/tcp/${signalingServer.info.port}/ws/p2p-webrtc-star`
   console.info(`Signaling server running at ${ssAddr}`)
-  peerInfo.multiaddrs.add(`${ssAddr}/p2p/${peerInfo.id.toB58String()}`)
+  addrs.push(`${ssAddr}/p2p/${peerId.toB58String()}`)
 
   // Create the node
-  const libp2p = await createBootstrapNode(peerInfo)
+  const libp2p = await createBootstrapNode(peerId, addrs)
 
   // Add chat handler
   libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
@@ -54,12 +57,12 @@ const ChatProtocol = require('./chat-protocol')
     // remove the newline
     message = message.slice(0, -1)
     // Iterate over all peers, and send messages to peers we are connected to
-    libp2p.peerStore.peers.forEach(async (peerInfo) => {
+    libp2p.peerStore.peers.forEach(async (peerData) => {
       // If they dont support the chat protocol, ignore
-      if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+      if (!peerData.protocols.includes(ChatProtocol.PROTOCOL)) return
 
       // If we're not connected, ignore
-      const connection = libp2p.registrar.getConnection(peerInfo)
+      const connection = libp2p.connectionManager.get(peerData.id)
       if (!connection) return
 
       try {
@@ -74,12 +77,13 @@ const ChatProtocol = require('./chat-protocol')
   // Start the node
   await libp2p.start()
   console.log('Node started with addresses:')
-  libp2p.peerInfo.multiaddrs.forEach(ma => console.log(ma.toString()))
-  libp2p.peerInfo.protocols.forEach(p => console.log(p))
+  libp2p.transportManager.getAddrs().forEach(ma => console.log(ma.toString()))
+  console.log('\nNode supports protocols:')
+  libp2p.upgrader.protocols.forEach((_, p) => console.log(p))
 
   // Create the Pubsub based chat extension
   const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
-    let fromMe = from === libp2p.peerInfo.id.toB58String()
+    let fromMe = from === libp2p.peerId.toB58String()
     let user = from.substring(0, 6)
     if (pubsubChat.userHandles.has(from)) {
       user = pubsubChat.userHandles.get(from)
@@ -104,13 +108,16 @@ const ChatProtocol = require('./chat-protocol')
 })()
 
 
-const createBootstrapNode = (peerInfo) => {
+const createBootstrapNode = (peerId, listenAddrs) => {
   return Libp2p.create({
-    peerInfo,
+    peerId,
+    addresses: {
+      listen: listenAddrs
+    },
     modules: {
       transport: [ WebrtcStar, TCP, Websockets ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ Secio ],
+      connEncryption: [ NOISE, Secio ],
       peerDiscovery: [ MDNS ],
       dht: KademliaDHT,
       pubsub: Gossipsub

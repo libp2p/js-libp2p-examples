@@ -12,6 +12,12 @@ const Libp2p = require('libp2p')
 ;(async () => {
   // Create the Node
   const libp2p = await Libp2p.create({
+    addresses: {
+      // TODO: Add a TCP listen address on port 0
+      // TODO: Add a Websockets listen address on port 0
+      // TODO: Add the signaling server multiaddr to the peerInfo multiaddrs list
+      listen: []
+    },
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ]
     },
@@ -23,10 +29,6 @@ const Libp2p = require('libp2p')
       }
     }
   })
-
-  // TODO: Add a TCP listen address on port 0
-  // TODO: Add a Websockets listen address on port 0
-  // TODO: Add the signaling server multiaddr to the peerInfo multiaddrs list
 
   // TODO: remove the exit call
   process.exit(0)
