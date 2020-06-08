@@ -9,6 +9,8 @@ const wrtc = require('wrtc')
 const multiaddr = require('multiaddr')
 // require `libp2p-mplex`
 const Mplex = require('libp2p-mplex')
+// require `libp2p-noise`
+const { NOISE } = require('libp2p-noise')
 // require `libp2p-secio`
 const Secio = require('libp2p-secio')
 // Chat protocol
@@ -20,10 +22,17 @@ const Libp2p = require('libp2p')
 ;(async () => {
   // Create the Node
   const libp2p = await Libp2p.create({
+    addresses: {
+      listen: [
+        '/ip4/0.0.0.0/tcp/0',
+        '/ip4/0.0.0.0/tcp/0/ws',
+        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
+      ]
+    },
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ Secio ]
+      connEncryption: [ NOISE, Secio ],
     },
     config: {
       transport : {
@@ -38,13 +47,6 @@ const Libp2p = require('libp2p')
   libp2p.on('peer:connect', (peerInfo) => {
     console.info(`Connected to ${peerInfo.id.toB58String()}!`)
   })
-
-  // Add a TCP listen address on port 0
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
-  // Add a Websockets listen address on port 0
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
-  // Add the signaling server multiaddr to the peerInfo multiaddrs list
-  libp2p.peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${libp2p.peerInfo.id.toB58String()}`)
 
   // TODO: Add chat handler
   // libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)

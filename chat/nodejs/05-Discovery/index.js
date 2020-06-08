@@ -9,6 +9,8 @@ const wrtc = require('wrtc')
 const multiaddr = require('multiaddr')
 // require `libp2p-mplex`
 const Mplex = require('libp2p-mplex')
+// require `libp2p-noise`
+const { NOISE } = require('libp2p-noise')
 // require `libp2p-secio`
 const Secio = require('libp2p-secio')
 // Chat protocol
@@ -23,10 +25,17 @@ const Libp2p = require('libp2p')
 ;(async () => {
   // Create the Node
   const libp2p = await Libp2p.create({
+    addresses: {
+      listen: [
+        '/ip4/0.0.0.0/tcp/0',
+        '/ip4/0.0.0.0/tcp/0/ws',
+        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
+      ]
+    },
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ Secio ],
+      connEncryption: [ NOISE, Secio ],
       // TODO: Add `libp2p-bootstrap` and the `webrtcStar.discovery` service
       peerDiscovery: [ ],
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value
@@ -58,13 +67,6 @@ const Libp2p = require('libp2p')
     console.info(`Connected to ${peerInfo.id.toB58String()}!`)
   })
 
-  // Add a TCP listen address on port 0
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0')
-  // Add a Websockets listen address on port 0
-  libp2p.peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0/ws')
-  // Add the signaling server multiaddr to the peerInfo multiaddrs list
-  libp2p.peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${libp2p.peerInfo.id.toB58String()}`)
-
   // Add chat handler
   libp2p.handle(ChatProtocol.PROTOCOL, ChatProtocol.handler)
 
@@ -76,12 +78,12 @@ const Libp2p = require('libp2p')
     // remove the newline
     message = message.slice(0, -1)
     // Iterate over all peers, and send messages to peers we are connected to
-    libp2p.peerStore.peers.forEach(async (peerInfo) => {
+    libp2p.peerStore.peers.forEach(async (peerData) => {
       // If they dont support the chat protocol, ignore
-      if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+      if (!peerData.protocols.includes(ChatProtocol.PROTOCOL)) return
 
       // If we're not connected, ignore
-      const connection = libp2p.registrar.getConnection(peerInfo)
+      const connection = libp2p.connectionManager.get(peerData.id)
       if (!connection) return
 
       try {

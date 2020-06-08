@@ -50,17 +50,17 @@ class Chat {
     this.libp2p.on('start', this.onStart.bind(this))
     this.libp2p.on('stop', this.onStop.bind(this))
     this.userHandles = new Map([
-      [libp2p.peerInfo.id.toB58String(), 'Me']
+      [libp2p.peerId.toB58String(), 'Me']
     ])
 
     this.connectedPeers = new Set()
-    this.libp2p.on('peer:connect', (peerInfo) => {
-      if (this.connectedPeers.has(peerInfo.id.toB58String())) return
-      this.connectedPeers.add(peerInfo.id.toB58String())
+    this.libp2p.on('peer:connect', (connection) => {
+      if (this.connectedPeers.has(connection.remotePeer.toB58String())) return
+      this.connectedPeers.add(connection.remotePeer.toB58String())
       this.sendStats(Array.from(this.connectedPeers))
     })
-    this.libp2p.on('peer:disconnect', (peerInfo) => {
-      if (this.connectedPeers.delete(peerInfo.id.toB58String())) {
+    this.libp2p.on('peer:disconnect', (connection) => {
+      if (this.connectedPeers.delete(connection.remotePeer.toB58String())) {
         this.sendStats(Array.from(this.connectedPeers))
       }
     })
