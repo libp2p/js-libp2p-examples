@@ -15,7 +15,7 @@ const Libp2p = require('libp2p')
     addresses: {
       // TODO: Add a TCP listen address on port 0
       // TODO: Add a Websockets listen address on port 0
-      // TODO: Add the signaling server multiaddr to the peerInfo multiaddrs list
+      // TODO: Add the signaling server multiaddr
       listen: []
     },
     modules: {

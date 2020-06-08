@@ -30,12 +30,12 @@ const sendMessage = () => {
   setMessage('')
   if (!message) return
   // Iterate over all peers, and send messages to peers we are connected to
-  libp2p.peerStore.peers.forEach(async (peerInfo) => {
+  libp2p.peerStore.peers.forEach(async (peerData) => {
     // If they dont support the chat protocol, ignore
-    if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+    if (!peerData.protocols.includes(ChatProtocol.PROTOCOL)) return
 
     // If we're not connected, ignore
-    const connection = libp2p.registrar.getConnection(peerInfo)
+    const connection = libp2p.connectionManager.get(peerData.id)
     if (!connection) return
 
     try {
@@ -104,7 +104,7 @@ useEffect(() => {
 
     // Listen for messages
     pubsubChat.on('message', (message) => {
-      if (message.from === libp2p.peerInfo.id.toB58String()) {
+      if (message.from === libp2p.peerId.toB58String()) {
         message.isMine = true
       }
       setMessages((messages) => [...messages, message])

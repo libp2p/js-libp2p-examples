@@ -43,9 +43,9 @@ const Libp2p = require('libp2p')
     }
   })
 
-  // Listen on libp2p for `peer:connect` and log the provided PeerInfo.id.toB58String() peer id string.
-  libp2p.on('peer:connect', (peerInfo) => {
-    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
+  // Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
+  libp2p.connectionManager.on('peer:connect', (connection) => {
+    console.info(`Connected to ${connection.remotePeer.toB58String()}!`)
   })
 
   // TODO: Add chat handler
@@ -60,12 +60,12 @@ const Libp2p = require('libp2p')
   //   // remove the newline
   //   message = message.slice(0, -1)
   //   // Iterate over all peers, and send messages to peers we are connected to
-  //   libp2p.peerStore.peers.forEach(async (peerInfo) => {
+  //   libp2p.peerStore.peers.forEach(async (peerData) => {
   //     // If they dont support the chat protocol, ignore
-  //     if (!peerInfo.protocols.has(ChatProtocol.PROTOCOL)) return
+  //     if (!peerData.protocols.includes(ChatProtocol.PROTOCOL)) return
 
   //     // If we're not connected, ignore
-  //     const connection = libp2p.registrar.getConnection(peerInfo)
+  //     const connection = libp2p.connectionManager.get(peerData.id)
   //     if (!connection) return
 
   //     try {

@@ -8,22 +8,26 @@ import multiaddr from 'multiaddr'
 // Stream Muxer
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
+import { NOISE } from 'libp2p-noise'
 import Secio from 'libp2p-secio'
 // Discovery
 // TODO: Import `libp2p-bootstrap`
 // TODO: Import `libp2p-kad-dht`
 
-const createLibp2p = async (peerInfo) => {
-  // Add the signaling server multiaddr to the peerInfo multiaddrs list
-  peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
-
+const createLibp2p = async (peerId) => {
   // Create the Node
   const libp2p = await Libp2p.create({
-    peerInfo,
+    peerId,
+    addresses: {
+      listen: [
+        // Add the signaling server multiaddr
+        '/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star'
+      ]
+    },
     modules: {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
-      connEncryption: [Secio],
+      connEncryption: [NOISE, Secio],
       // TODO: Add `libp2p-bootstrap`
       peerDiscovery: [],
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value
@@ -47,8 +51,8 @@ const createLibp2p = async (peerInfo) => {
   })
 
   // Listener for peer connection events
-  libp2p.on('peer:connect', (peerInfo) => {
-    console.info(`Connected to ${peerInfo.id.toB58String()}!`)
+  libp2p.connectionManager.on('peer:connect', (connection) => {
+    console.info(`Connected to ${connection.remotePeer.toB58String()}!`)
   })
 
   // Automatically start libp2p

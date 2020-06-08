@@ -6,23 +6,27 @@ import WebrtcStar from 'libp2p-webrtc-star'
 // Stream Muxer
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
+import { NOISE } from 'libp2p-noise'
 import Secio from 'libp2p-secio'
 // Peer Discovery
 import Bootstrap from 'libp2p-bootstrap'
 import KadDHT from 'libp2p-kad-dht'
 // TODO: import 'libp2p-gossipsub'
 
-const createLibp2p = async (peerInfo) => {
-  // Listen on the signaling server
-  peerInfo.multiaddrs.add(`/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/p2p/${peerInfo.id.toB58String()}`)
-
+const createLibp2p = async (peerId) => {
   // Create the Node
   const libp2p = await Libp2p.create({
-    peerInfo,
+    peerId,
+    addresses: {
+      listen: [
+        // Add the signaling server multiaddr
+        '/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star'
+      ]
+    },
     modules: {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
-      connEncryption: [Secio],
+      connEncryption: [NOISE, Secio],
       peerDiscovery: [Bootstrap],
       dht: KadDHT,
       // TODO: set pubsub to the imported 'libp2p-gossipsub'
