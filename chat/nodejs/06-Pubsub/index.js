@@ -22,14 +22,14 @@ const MDNS = require('libp2p-mdns')
 const KadDHT = require('libp2p-kad-dht')
 // TODO: import `libp2p-gossipsub`
 
-;(async () => {
+async function main() {
   // Create the Node
   const libp2p = await Libp2p.create({
     addresses: {
       listen: [
         '/ip4/0.0.0.0/tcp/0',
         '/ip4/0.0.0.0/tcp/0/ws',
-        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
+        `/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star`
       ]
     },
     modules: {
@@ -48,7 +48,7 @@ const KadDHT = require('libp2p-kad-dht')
       },
       peerDiscovery: {
         bootstrap: {
-          list: [ '/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
+          list: [ '/dnsaddr/sjc-1.bootstrap.libp2p.io/tcp/4001/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN' ]
         }
       },
       dht: {
@@ -71,6 +71,10 @@ const KadDHT = require('libp2p-kad-dht')
 
   // Start libp2p
   await libp2p.start()
+
+  // Log our PeerId and Multiaddrs
+  console.info(`${libp2p.peerId.toB58String()} listening on addresses:`)
+  console.info(libp2p.multiaddrs.map(addr => addr.toString()).join('\n'), '\n')
 
   // Create our PubsubChat client
   // TODO: uncomment the following code
@@ -104,4 +108,4 @@ const KadDHT = require('libp2p-kad-dht')
       }
     })
   })
-})()
+}

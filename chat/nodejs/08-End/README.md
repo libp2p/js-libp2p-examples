@@ -1,3 +1,3 @@
 # Chapter 08
 
-The end! Or is it...?
+The code in this chapter contains the full, working source code for the chat app in Node.js.

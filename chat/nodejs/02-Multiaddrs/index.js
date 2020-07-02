@@ -9,7 +9,7 @@ const wrtc = require('wrtc')
 // Libp2p Core
 const Libp2p = require('libp2p')
 
-;(async () => {
+async function main() {
   // Create the Node
   const libp2p = await Libp2p.create({
     addresses: {
@@ -30,9 +30,8 @@ const Libp2p = require('libp2p')
     }
   })
 
-  // TODO: remove the exit call
-  process.exit(0)
-
   // TODO: start libp2p
   // TODO: once started, use `libp2p.dial` to dial to the Bootstrap node
-})()
+}
+
+main()

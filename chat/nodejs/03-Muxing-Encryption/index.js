@@ -14,7 +14,7 @@ const multiaddr = require('multiaddr')
 // Libp2p Core
 const Libp2p = require('libp2p')
 
-;(async () => {
+async function main() {
   // Create the Node
   const libp2p = await Libp2p.create({
     addresses: {
@@ -24,7 +24,7 @@ const Libp2p = require('libp2p')
         // Add a Websockets listen address on port 0
         '/ip4/0.0.0.0/tcp/0/ws',
         // Add the signaling server multiaddr
-        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
+        `/dns4/webrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star`
       ]
     },
     modules: {
@@ -46,7 +46,7 @@ const Libp2p = require('libp2p')
   // start libp2p
   await libp2p.start()
   // once started, use `libp2p.dial` to dial to the Bootstrap node
-  const targetAddress = multiaddr('/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d')
+  const targetAddress = multiaddr('/dnsaddr/sjc-1.bootstrap.libp2p.io/tcp/4001/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN')
   try {
     await libp2p.dial(targetAddress)
     // TODO: delete this log in favor of the `peer:connect` listener above
@@ -54,4 +54,6 @@ const Libp2p = require('libp2p')
   } catch (err) {
     console.error(err)
   }
-})()
+}
+
+main()

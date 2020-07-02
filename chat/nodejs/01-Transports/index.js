@@ -5,7 +5,7 @@
 // Libp2p Core
 const Libp2p = require('libp2p')
 
-;(async () => {
+async function main () {
   // Create the Node
   const libp2p = await Libp2p.create({
     modules: {
@@ -20,7 +20,6 @@ const Libp2p = require('libp2p')
       }
     }
   })
+}
 
-  // All done for now, exit
-  process.exit(0)
-})()
+main()

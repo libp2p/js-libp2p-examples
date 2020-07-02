@@ -22,14 +22,14 @@ const ChatProtocol = require('./chat-protocol')
 // Libp2p Core
 const Libp2p = require('libp2p')
 
-;(async () => {
+async function main() {
   // Create the Node
   const libp2p = await Libp2p.create({
     addresses: {
       listen: [
         '/ip4/0.0.0.0/tcp/0',
         '/ip4/0.0.0.0/tcp/0/ws',
-        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
+        `/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star`
       ]
     },
     modules: {
@@ -73,6 +73,10 @@ const Libp2p = require('libp2p')
   // start libp2p
   await libp2p.start()
 
+  // Log our PeerId and Multiaddrs
+  console.info(`${libp2p.peerId.toB58String()} listening on addresses:`)
+  console.info(libp2p.multiaddrs.map(addr => addr.toString()).join('\n'), '\n')
+
   // Set up our input handler
   process.stdin.on('data', (message) => {
     // remove the newline
@@ -98,10 +102,12 @@ const Libp2p = require('libp2p')
   // TODO: remove the rest of the code in this function
 
   // once started, use `libp2p.dial` to dial to the Bootstrap node
-  const targetAddress = multiaddr('/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d')
+  const targetAddress = multiaddr('/dnsaddr/sjc-1.bootstrap.libp2p.io/tcp/4001/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN')
   try {
     await libp2p.dial(targetAddress)
   } catch (err) {
     console.error(err)
   }
-})()
+}
+
+main()
