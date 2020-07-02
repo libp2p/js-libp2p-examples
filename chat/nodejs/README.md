@@ -1,25 +1,14 @@
-# Nodejs based chat
+# HackFS - Intro to decentralized messaging and libp2p
 
-The chapters in this example are organized sequentially by folder name. The names also include the overall topic. For example, `01-Transports` is the first chapter and includes an overview of Transports.
+This workshop will introduce you to decentralized messaging and how libp2p can be used to achieve it. As we discuss these concepts we will build a decentralized chat application.
 
-## Setup
+## Preparation for the workshop
 
-1. Install node modules via `npm clean-install`
+To prepare for this workshop please ensure you have done the following if you wish to code along:
 
-### Running the Bootstrap node
-This works with the Bootstrap node located at [./bootstrap](./bootstrap). See the instructions there for its setup.
-
-## Running the Chapters
-
-**Important Note**: All modules you need will be installed in the [setup][setup] phase. If a chapter asks for you to add a module to libp2p, you will only need to declare it in the code.
-
-For the particular chapter you are doing, you will need to `cd` into the directory and execute `node index.js` from there. This ensures that the libp2p code for that particular chapter is executed.
-
-For example, starting the Transports lesson you will cd into the [./01-Transports](./01-Transports) directory and run `node index.js`.
-
-```sh
-cd ./01-Transports
-node index.js
-```
-
-[setup]: #setup
+- Have your favorite code editor installed, if your don't have one, we recommend [VSCode](https://code.visualstudio.com)
+- Have git installed, [https://git-scm.com/downloads](https://git-scm.com/downloads).
+- [Node.js >= 10 installed + npm >= 6 installed.](https://nodejs.org/en/download/)
+- Download or clone the code at https://github.com/libp2p/js-libp2p-examples, `git clone https://github.com/libp2p/js-libp2p-examples.git`.
+- Check out the branch for HackFS, `git checkout hackfs`
+- Install dependencies the dependencies by running `npm clean-install`

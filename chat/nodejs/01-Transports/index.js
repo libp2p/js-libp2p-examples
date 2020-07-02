@@ -13,7 +13,7 @@ async function main () {
     },
     config: {
       transport : {
-        // WebrtcStar should match the exported name of the `libp2p-webrtc-star` transport
+        // WebRTCStar should match the exported name of the `libp2p-webrtc-star` transport
         [WebRTCStar.prototype[Symbol.toStringTag]]: {
           wrtc
         }
