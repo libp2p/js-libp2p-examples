@@ -21,7 +21,7 @@ const createLibp2p = async (peerId) => {
     addresses: {
       listen: [
         // Add the signaling server multiaddr
-        '/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star'
+        '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star'
       ]
     },
     modules: {
@@ -38,7 +38,7 @@ const createLibp2p = async (peerId) => {
     //   peerDiscovery: {
     //     bootstrap: {
     //       // TODO: Update the IP address to match the bootstrap peer
-    //       list: [ '/ip4/127.0.0.1/tcp/63786/ws/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
+    //       list: [ '/dns4/sjc-1.bootstrap.libp2p.io/tcp/443/wss/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN' ]
     //     }
     //   },
     //   dht: {
@@ -61,7 +61,7 @@ const createLibp2p = async (peerId) => {
   // TODO: remove the rest of the code inside this function, except the return statement
 
   // Create the multiaddr to the Bootstrap node
-  const targetAddress = multiaddr('/ip4/127.0.0.1/tcp/63786/ws/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d')
+  const targetAddress = multiaddr('/dns4/sjc-1.bootstrap.libp2p.io/tcp/443/wss/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN')
   // And dial it. The UI is listening for connections,
   // so it should update if the dial is successful.
   try {
