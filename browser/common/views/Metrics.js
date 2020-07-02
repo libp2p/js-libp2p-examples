@@ -18,6 +18,7 @@ export default function Metrics ({
 }) {
   const [listening, setListening] = useState(false)
   const [peerCount, setPeerCount] = useState(0)
+  const [connectionCount, setConnectionCount] = useState(0)
   const [stats, setStats] = useState(new Map())
   const _graphRoot = createRef()
   cytoscape.use(euler)
@@ -36,9 +37,12 @@ export default function Metrics ({
       })
 
       libp2p.peerStore.on('peer', (peerId) => {
-        console.log('peers', libp2p.peerStore.peers.size)
         const num = libp2p.peerStore.peers.size
         setPeerCount(num)
+      })
+
+      libp2p.connectionManager.on('peer:connect', () => {
+        setConnectionCount(libp2p.connections.size)
       })
 
       setListening(true)

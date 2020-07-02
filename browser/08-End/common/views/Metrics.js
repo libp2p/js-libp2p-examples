@@ -18,6 +18,7 @@ export default function Metrics ({
 }) {
   const [listening, setListening] = useState(false)
   const [peerCount, setPeerCount] = useState(0)
+  const [connectionCount, setConnectionCount] = useState(0)
   const [stats, setStats] = useState(new Map())
   const _graphRoot = createRef()
   cytoscape.use(euler)
@@ -38,6 +39,10 @@ export default function Metrics ({
       libp2p.peerStore.on('peer', (peerId) => {
         const num = libp2p.peerStore.peers.size
         setPeerCount(num)
+      })
+
+      libp2p.connectionManager.on('peer:connect', () => {
+        setConnectionCount(libp2p.connections.size)
       })
 
       setListening(true)
@@ -91,12 +96,11 @@ export default function Metrics ({
     <div className='flex flex-column w-50 pa3 h-100'>
       <div className='dt dt--fixed w-100'>
         <p className='dtc'><span className='dot bg-libp2p-dark-purple' /> Me</p>
-        <p className='dtc'><span className='dot bg-libp2p-dark-aqua' /> Go</p>
         <p className='dtc'><span className='dot bg-libp2p-dark-orange' /> Browser</p>
         <p className='dtc'><span className='dot bg-libp2p-dark-green' /> Node.js</p>
         <p className='dtc'><span className='dot' /> Unknown</p>
       </div>
-      <h3>Peers Known: {peerCount}</h3>
+      <h3>Peers Known: {peerCount} | Connections: {connectionCount}</h3>
       <Graph graphRoot={_graphRoot} />
     </div>
   )
