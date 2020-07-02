@@ -47,6 +47,8 @@ const createLibp2p = async (peerId) => {
     }
   })
 
+  window && (window.libp2p = libp2p)
+
   // Automatically start libp2p
   await libp2p.start()
 

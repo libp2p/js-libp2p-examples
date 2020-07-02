@@ -9,7 +9,7 @@ export default function Header ({
       <a href='https://libp2p.io' title='home' className='w-50'>
         <img className={started ? 'libp2p-on' : 'libp2p-off'} src={Logo} style={{ height: 50 }} />
       </a>
-      <h1 className='w-50 ma0 tr f3 fw2 nexa white'><span className='fw7'>libp</span>p2p chat</h1>
+      <h1 className='w-50 ma0 tr f3 fw2 nexa white'><span className='fw7'>lib</span>p2p chat</h1>
     </header>
   )
 }
