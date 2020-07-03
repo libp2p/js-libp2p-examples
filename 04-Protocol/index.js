@@ -1,24 +1,31 @@
 'use strict'
-// require `libp2p-tcp`, `libp2p-websockets`, and `libp2p-webrtc-star`
+// Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
 const WebRTCStar = require('libp2p-webrtc-star')
-// require `wrtc`
+
+// WebRTC support in Node.js
 const wrtc = require('wrtc')
+
 // Multiaddr
 const multiaddr = require('multiaddr')
-// require `libp2p-mplex`
+
+// Stream Multiplexers
 const Mplex = require('libp2p-mplex')
-// require `libp2p-noise`
+
+// Connection Encryption
 const { NOISE } = require('libp2p-noise')
-// require `libp2p-secio`
 const Secio = require('libp2p-secio')
-// Chat protocol
+
+// Custom chat protocol
 const ChatProtocol = require('./chat-protocol')
 
 // Libp2p Core
 const Libp2p = require('libp2p')
 
+/**
+ * The main entry point into our application
+ */
 async function main() {
   // Create the Node
   const libp2p = await Libp2p.create({
@@ -26,7 +33,7 @@ async function main() {
       listen: [
         '/ip4/0.0.0.0/tcp/0',
         '/ip4/0.0.0.0/tcp/0/ws',
-        `/dns4/webrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star`
+        `/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star`
       ]
     },
     modules: {
