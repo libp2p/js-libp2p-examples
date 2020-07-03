@@ -1,13 +1,19 @@
 'use strict'
-// require `libp2p-tcp`, `libp2p-websockets`, and `libp2p-webrtc-star`
+// Transports
 const TCP = require('libp2p-tcp')
 const Websockets = require('libp2p-websockets')
 const WebRTCStar = require('libp2p-webrtc-star')
-// require `wrtc`
+
+// WebRTC support in Node.js
 const wrtc = require('wrtc')
+
 // Multiaddr
 const multiaddr = require('multiaddr')
+
+// Stream Multiplexers
 // TODO: require `libp2p-mplex`
+
+// Connection Encryption
 // TODO: require `libp2p-noise`
 // TODO: require `libp2p-secio`
 
@@ -24,7 +30,7 @@ async function main() {
         // Add a Websockets listen address on port 0
         '/ip4/0.0.0.0/tcp/0/ws',
         // Add the signaling server multiaddr
-        `/dns4/webrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star`
+        '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star'
       ]
     },
     modules: {
