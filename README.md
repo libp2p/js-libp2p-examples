@@ -12,3 +12,11 @@ To prepare for this workshop please ensure you have done the following if you wi
 - Download or clone this repository, `git clone https://github.com/libp2p/js-libp2p-examples.git`.
 - Check out the branch for HackFS, `git checkout hackfs`
 - Install the dependencies by running `npm clean-install`
+
+## Presentation
+
+Here are some links to the recording and slides used for this presentation.
+
+[Recording on Youtube](https://www.youtube.com/watch?v=69h1zhIdCN0)
+[Presentation Slides](https://docs.google.com/presentation/d/1nQfZQTQ4U_HqYBrnFFuhWezZkaiyFRUvYeBwv4z_CrQ/)
+[PDF of the presentation on the IPFS Gateway](https://gateway.ipfs.io/ipfs/bafybeibnvhnabob5trf6dwazt62iichgrwsoykoduxwq5moan3uuufl4ly)
