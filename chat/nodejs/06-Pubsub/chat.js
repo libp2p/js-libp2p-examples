@@ -1,4 +1,6 @@
 const protons = require('protons')
+const uint8arrayFromString = require('uint8arrays/from-string')
+const uint8arrayToString = require('uint8arrays/to-string')
 
 const { Request, Stats } = protons(`
 message Request {
@@ -63,6 +65,8 @@ class Chat {
       }
     })
 
+    this._onMessage = this._onMessage.bind(this)
+
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
   }
@@ -87,28 +91,8 @@ class Chat {
    * @private
    */
   join () {
-    this.libp2p.pubsub.subscribe(this.topic, (message) => {
-      try {
-        const request = Request.decode(message.data)
-        switch (request.type) {
-          case Request.Type.UPDATE_PEER:
-            const newHandle = request.updatePeer.userHandle.toString()
-            console.info(`System: ${message.from} is now ${newHandle}.`)
-            this.userHandles.set(message.from, newHandle)
-            break
-          case Request.Type.SEND_MESSAGE:
-            this.messageHandler({
-              from: message.from,
-              message: request.sendMessage
-            })
-            break
-          default:
-            // Do nothing
-        }
-      } catch (err) {
-        console.error(err)
-      }
-    })
+    this.libp2p.pubsub.on(this.topic, this._onMessage)
+    this.libp2p.pubsub.subscribe(this.topic)
   }
 
   /**
@@ -116,7 +100,35 @@ class Chat {
    * @private
    */
   leave () {
+    this.libp2p.pubsub.removeListener(this.topic, this._onMessage)
     this.libp2p.pubsub.unsubscribe(this.topic)
+  }
+
+  _onMessage (message) {
+    try {
+      const request = Request.decode(message.data)
+      switch (request.type) {
+        case Request.Type.UPDATE_PEER:
+          const newHandle = request.updatePeer.userHandle.toString()
+          console.info(`System: ${message.from} is now ${newHandle}.`)
+          this.userHandles.set(message.from, newHandle)
+          break
+        case Request.Type.SEND_MESSAGE:
+          this.messageHandler({
+            from: message.from,
+            message: {
+              data: uint8arrayToString(request.sendMessage.data),
+              created: request.sendMessage.created,
+              id: uint8arrayToString(request.sendMessage.id),
+            }
+          })
+          break
+        default:
+          // Do nothing
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   /**
@@ -161,13 +173,13 @@ class Chat {
 
   /**
    * Sends the updated stats to the pubsub network
-   * @param {Array<Buffer>} connectedPeers
+   * @param {Array<string>} connectedPeers
    */
   async sendStats (connectedPeers) {
     const msg = Request.encode({
       type: Request.Type.STATS,
       stats: {
-        connectedPeers,
+        connectedPeers: connectedPeers.map(id => uint8arrayFromString(id)),
         nodeType: Stats.NodeType.NODEJS
       }
     })
@@ -188,8 +200,8 @@ class Chat {
     const msg = Request.encode({
       type: Request.Type.SEND_MESSAGE,
       sendMessage: {
-        id: (~~(Math.random() * 1e9)).toString(36) + Date.now(),
-        data: Buffer.from(message),
+        id: uint8arrayFromString((~~(Math.random() * 1e9)).toString(36) + Date.now()),
+        data: uint8arrayFromString(message),
         created: Date.now()
       }
     })

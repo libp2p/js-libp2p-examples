@@ -20,6 +20,7 @@
     "peer-id": "^0.14.0",
     "protons": "^2.0.0",
     "streaming-iterables": "^5.0.2",
+    "uint8arrays": "^1.1.0",
     "wrtc": "^0.4.6"
   },
   "devDependencies": {},
