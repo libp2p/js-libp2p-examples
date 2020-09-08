@@ -11,8 +11,6 @@ const multiaddr = require('multiaddr')
 const Mplex = require('libp2p-mplex')
 // require `libp2p-noise`
 const { NOISE } = require('libp2p-noise')
-// require `libp2p-secio`
-const Secio = require('libp2p-secio')
 // Chat protocol
 const ChatProtocol = require('./chat-protocol')
 // TODO: Import `libp2p-bootstrap`
@@ -35,7 +33,7 @@ const Libp2p = require('libp2p')
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ NOISE, Secio ],
+      connEncryption: [ NOISE ],
       // TODO: Add `libp2p-bootstrap` and the `webrtcStar.discovery` service
       peerDiscovery: [ ],
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value

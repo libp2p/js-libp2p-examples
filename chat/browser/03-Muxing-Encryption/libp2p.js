@@ -4,7 +4,6 @@ import WebrtcStar from 'libp2p-webrtc-star'
 import multiaddr from 'multiaddr'
 // TODO: import `libp2p-mplex`
 // TODO: import `libp2p-noise`
-// TODO: import `libp2p-secio`
 
 const createLibp2p = async (peerId) => {
   // Create the Node

@@ -15,7 +15,6 @@ const SignalingServer = require('libp2p-webrtc-star/src/sig-server')
 const Mplex = require('libp2p-mplex')
 // Encryption
 const { NOISE } = require('libp2p-noise')
-const Secio = require('libp2p-secio')
 // Discovery
 const MDNS = require('libp2p-mdns')
 // DHT
@@ -117,7 +116,7 @@ const createBootstrapNode = (peerId, listenAddrs) => {
     modules: {
       transport: [ WebrtcStar, TCP, Websockets ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ NOISE, Secio ],
+      connEncryption: [ NOISE ],
       peerDiscovery: [ MDNS ],
       dht: KademliaDHT,
       pubsub: Gossipsub

@@ -9,7 +9,6 @@ import multiaddr from 'multiaddr'
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
 import { NOISE } from 'libp2p-noise'
-import Secio from 'libp2p-secio'
 
 const createLibp2p = async (peerId) => {
   // Create the Node
@@ -24,7 +23,7 @@ const createLibp2p = async (peerId) => {
     modules: {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
-      connEncryption: [NOISE, Secio]
+      connEncryption: [NOISE]
     }
   })
 
