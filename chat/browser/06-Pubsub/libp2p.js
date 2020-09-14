@@ -7,7 +7,6 @@ import WebrtcStar from 'libp2p-webrtc-star'
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
 import { NOISE } from 'libp2p-noise'
-import Secio from 'libp2p-secio'
 // Peer Discovery
 import Bootstrap from 'libp2p-bootstrap'
 import KadDHT from 'libp2p-kad-dht'
@@ -26,7 +25,7 @@ const createLibp2p = async (peerId) => {
     modules: {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
-      connEncryption: [NOISE, Secio],
+      connEncryption: [NOISE],
       peerDiscovery: [Bootstrap],
       dht: KadDHT,
       // TODO: set pubsub to the imported 'libp2p-gossipsub'

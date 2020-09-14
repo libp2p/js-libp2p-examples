@@ -1,4 +1,7 @@
 const protons = require('protons')
+const uint8arrayFromString = require('uint8arrays/from-string')
+const uint8arrayToString = require('uint8arrays/to-string')
+
 const EventEmitter = require('events')
 
 const { Request, Stats } = protons(`
@@ -64,6 +67,8 @@ class Chat extends EventEmitter {
       }
     })
 
+    this._onMessage = this._onMessage.bind(this)
+
     // Join if libp2p is already on
     if (this.libp2p.isStarted()) this.join()
   }
@@ -74,31 +79,8 @@ class Chat extends EventEmitter {
    * @private
    */
   join () {
-    this.libp2p.pubsub.subscribe(this.topic, (message) => {
-      try {
-        const request = Request.decode(message.data)
-        switch (request.type) {
-          case Request.Type.UPDATE_PEER:
-            this.emit('peer:update', {
-              id: message.from,
-              name: request.updatePeer.userHandle.toString()
-            })
-            break
-          case Request.Type.STATS:
-            this.stats.set(message.from, request.stats)
-            console.log('Incoming Stats:', message.from, request.stats)
-            this.emit('stats', this.stats)
-            break
-          default:
-            this.emit('message', {
-              from: message.from,
-              ...request.sendMessage
-            })
-        }
-      } catch (err) {
-        console.error(err)
-      }
-    })
+    this.libp2p.pubsub.on(this.topic, this._onMessage)
+    this.libp2p.pubsub.subscribe(this.topic)
   }
 
   /**
@@ -106,7 +88,36 @@ class Chat extends EventEmitter {
    * @private
    */
   leave () {
+    this.libp2p.pubsub.removeListener(this.topic, this._onMessage)
     this.libp2p.pubsub.unsubscribe(this.topic)
+  }
+
+  _onMessage (message) {
+    try {
+      const request = Request.decode(message.data)
+      switch (request.type) {
+        case Request.Type.UPDATE_PEER:
+          this.emit('peer:update', {
+            id: message.from,
+            name: request.updatePeer.userHandle.toString()
+          })
+          break
+        case Request.Type.STATS:
+          this.stats.set(message.from, request.stats)
+          console.log('Incoming Stats:', message.from, request.stats)
+          this.emit('stats', this.stats)
+          break
+        default:
+          this.emit('message', {
+            from: message.from,
+            data: uint8arrayToString(request.sendMessage.data),
+            created: request.sendMessage.created,
+            id: uint8arrayToString(request.sendMessage.id)
+          })
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   /**
@@ -151,13 +162,13 @@ class Chat extends EventEmitter {
 
   /**
    * Sends the updated stats to the pubsub network
-   * @param {Array<Buffer>} connectedPeers
+   * @param {Array<string>} connectedPeers
    */
   async sendStats (connectedPeers) {
     const msg = Request.encode({
       type: Request.Type.STATS,
       stats: {
-        connectedPeers,
+        connectedPeers: connectedPeers.map(id => uint8arrayFromString(id)),
         nodeType: Stats.NodeType.BROWSER
       }
     })
@@ -171,14 +182,14 @@ class Chat extends EventEmitter {
 
   /**
    * Publishes the given `message` to pubsub peers
-   * @param {Buffer|string} message The chat message to send
+   * @param {string} message The chat message to send
    */
   async send (message) {
     const msg = Request.encode({
       type: Request.Type.SEND_MESSAGE,
       sendMessage: {
-        id: (~~(Math.random() * 1e9)).toString(36) + Date.now(),
-        data: Buffer.from(message),
+        id: uint8arrayFromString((~~(Math.random() * 1e9)).toString(36) + Date.now()),
+        data: uint8arrayFromString(message),
         created: Date.now()
       }
     })

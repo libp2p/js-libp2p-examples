@@ -9,7 +9,6 @@ const wrtc = require('wrtc')
 const multiaddr = require('multiaddr')
 // TODO: require `libp2p-mplex`
 // TODO: require `libp2p-noise`
-// TODO: require `libp2p-secio`
 
 // Libp2p Core
 const Libp2p = require('libp2p')
@@ -30,7 +29,7 @@ const Libp2p = require('libp2p')
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ],
       streamMuxer: [ /* TODO: add `libp2p-mplex` */ ],
-      connEncryption: [ /* TODO: add `libp2p-noise` and `libp2p-secio` */ ]
+      connEncryption: [ /* TODO: add `libp2p-noise` */ ]
     },
     config: {
       transport : {

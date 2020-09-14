@@ -11,7 +11,6 @@ const wrtc = require('wrtc')
 const Mplex = require('libp2p-mplex')
 // Connection Encryption
 const { NOISE } = require('libp2p-noise')
-const Secio = require('libp2p-secio')
 // Chat protocol
 const ChatProtocol = require('./chat-protocol')
 // Chat over Pubsub
@@ -35,7 +34,7 @@ const KadDHT = require('libp2p-kad-dht')
     modules: {
       transport: [ TCP, Websockets, WebRTCStar ],
       streamMuxer: [ Mplex ],
-      connEncryption: [ NOISE, Secio ],
+      connEncryption: [ NOISE ],
       peerDiscovery: [ Bootstrap, MDNS ],
       dht: KadDHT
       // TODO: set pubsub

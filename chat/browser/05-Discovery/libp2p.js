@@ -9,7 +9,6 @@ import multiaddr from 'multiaddr'
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
 import { NOISE } from 'libp2p-noise'
-import Secio from 'libp2p-secio'
 // Discovery
 // TODO: Import `libp2p-bootstrap`
 // TODO: Import `libp2p-kad-dht`
@@ -27,7 +26,7 @@ const createLibp2p = async (peerId) => {
     modules: {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
-      connEncryption: [NOISE, Secio],
+      connEncryption: [NOISE],
       // TODO: Add `libp2p-bootstrap`
       peerDiscovery: [],
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value
