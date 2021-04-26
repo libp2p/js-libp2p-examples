@@ -2,6 +2,7 @@
 import Libp2p from 'libp2p'
 // Transports
 import Websockets from 'libp2p-websockets'
+import filters from 'libp2p-websockets/src/filters'
 import WebrtcStar from 'libp2p-webrtc-star'
 // Multiaddr creation
 import multiaddr from 'multiaddr'
@@ -9,6 +10,8 @@ import multiaddr from 'multiaddr'
 import Mplex from 'libp2p-mplex'
 // Connection Encryption
 import { NOISE } from 'libp2p-noise'
+
+const transportKey = Websockets.prototype[Symbol.toStringTag]
 
 const createLibp2p = async (peerId) => {
   // Create the Node
@@ -24,6 +27,15 @@ const createLibp2p = async (peerId) => {
       transport: [Websockets, WebrtcStar],
       streamMuxer: [Mplex],
       connEncryption: [NOISE]
+    },
+    config: {
+      transport: {
+        [transportKey]: {
+          // by default websockets do not allow localhost dials
+          // let's enable it for testing purposes in this example
+          filter: filters.all
+        }
+      }
     }
   })
 

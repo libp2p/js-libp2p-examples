@@ -2,6 +2,7 @@
 import Libp2p from 'libp2p'
 // Transports
 import Websockets from 'libp2p-websockets'
+import filters from 'libp2p-websockets/src/filters'
 import WebrtcStar from 'libp2p-webrtc-star'
 // Multiaddr creation
 import multiaddr from 'multiaddr'
@@ -12,6 +13,8 @@ import { NOISE } from 'libp2p-noise'
 // Discovery
 // TODO: Import `libp2p-bootstrap`
 // TODO: Import `libp2p-kad-dht`
+
+const transportKey = Websockets.prototype[Symbol.toStringTag]
 
 const createLibp2p = async (peerId) => {
   // Create the Node
@@ -31,6 +34,15 @@ const createLibp2p = async (peerId) => {
       peerDiscovery: [],
       // TODO: set the `dht` property to the imported `libp2p-kad-dht` value
       dht: undefined
+    },
+    config: {
+      transport: {
+        [transportKey]: {
+          // by default websockets do not allow localhost dials
+          // let's enable it for testing purposes in this example
+          filter: filters.all
+        }
+      }
     }
     // TODO: Uncomment the config code below
     // config: {
