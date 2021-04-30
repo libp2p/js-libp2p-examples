@@ -6,9 +6,10 @@ Both examples will benefit from you using the provided [Bootstrap][bootstrap] no
 
 ## js-libp2p Version
 
-This example has been updated for js-libp2p 0.29.0.
+This example has been updated for js-libp2p 0.31.0.
 
 For previous versions of js-libp2p, please see their respective branch:
+- [js-libp2p 0.29.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.29.x)
 - [js-libp2p 0.28.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.28.x)
 - [js-libp2p 0.27.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.27.x)
 - [js-libp2p 0.25.x](https://github.com/libp2p/js-libp2p-examples/tree/libp2p-0.25.x)
