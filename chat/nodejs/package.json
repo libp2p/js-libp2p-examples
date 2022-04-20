@@ -15,6 +15,7 @@
     "libp2p-tcp": "^0.15.1",
     "libp2p-webrtc-star": "^0.22.0",
     "libp2p-websockets": "^0.15.5",
+    "minimist": "^1.2.6",
     "multiaddr": "^9.0.0",
     "peer-id": "^0.14.0",
     "protons": "^2.0.0",

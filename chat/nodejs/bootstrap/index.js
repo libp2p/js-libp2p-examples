@@ -38,12 +38,12 @@ const ChatProtocol = require('./chat-protocol')
     '/ip4/0.0.0.0/tcp/63786/ws'
   ]
 
-  const signalingServer = await SignalingServer.start({
-    port: 15555
-  })
-  const ssAddr = `/ip4/${signalingServer.info.host}/tcp/${signalingServer.info.port}/ws/p2p-webrtc-star`
-  console.info(`Signaling server running at ${ssAddr}`)
-  addrs.push(`${ssAddr}/p2p/${peerId.toB58String()}`)
+  // const signalingServer = await SignalingServer.start({
+  //   port: 15555
+  // })
+  // const ssAddr = `/ip4/${signalingServer.info.host}/tcp/${signalingServer.info.port}/ws/p2p-webrtc-star`
+  // console.info(`Signaling server running at ${ssAddr}`)
+  // addrs.push(`${ssAddr}/p2p/${peerId.toB58String()}`)
 
   // Create the node
   const libp2p = await createBootstrapNode(peerId, addrs)
@@ -114,7 +114,7 @@ const createBootstrapNode = (peerId, listenAddrs) => {
       listen: listenAddrs
     },
     modules: {
-      transport: [ WebrtcStar, TCP, Websockets ],
+      transport: [ TCP, Websockets ],
       streamMuxer: [ Mplex ],
       connEncryption: [ NOISE ],
       peerDiscovery: [ MDNS ],
@@ -122,18 +122,18 @@ const createBootstrapNode = (peerId, listenAddrs) => {
       pubsub: Gossipsub
     },
     config: {
-      transport : {
-        [WebrtcStar.prototype[Symbol.toStringTag]]: {
-          wrtc
-        }
-      },
-      relay: {
-        enabled: true,
-        hop: {
-          enabled: true,
-          active: false
-        }
-      },
+      // transport : {
+      //   [WebrtcStar.prototype[Symbol.toStringTag]]: {
+      //     wrtc
+      //   }
+      // },
+      // relay: {
+      //   enabled: true,
+      //   hop: {
+      //     enabled: true,
+      //     active: false
+      //   }
+      // },
       dht: {
         enabled: true,
         randomWalk: {

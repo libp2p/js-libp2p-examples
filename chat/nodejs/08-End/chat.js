@@ -35,6 +35,7 @@ message Stats {
 
   repeated bytes connectedPeers = 1;
   optional NodeType nodeType = 2;
+  // Add GeoLocation (lat/long)
 }
 `)
 
@@ -180,7 +181,8 @@ class Chat {
       type: Request.Type.STATS,
       stats: {
         connectedPeers: connectedPeers.map(id => uint8arrayFromString(id)),
-        nodeType: Stats.NodeType.NODEJS
+        nodeType: Stats.NodeType.NODEJS,
+        // Add Geolocation
       }
     })
 

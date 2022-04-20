@@ -19,56 +19,62 @@ const MDNS = require('libp2p-mdns')
 const KadDHT = require('libp2p-kad-dht')
 // PubSub implementation
 const Gossipsub = require('libp2p-gossipsub')
-
+const args = require('minimist')(process.argv.slice(2))
+const listenPort = args['bootstrap'] ? 0 : 63785
+const listenAddrsList = [
+    `/ip4/0.0.0.0/tcp/${listenPort}`,
+    `/ip4/0.0.0.0/tcp/${listenPort}/ws`,
+]
+const peerDiscoveryList = args['bootstrap'] ? [ Bootstrap, MDNS ] : [ MDNS ]
+const bootstrapList = args['bootstrap'] ? [ args['bootstrap'] ] : []
 ;(async () => {
   // Create the Node
-  const libp2p = await Libp2p.create({
+  const node = await Libp2p.create({
     addresses: {
-      listen: [
-        '/ip4/0.0.0.0/tcp/0',
-        '/ip4/0.0.0.0/tcp/0/ws',
-        `/ip4/127.0.0.1/tcp/15555/ws/p2p-webrtc-star/`
-      ]
+      listen: listenAddrsList
     },
     modules: {
-      transport: [ TCP, Websockets, WebrtcStar ],
+      transport: [ TCP, Websockets ],
       streamMuxer: [ Mplex ],
       connEncryption: [ NOISE ],
-      peerDiscovery: [ Bootstrap, MDNS ],
+      peerDiscovery: peerDiscoveryList,
       dht: KadDHT,
       pubsub: Gossipsub
     },
     config: {
-      transport : {
-        [WebrtcStar.prototype[Symbol.toStringTag]]: {
-          wrtc
+      ...(args['bootstrap'] && { 
+        peerDiscovery: {
+          bootstrap: {
+            list: bootstrapList
+          }
         }
-      },
-      peerDiscovery: {
-        bootstrap: {
-          list: [ '/ip4/127.0.0.1/tcp/63785/ipfs/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d' ]
-        }
-      },
+      }),
       dht: {
         enabled: true,
         randomWalk: {
           enabled: true
         }
-      }
+      },
     }
   })
+  
+  if (!args['bootstrap']) {
+    listenAddrsList.forEach(addr => {
+      console.log(`${addr.toString()}/p2p/${node.peerId.toB58String()}`)
+    })
+  }
 
-  // Listen on libp2p for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
-  libp2p.connectionManager.on('peer:connect', (connection) => {
+  // Listen on node for `peer:connect` and log the provided connection.remotePeer.toB58String() peer id string.
+  node.connectionManager.on('peer:connect', (connection) => {
     console.info(`Connected to ${connection.remotePeer.toB58String()}!`)
   })
 
-    // Start libp2p
-  await libp2p.start()
+    // Start node
+  await node.start()
 
   // Create our PubsubChat client
-  const pubsubChat = new PubsubChat(libp2p, PubsubChat.TOPIC, ({ from, message }) => {
-    let fromMe = from === libp2p.peerId.toB58String()
+  const pubsubChat = new PubsubChat(node, PubsubChat.TOPIC, ({ from, message }) => {
+    let fromMe = from === node.peerId.toB58String()
     let user = from.substring(0, 6)
     if (pubsubChat.userHandles.has(from)) {
       user = pubsubChat.userHandles.get(from)
