@@ -1,3 +1,6 @@
+⛔️ ARCHIVED: libp2p-examples is now included in [js-libp2p/examples](https://github.com/libp2p/js-libp2p/tree/master/examples)
+=====
+
 JS Libp2p Examples
 ======
 
