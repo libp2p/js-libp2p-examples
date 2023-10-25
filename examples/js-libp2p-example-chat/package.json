@@ -27,7 +27,7 @@
     "it-length-prefixed": "^9.0.1",
     "it-map": "^3.0.3",
     "it-pipe": "^3.0.1",
-    "libp2p": "^0.46.0",
+    "libp2p": "^0.46.16",
     "p-defer": "^4.0.0",
     "uint8arrays": "^4.0.6"
   },

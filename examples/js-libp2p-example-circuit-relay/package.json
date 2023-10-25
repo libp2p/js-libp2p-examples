@@ -20,7 +20,7 @@
     "@chainsafe/libp2p-yamux": "^5.0.0",
     "@libp2p/websockets": "^7.0.9",
     "@multiformats/multiaddr": "^12.1.7",
-    "libp2p": "^0.46.14"
+    "libp2p": "^0.46.16"
   },
   "devDependencies": {
     "test-ipfs-example": "^1.1.0"
