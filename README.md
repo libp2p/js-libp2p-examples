@@ -74,12 +74,15 @@ Make sure you have installed all of the following prerequisites on your developm
 
 ## Documentation
 
-- [IPFS Primer](https://dweb-primer.ipfs.io/)
-- [IPFS Docs](https://docs.ipfs.io/)
-- [Tutorials](https://proto.school)
-- [More examples](https://github.com/libp2p/js-libp2p-examples)
-- [API - Helia](https://ipfs.github.io/helia/modules/helia.html)
-- [API - @helia/unixfs](https://ipfs.github.io/helia-unixfs/modules/helia.html)
+- [js-libp2p docs](https://github.com/libp2p/js-libp2p/tree/master/doc)
+- [libp2p.io](https://libp2p.io)
+- [docs.libp2p.io](https://docs.libp2p.io)
+- [Specification (WIP)](https://github.com/libp2p/specs)
+- [Discussion Forums](https://discuss.libp2p.io)
+- Talks
+  - [`libp2p <3 ethereum` at DEVCON2](https://archive.devcon.org/archive/watch/2/libp2p-devp2p-ipfs-and-ethereum-networking/)
+- Articles
+  - [The overview of libp2p](https://github.com/libp2p/libp2p#description)
 
 ## Contribute
 
