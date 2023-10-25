@@ -11,7 +11,7 @@ jobs:
       - name: Pull from another repository
         uses: ipfs-examples/actions-pull-directory-from-repo@main
         with:
-          source-repo: ipfs-examples/helia-examples
+          source-repo: libp2p/js-libp2p-examples
           source-folder-path: examples/${{ github.event.repository.name }}
           source-branch: main
           target-branch: main
