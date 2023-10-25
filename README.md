@@ -48,15 +48,14 @@ Feel free to jump directly into the examples, however going through the followin
 
 #### Understanding how libp2p works
 
-- [Circuit Relay](./examples/js-libp2p-example-circuit-relay)
+- [Circuit Relay](./examples/js-libp2p-example-circuit-relay) - configuring Circuit Relay connections
 
 #### Other examples
 
-- Running libp2p in the Electron (future)
-- [The standard echo net example with libp2p](./echo)
-- [A simple chat app with libp2p](./chat)
+- [Chat](./examples/js-libp2p-example-chat) - a simple chat app
 
 #### libp2p in the Browser
+
 There are a number of ways libp2p can be used in the browser. Here are some examples:
 
 - [webRTC](./libp2p-in-the-browser/webrtc/README.md)
