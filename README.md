@@ -49,6 +49,7 @@ Feel free to jump directly into the examples, however going through the followin
 #### Understanding how libp2p works
 
 - [Circuit Relay](./examples/js-libp2p-example-circuit-relay) - configuring Circuit Relay connections
+- [Connection Encryption](./examples/js-libp2p-example-connection-encryption) - how to encrypt connection between libp2p nodes
 
 #### Other examples
 

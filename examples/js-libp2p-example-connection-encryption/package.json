@@ -1,0 +1,31 @@
+{
+  "name": "@libp2p/example-connection-encryption",
+  "version": "0.0.0",
+  "description": "An example of how to configure connection encryption",
+  "license": "Apache-2.0 OR MIT",
+  "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/master/examples/js-libp2p-example-connection-encryption#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "test-node-example test/*"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-noise": "^13.0.0",
+    "@chainsafe/libp2p-yamux": "^5.0.0",
+    "@libp2p/mplex": "^9.0.0",
+    "@libp2p/tcp": "^8.0.0",
+    "it-pipe": "^3.0.1",
+    "libp2p": "^0.46.0",
+    "uint8arrays": "^4.0.6"
+  },
+  "devDependencies": {
+    "test-ipfs-example": "^1.0.0"
+  },
+  "private": true
+}
