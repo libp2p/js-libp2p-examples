@@ -1,7 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { matchOutput } from 'test-ipfs-example/node'
 import pDefer from 'p-defer'
+import { matchOutput } from 'test-ipfs-example/node'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
