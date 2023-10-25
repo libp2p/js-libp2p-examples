@@ -6,25 +6,12 @@
   "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/master/examples/js-libp2p-example-circuit-relay#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/libp2p/js-libp2p.git"
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
   },
   "bugs": {
-    "url": "https://github.com/libp2p/js-libp2p/issues"
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
   },
   "type": "module",
-  "files": [
-    "src",
-    "dist",
-    "!dist/test",
-    "!**/*.tsbuildinfo"
-  ],
-  "eslintConfig": {
-    "extends": "ipfs",
-    "parserOptions": {
-      "project": true,
-      "sourceType": "module"
-    }
-  },
   "scripts": {
     "test": "test-node-example test/*"
   },
@@ -36,7 +23,7 @@
     "libp2p": "^0.46.14"
   },
   "devDependencies": {
-    "test-ipfs-example": "^1.0.0"
+    "test-ipfs-example": "^1.1.0"
   },
   "private": true
 }

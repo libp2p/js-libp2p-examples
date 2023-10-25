@@ -1,0 +1,38 @@
+{
+  "name": "@libp2p/example-chat",
+  "version": "0.0.0",
+  "description": "An example chat app using libp2p",
+  "license": "Apache-2.0 OR MIT",
+  "homepage": "https://github.com/libp2p/js-libp2p/tree/master/examples/chat#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "test-node-example test/*"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-noise": "^13.0.0",
+    "@chainsafe/libp2p-yamux": "^5.0.0",
+    "@libp2p/peer-id-factory": "^3.0.0",
+    "@libp2p/tcp": "^8.0.0",
+    "@libp2p/websockets": "^7.0.0",
+    "@multiformats/multiaddr": "^12.1.5",
+    "@nodeutils/defaults-deep": "^1.1.0",
+    "D": "^1.0.0",
+    "it-length-prefixed": "^9.0.1",
+    "it-map": "^3.0.3",
+    "it-pipe": "^3.0.1",
+    "libp2p": "^0.46.0",
+    "p-defer": "^4.0.0",
+    "uint8arrays": "^4.0.6"
+  },
+  "devDependencies": {
+    "test-ipfs-example": "^1.1.0"
+  },
+  "private": true
+}

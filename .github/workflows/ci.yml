@@ -20,6 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         project:
+          - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
     defaults:
       run:
@@ -68,6 +69,7 @@ jobs:
       fail-fast: true
       matrix:
         project:
+          - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
     steps:
       - uses: convictional/trigger-workflow-and-wait@f69fa9eedd3c62a599220f4d5745230e237904be
