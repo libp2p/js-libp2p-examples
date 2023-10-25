@@ -27,7 +27,8 @@
     - [libp2p in the Browser](#libp2p-in-the-browser)
   - [Prerequisites](#prerequisites)
 - [Documentation](#documentation)
-- [Want to hack on IPFS?](#want-to-hack-on-ipfs)
+- [Contribute](#contribute)
+- [License](#license)
 
 ## About The Project
 
@@ -80,18 +81,13 @@ Make sure you have installed all of the following prerequisites on your developm
 - [API - Helia](https://ipfs.github.io/helia/modules/helia.html)
 - [API - @helia/unixfs](https://ipfs.github.io/helia-unixfs/modules/helia.html)
 
-## Want to hack on IPFS?
+## Contribute
 
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-The IPFS implementation in JavaScript needs your help! There are a few things you can do right now to help out:
+## License
 
-Read the [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md) and [JavaScript Contributing Guidelines](https://github.com/ipfs/community/blob/master/CONTRIBUTING_JS.md).
+Licensed under either of
 
-- **Check out existing issues** The [issue list](https://github.com/ipfs/helia/issues) has many that are marked as ['help wanted'](https://github.com/ipfs/helia/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22) or ['difficulty:easy'](https://github.com/ipfs/helia/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Adifficulty%3Aeasy) which make great starting points for development, many of which can be tackled with no prior IPFS knowledge
-- **Look at the [Helia Roadmap](https://github.com/ipfs/helia/blob/main/ROADMAP.md)** This are the high priority items being worked on right now
-- **Perform code reviews** More eyes will help
-  a. speed the project along
-  b. ensure quality, and
-  c. reduce possible future bugs
-- **Add tests**. There can never be enough tests
+- Apache 2.0, ([LICENSE-APACHE](LICENSE-APACHE) / <http://www.apache.org/licenses/LICENSE-2.0>)
+- MIT ([LICENSE-MIT](LICENSE-MIT) / <http://opensource.org/licenses/MIT>)
