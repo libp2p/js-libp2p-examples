@@ -1,0 +1,32 @@
+{
+  "name": "js-libp2p-examples",
+  "version": "1.0.0",
+  "description": "Examples of how to use js-libp2p",
+  "type": "module",
+  "scripts": {
+    "reset": "aegir run clean && aegir clean **/node_modules **/package-lock.json",
+    "test": "aegir run test",
+    "clean": "aegir run clean",
+    "build": "aegir run build",
+    "lint": "aegir exec aegir -- lint --files '**/*.{js,ts,jsx}' '!**/node_modules/**' '!**/dist/**'",
+    "lint:fix": "aegir exec aegir -- lint --files '**/*.{js,ts,jsx}' '!**/node_modules/**' '!**/dist/**' --fix",
+    "dep-check": "aegir run dep-check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
+  },
+  "homepage": "https://github.com/libp2p/js-libp2p-examples#readme",
+  "devDependencies": {
+    "aegir": "^41.0.4"
+  },
+  "workspaces": [
+    "examples/*"
+  ],
+  "private": true
+}
