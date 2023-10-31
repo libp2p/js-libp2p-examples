@@ -23,7 +23,6 @@
     "@libp2p/websockets": "^7.0.0",
     "@multiformats/multiaddr": "^12.1.5",
     "@nodeutils/defaults-deep": "^1.1.0",
-    "D": "^1.0.0",
     "it-length-prefixed": "^9.0.1",
     "it-map": "^3.0.3",
     "it-pipe": "^3.0.1",
