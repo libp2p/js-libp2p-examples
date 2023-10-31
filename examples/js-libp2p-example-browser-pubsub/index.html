@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js-libp2p browser pubsub</title>
+    <style>
+      label,
+      button {
+        display: block;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+      div {
+        margin-bottom: 20px;
+      }
+      #send-section {
+        display: none;
+      }
+      input[type="text"] {
+        width: 800px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>libp2p Browser PubSub example</h1>
+    <p>This example demonstrates the pubsub API running in a browser</p>
+    <ol>
+      <li>Start a relay using the command line: <pre>$ node ./relay.js
+Relay listening on multiaddr(s):  [
+  '${multiaddr}'
+]
+      </pre></li>
+      <li>Copy the relay's multiaddr and use the "Dial Multaddr" section to dial the relay</li>
+      <li>Wait for a WebRTC address to appear in the "Listening Addresses" area</li>
+      <li>Open the same page in another browser window</li>
+      <li>Use the "Dial Multiaddr" section in the second window to dial the WebRTC address from the first</li>
+      <li>Subscribe both windows to the same topic using the "PubSub" section</li>
+      <li>Send messages between the windows using the "PubSub" section</li>
+    </ol>
+    <hr />
+    <div>
+      <h2>Node</h2>
+      <label for="relay">Dial MultiAddr</label>
+      <input type="text" id="dial-multiaddr-input" placeholder="/ip4/127.0.0.1/tcp/1234/ws/p2p/123Foo" />
+      <button id="dial-multiaddr-button">Connect</button>
+
+      <h4>PeerId</h4>
+      <p id="peer-id"></p>
+
+      <h4>Listening Addresses</h4>
+      <ul id="listening-addresses">
+        <li>None</li>
+      </ul>
+
+      <h4>Connected Peers</h4>
+      <ul id="peer-connections">
+        <li>None</li>
+      </ul>
+    </div>
+    <hr />
+    <div>
+      <h2>PubSub</h2>
+      <label for="topic">Subscribe to topic</label>
+      <input type="text" id="subscribe-topic-input" placeholder="my-topic" />
+      <button id="subscribe-topic-button">Subscribe</button>
+
+      <h4>Topic Peers</h4>
+      <ul id="topic-peers">
+        <li>None</li>
+      </ul>
+
+      <label for="topic">Send Message to Topic</label>
+      <input type="text" id="send-topic-message-input" placeholder="hello world" disabled="disabled" />
+      <button id="send-topic-message-button" disabled="disabled">Send</button>
+    </div>
+    <hr />
+    <div>
+      <h2>Output</h2>
+      <pre id="output"></pre>
+    </div>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
