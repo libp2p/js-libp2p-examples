@@ -20,6 +20,8 @@ const output = '#output'
 const listeningAddresses = '#listening-addresses'
 const subscribeInput = '#subscribe-topic-input'
 const subscribeBtn = '#subscribe-topic-button'
+const topicPeers = '#topic-peers'
+const peerId = '#peer-id'
 
 let url
 
@@ -73,6 +75,10 @@ test.describe('pubsub browser example:', () => {
     const pageB = await context.newPage()
     await pageB.goto(url)
 
+    // load page peer ids
+    const pageAPeerId = await pageA.textContent(peerId)
+    const pageBPeerId = await pageB.textContent(peerId)
+
     // connect the first page to the relay
     const webRTCAddressA = await dialRelay(pageA, relayNodeAddr)
 
@@ -88,6 +94,10 @@ test.describe('pubsub browser example:', () => {
     await subscribeToTopic(pageA, topicName)
     await subscribeToTopic(pageB, topicName)
 
+    // wait for peers to appear in topic peers
+    await waitForTopicPeers(pageA, pageBPeerId)
+    await waitForTopicPeers(pageB, pageAPeerId)
+
     // send a message from one to the other
     await sendMessage(pageA, 'hello A', pageB)
   })
@@ -101,6 +111,11 @@ async function subscribeToTopic (page, topic) {
   // check the message was echoed back
   const outputLocator = page.locator(output)
   await expect(outputLocator).toContainText(`Subscribing to '${topic}'`)
+}
+
+async function waitForTopicPeers (page, otherPeer) {
+  const outputLocator = page.locator(topicPeers)
+  await expect(outputLocator).toContainText(otherPeer)
 }
 
 async function sendMessage (pageA, message, pageB) {
