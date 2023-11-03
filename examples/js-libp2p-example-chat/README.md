@@ -16,10 +16,9 @@
 
 ## Setup
 
-1. Install example depenedencies and build the project
+1. Install example depenedencies
     ```console
     $ npm install
-    $ npm run build
     ```
 2. Open 2 terminal windows in the `./src` directory.
 
