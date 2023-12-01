@@ -1,13 +1,14 @@
 import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
+import { dcutr } from '@libp2p/dcutr'
+import { identify } from '@libp2p/identify'
 import { webRTC } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
 import * as filters from '@libp2p/websockets/filters'
 import { multiaddr } from '@multiformats/multiaddr'
 import { createLibp2p } from 'libp2p'
-import { circuitRelayTransport } from 'libp2p/circuit-relay'
-import { identifyService } from 'libp2p/identify'
 import { fromString, toString } from 'uint8arrays'
 
 const DOM = {
@@ -63,16 +64,17 @@ const libp2p = await createLibp2p({
   streamMuxers: [yamux()],
   connectionGater: {
     denyDialMultiaddr: () => {
-      // by default we refuse to dial local addresses from the browser since they
-      // are usually sent by remote peers broadcasting undialable multiaddrs but
-      // here we are explicitly connecting to a local node so do not deny dialing
-      // any discovered address
+      // by default we refuse to dial local addresses from browsers since they
+      // are usually sent by remote peers broadcasting undialable multiaddrs and
+      // cause errors to appear in the console but in this example we are
+      // explicitly connecting to a local node so allow all addresses
       return false
     }
   },
   services: {
-    identify: identifyService(),
-    pubsub: gossipsub()
+    identify: identify(),
+    pubsub: gossipsub(),
+    dcutr: dcutr()
   },
   connectionManager: {
     minConnections: 0
@@ -87,6 +89,18 @@ function updatePeerList () {
     .map(peerId => {
       const el = document.createElement('li')
       el.textContent = peerId.toString()
+
+      const addrList = document.createElement('ul')
+
+      for (const conn of libp2p.getConnections(peerId)) {
+        const addr = document.createElement('li')
+        addr.textContent = conn.remoteAddr.toString()
+
+        addrList.appendChild(addr)
+      }
+
+      el.appendChild(addrList)
+
       return el
     })
   DOM.peerConnectionsList().replaceChildren(...peerList)

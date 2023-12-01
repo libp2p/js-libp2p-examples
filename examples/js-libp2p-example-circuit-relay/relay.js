@@ -2,10 +2,10 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { circuitRelayServer } from '@libp2p/circuit-relay-v2'
+import { identify } from '@libp2p/identify'
 import { webSockets } from '@libp2p/websockets'
 import { createLibp2p } from 'libp2p'
-import { circuitRelayServer } from 'libp2p/circuit-relay'
-import { identifyService } from 'libp2p/identify'
 
 async function main () {
   const node = await createLibp2p({
@@ -24,7 +24,7 @@ async function main () {
       yamux()
     ],
     services: {
-      identify: identifyService(),
+      identify: identify(),
       relay: circuitRelayServer()
     }
   })
