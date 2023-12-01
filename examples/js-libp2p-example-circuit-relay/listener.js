@@ -2,11 +2,11 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
+import { identify } from '@libp2p/identify'
 import { webSockets } from '@libp2p/websockets'
 import { multiaddr } from '@multiformats/multiaddr'
 import { createLibp2p } from 'libp2p'
-import { circuitRelayTransport } from 'libp2p/circuit-relay'
-import { identifyService } from 'libp2p/identify'
 
 async function main () {
   const relayAddr = process.argv[2]
@@ -28,7 +28,7 @@ async function main () {
       yamux()
     ],
     services: {
-      identify: identifyService()
+      identify: identify()
     }
   })
 

@@ -21,10 +21,9 @@ This example leverages the [vite bundler](https://vitejs.dev/) to compile and se
 
 ## Setup
 
-1. Install example depenedencies and build the project
+1. Install example dependencies
     ```console
     $ npm install
-    $ npm run build
     ```
 2. Open 2 terminal windows in the `./src` directory.
 

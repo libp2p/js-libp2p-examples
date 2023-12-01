@@ -16,7 +16,7 @@
 
 ## Setup
 
-1. Install example depenedencies
+1. Install example dependencies
     ```console
     $ npm install
     ```
