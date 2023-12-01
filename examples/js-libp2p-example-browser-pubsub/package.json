@@ -23,7 +23,7 @@
     "@libp2p/websockets": "^8.0.4",
     "@multiformats/multiaddr": "^12.1.11",
     "libp2p": "^1.0.5",
-    "vite": "^4.2.1"
+    "vite": "^5.0.4"
   },
   "devDependencies": {
     "test-ipfs-example": "^1.0.0"
