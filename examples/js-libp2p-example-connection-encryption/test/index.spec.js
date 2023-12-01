@@ -12,6 +12,6 @@ await waitForOutput('This information is sent out encrypted to the other peer', 
 
 process.stdout.write('plaintext.js\n')
 
-await waitForOutput('This information is sent out encrypted to the other peer', 'node', [path.join(__dirname, '../noise.js')], {
+await waitForOutput('This information is sent out encrypted to the other peer', 'node', [path.join(__dirname, '../plaintext.js')], {
   cwd: __dirname
 })

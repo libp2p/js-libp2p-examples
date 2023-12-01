@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { plaintext } from '@libp2p/plaintext'
 import { tcp } from '@libp2p/tcp'
 import { pipe } from 'it-pipe'
 import { createLibp2p } from 'libp2p'
-import { plaintext } from 'libp2p/insecure'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 
