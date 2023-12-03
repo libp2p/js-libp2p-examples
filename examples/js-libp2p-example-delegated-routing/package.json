@@ -31,7 +31,8 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
-    "test-ipfs-example": "^1.0.0"
+    "test-ipfs-example": "^1.0.0",
+    "eslint-config-ipfs": "^6.0.0"
   },
   "browserslist": [
     ">0.2%",
