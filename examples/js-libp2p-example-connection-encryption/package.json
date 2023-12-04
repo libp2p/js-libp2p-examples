@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "An example of how to configure connection encryption",
   "license": "Apache-2.0 OR MIT",
-  "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/master/examples/js-libp2p-example-connection-encryption#readme",
+  "homepage": "https://github.com/libp2p/js-libp2p-example-connection-encryption#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
@@ -21,7 +21,7 @@
     "@libp2p/plaintext": "^1.0.4",
     "@libp2p/tcp": "^9.0.4",
     "it-pipe": "^3.0.1",
-    "libp2p": "^1.0.5",
+    "libp2p": "^1.0.8",
     "uint8arrays": "^4.0.6"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "An example chat app using libp2p",
   "license": "Apache-2.0 OR MIT",
-  "homepage": "https://github.com/libp2p/js-libp2p/tree/master/examples/chat#readme",
+  "homepage": "https://github.com/libp2p/js-libp2p-example-chat#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
@@ -26,7 +26,7 @@
     "it-length-prefixed": "^9.0.1",
     "it-map": "^3.0.3",
     "it-pipe": "^3.0.1",
-    "libp2p": "^1.0.5",
+    "libp2p": "^1.0.8",
     "p-defer": "^4.0.0",
     "uint8arrays": "^4.0.6"
   },

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "How to create custom protocols for your app",
   "license": "Apache-2.0 OR MIT",
-  "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/main/examples/js-libp2p-example-custom-protocols#readme",
+  "homepage": "https://github.com/libp2p/js-libp2p-example-custom-protocols#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
