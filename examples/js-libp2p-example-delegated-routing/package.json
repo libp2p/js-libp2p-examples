@@ -1,0 +1,42 @@
+{
+  "name": "@libp2p/example-delegated-routing-example",
+  "version": "0.0.0",
+  "description": "How to use other libp2p nodes to perform delegated routing",
+  "license": "Apache-2.0 OR MIT",
+  "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/main/examples/js-libp2p-example-delegated-routing#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "BUILD_PATH=dist PUBLIC_URL=/ react-scripts build",
+    "start": "PUBLIC_URL=/ react-scripts start",
+    "test:firefox": "npm run build && playwright test --browser=firefox test",
+    "test:chrome": "npm run build && playwright test test",
+    "test": "npm run build && test-browser-example test"
+  },
+  "dependencies": {
+    "@helia/delegated-routing-v1-http-api-client": "^1.1.0",
+    "@helia/delegated-routing-v1-http-api-server": "^1.0.3",
+    "helia": "^2.1.0",
+    "libp2p": "^1.0.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "test-ipfs-example": "^1.0.0",
+    "eslint-config-ipfs": "^6.0.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "private": true
+}
