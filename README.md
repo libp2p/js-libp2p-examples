@@ -56,8 +56,8 @@ Feel free to jump directly into the examples, however going through the followin
 
 #### Other examples
 
-- [Chat](./examples/js-libp2p-example-chat) - a simple chat app
-- [Browser Pub/Sub](./examples/js-libp2p-example-browser-pubsub) - Using Pub/Sub between browsers
+- [Chat](https://github.com/libp2p/js-libp2p-example-chat) - a simple chat app
+- [Browser Pub/Sub](https://github.com/libp2p/js-libp2p-example-browser-pubsub) - Using Pub/Sub between browsers
 
 #### libp2p in the Browser
 
