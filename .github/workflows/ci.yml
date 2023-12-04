@@ -24,6 +24,7 @@ jobs:
           - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
           - js-libp2p-example-connection-encryption
+          - js-libp2p-example-custom-procotols
           - js-libp2p-example-delegated-routing
           - js-libp2p-example-discovery-mechanisms
     defaults:
@@ -77,6 +78,7 @@ jobs:
           - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
           - js-libp2p-example-connection-encryption
+          - js-libp2p-example-custom-procotols
           - js-libp2p-example-delegated-routing
           - js-libp2p-example-discovery-mechanisms
     steps:
