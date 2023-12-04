@@ -1,0 +1,39 @@
+{
+  "name": "@libp2p/example-discovery-mechanisms",
+  "version": "0.0.0",
+  "description": "How to configure peer discovery mechanisms",
+  "license": "Apache-2.0 OR MIT",
+  "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/main/examples/js-libp2p-example-discovery-mechanisms#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libp2p/js-libp2p-examples.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libp2p/js-libp2p-examples/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "test-node-example test/*"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-noise": "^14.0.0",
+    "@chainsafe/libp2p-yamux": "^6.0.1",
+    "@libp2p/bootstrap": "^10.0.5",
+    "@libp2p/circuit-relay-v2": "^1.0.5",
+    "@libp2p/floodsub": "^9.0.1",
+    "@libp2p/identify": "^1.0.4",
+    "@libp2p/kad-dht": "^11.0.5",
+    "@libp2p/mdns": "^10.0.5",
+    "@libp2p/mplex": "^10.0.5",
+    "@libp2p/pubsub-peer-discovery": "^10.0.1",
+    "@libp2p/tcp": "^9.0.4",
+    "libp2p": "^1.0.8"
+  },
+  "devDependencies": {
+    "execa": "^8.0.1",
+    "p-wait-for": "^5.0.2",
+    "test-ipfs-example": "^1.1.0",
+    "uint8arrays": "^4.0.9"
+  },
+  "private": true
+}
