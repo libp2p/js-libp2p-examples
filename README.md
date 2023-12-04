@@ -48,10 +48,11 @@ Feel free to jump directly into the examples, however going through the followin
 
 #### Understanding how libp2p works
 
-- [Circuit Relay](./examples/js-libp2p-example-circuit-relay) - configuring Circuit Relay connections
-- [Connection Encryption](./examples/js-libp2p-example-connection-encryption) - how to encrypt connection between libp2p nodes
-- [Delegated routing](./examples/js-libp2p-example-delegated-routing) - how to offload network operations and queries onto more capable nodes
-- [Discovery mechanisms](./examples/js-libp2p-example-discovery-mechanisms) - how libp2p discovers other peers on the network
+- [Circuit Relay](https://github.com/libp2p/js-libp2p-example-circuit-relay) - configuring Circuit Relay connections
+- [Connection Encryption](https://github.com/libp2p/js-libp2p-example-connection-encryption) - how to encrypt connection between libp2p nodes
+- [Delegated routing](https://github.com/libp2p/js-libp2p-example-delegated-routing) - how to offload network operations and queries onto more capable nodes
+- [Discovery mechanisms](https://github.com/libp2p/js-libp2p-example-discovery-mechanisms) - how libp2p discovers other peers on the network
+- [Custom protocols](https://github.com/libp2p/js-libp2p-example-custom-protocols) - how to create a custom protocol for your application
 
 #### Other examples
 
