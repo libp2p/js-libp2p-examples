@@ -24,6 +24,7 @@ jobs:
           - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
           - js-libp2p-example-connection-encryption
+          - js-libp2p-example-delegated-routing
     defaults:
       run:
         working-directory: examples/${{ matrix.project }}
@@ -75,6 +76,7 @@ jobs:
           - js-libp2p-example-chat
           - js-libp2p-example-circuit-relay
           - js-libp2p-example-connection-encryption
+          - js-libp2p-example-delegated-routing
     steps:
       - uses: convictional/trigger-workflow-and-wait@f69fa9eedd3c62a599220f4d5745230e237904be
         with:
