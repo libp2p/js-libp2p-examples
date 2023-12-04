@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 
-import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { bootstrap } from '@libp2p/bootstrap'
+import { floodsub } from '@libp2p/floodsub'
 import { identify } from '@libp2p/identify'
 import { mplex } from '@libp2p/mplex'
 import { pubsubPeerDiscovery } from '@libp2p/pubsub-peer-discovery'
@@ -24,7 +24,7 @@ const createNode = async (bootstrappers = []) => {
       })
     ],
     services: {
-      pubsub: gossipsub(),
+      pubsub: floodsub(),
       identify: identify()
     }
   }
