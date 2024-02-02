@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@helia/delegated-routing-v1-http-api-client": "^1.1.0",
-    "@helia/delegated-routing-v1-http-api-server": "^1.0.3",
+    "@helia/delegated-routing-v1-http-api-server": "^3.0.2",
     "helia": "^2.1.0",
     "libp2p": "^1.0.8",
     "react": "^18.2.0",
