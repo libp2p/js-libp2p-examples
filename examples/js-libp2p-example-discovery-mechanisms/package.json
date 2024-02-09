@@ -33,7 +33,7 @@
     "execa": "^8.0.1",
     "p-wait-for": "^5.0.2",
     "test-ipfs-example": "^1.1.0",
-    "uint8arrays": "^4.0.9"
+    "uint8arrays": "^5.0.2"
   },
   "private": true
 }
