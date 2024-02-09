@@ -22,7 +22,7 @@
     "@libp2p/tcp": "^9.0.4",
     "it-pipe": "^3.0.1",
     "libp2p": "^1.0.8",
-    "uint8arrays": "^4.0.6"
+    "uint8arrays": "^5.0.2"
   },
   "devDependencies": {
     "test-ipfs-example": "^1.0.0"
