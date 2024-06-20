@@ -55,6 +55,11 @@ class App extends Component {
         isLoading: this.state.isLoading - 1
       })
     }
+
+    this.setState({
+      response: JSON.stringify(providers, null, 2),
+      isLoading: this.state.isLoading - 1
+    })
   }
 
   async handlePeerSubmit (event) {
