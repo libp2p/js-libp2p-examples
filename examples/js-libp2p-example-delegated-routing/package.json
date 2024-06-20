@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "test-ipfs-example": "^1.0.0",
-    "eslint-config-ipfs": "^7.0.0",
     "helia": "^4.2.4"
   },
   "browserslist": [
