@@ -33,4 +33,4 @@ proc.all.on('data', async (data) => {
 
 await pWaitFor(() => discoveredPeers.length > 2, 600000)
 
-proc.kill()
+process.exit(0)
