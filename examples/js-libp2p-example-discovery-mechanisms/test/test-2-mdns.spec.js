@@ -28,4 +28,4 @@ proc.all.on('data', async (data) => {
 
 await pWaitFor(() => discoveredNodes > 1, 600000)
 
-proc.kill()
+process.exit(0)
