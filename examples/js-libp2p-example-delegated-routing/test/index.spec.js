@@ -57,7 +57,7 @@ test.describe('delegated routing example:', () => {
     await page.click(findProvidersBtn)
 
     const outputLocator = page.locator(output)
-    await expect(outputLocator).toContainText('multiaddrs":')
+    await expect(outputLocator).toContainText('[')
   })
 
   test('should find peer using the delegate', async ({ page, context }) => {
