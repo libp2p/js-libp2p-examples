@@ -25,7 +25,7 @@
     "@nodeutils/defaults-deep": "^1.1.0",
     "it-length-prefixed-stream": "^1.1.4",
     "it-pipe": "^3.0.1",
-    "libp2p": "^1.0.8",
+    "libp2p": "^2.0.0",
     "uint8arrays": "^5.1.0"
   },
   "devDependencies": {

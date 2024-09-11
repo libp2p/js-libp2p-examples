@@ -22,7 +22,7 @@
     "@libp2p/identify": "^2.1.0",
     "@libp2p/websockets": "^8.0.4",
     "@multiformats/multiaddr": "^12.1.11",
-    "libp2p": "^1.0.8 "
+    "libp2p": "^2.0.0 "
   },
   "devDependencies": {
     "test-ipfs-example": "^1.1.0"
