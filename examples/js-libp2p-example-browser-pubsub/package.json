@@ -25,7 +25,7 @@
     "@chainsafe/libp2p-noise": "^15.0.0",
     "@chainsafe/libp2p-yamux": "^6.0.1",
     "@libp2p/circuit-relay-v2": "^1.0.4",
-    "@libp2p/dcutr": "^1.0.3",
+    "@libp2p/dcutr": "^2.0.0",
     "@libp2p/identify": "^2.1.0",
     "@libp2p/mplex": "^10.1.0",
     "@libp2p/webrtc": "^4.0.5",
