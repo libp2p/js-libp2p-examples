@@ -27,7 +27,7 @@
     "@libp2p/circuit-relay-v2": "^1.0.4",
     "@libp2p/dcutr": "^1.0.3",
     "@libp2p/identify": "^2.1.0",
-    "@libp2p/mplex": "^10.1.0",
+    "@libp2p/mplex": "^11.0.0",
     "@libp2p/webrtc": "^4.0.5",
     "@libp2p/websockets": "^8.0.4",
     "@multiformats/multiaddr": "^12.1.11",
