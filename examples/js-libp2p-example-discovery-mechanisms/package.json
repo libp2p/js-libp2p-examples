@@ -21,7 +21,7 @@
     "@libp2p/bootstrap": "^10.1.0",
     "@libp2p/circuit-relay-v2": "^1.0.5",
     "@libp2p/floodsub": "^9.1.0",
-    "@libp2p/identify": "^2.1.0",
+    "@libp2p/identify": "^3.0.0",
     "@libp2p/kad-dht": "^12.1.0",
     "@libp2p/mdns": "^10.0.5",
     "@libp2p/mplex": "^10.1.0",
