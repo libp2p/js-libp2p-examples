@@ -29,7 +29,7 @@
     "@libp2p/identify": "^2.1.0",
     "@libp2p/mplex": "^10.1.0",
     "@libp2p/webrtc": "^4.0.5",
-    "@libp2p/websockets": "^8.0.4",
+    "@libp2p/websockets": "^9.0.1",
     "@multiformats/multiaddr": "^12.1.11",
     "libp2p": "^1.0.8",
     "vite": "^5.3.1"
