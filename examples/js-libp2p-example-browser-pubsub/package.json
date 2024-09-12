@@ -31,7 +31,7 @@
     "@libp2p/webrtc": "^4.0.5",
     "@libp2p/websockets": "^8.0.4",
     "@multiformats/multiaddr": "^12.1.11",
-    "libp2p": "^1.0.8",
+    "libp2p": "^2.0.1",
     "vite": "^5.3.1"
   },
   "devDependencies": {

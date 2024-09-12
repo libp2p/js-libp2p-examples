@@ -22,7 +22,7 @@
   "dependencies": {
     "@helia/delegated-routing-v1-http-api-client": "^3.0.1",
     "@helia/delegated-routing-v1-http-api-server": "^3.0.3",
-    "libp2p": "^1.0.8",
+    "libp2p": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
