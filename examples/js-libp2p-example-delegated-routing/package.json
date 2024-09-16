@@ -20,7 +20,7 @@
     "test": "npm run build && test-browser-example test"
   },
   "dependencies": {
-    "@helia/delegated-routing-v1-http-api-client": "^3.0.1",
+    "@helia/delegated-routing-v1-http-api-client": "^4.0.0",
     "@helia/delegated-routing-v1-http-api-server": "^3.0.3",
     "libp2p": "^1.0.8",
     "react": "^18.2.0",
