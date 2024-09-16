@@ -4,6 +4,7 @@ import { tcp } from '@libp2p/tcp'
 import { webSockets } from '@libp2p/websockets'
 import defaultsDeep from '@nodeutils/defaults-deep'
 import { createLibp2p as create } from 'libp2p'
+import { mdns } from '@libp2p/mdns'
 
 export async function createLibp2p (_options) {
   const defaults = {
@@ -14,8 +15,11 @@ export async function createLibp2p (_options) {
     streamMuxers: [
       yamux()
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
+    ],
+    peerDiscovery: [
+      mdns()
     ]
   }
 

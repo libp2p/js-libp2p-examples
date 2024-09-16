@@ -16,12 +16,12 @@
     "test": "test-node-example test/*"
   },
   "dependencies": {
-    "@chainsafe/libp2p-noise": "^15.0.0",
-    "@chainsafe/libp2p-yamux": "^6.0.1",
-    "@libp2p/plaintext": "^1.0.4",
-    "@libp2p/tcp": "^9.0.4",
+    "@chainsafe/libp2p-noise": "^16.0.0",
+    "@chainsafe/libp2p-yamux": "^7.0.0",
+    "@libp2p/plaintext": "^2.0.0",
+    "@libp2p/tcp": "^10.0.0",
     "it-pipe": "^3.0.1",
-    "libp2p": "^1.0.8",
+    "libp2p": "^2.0.0",
     "uint8arrays": "^5.1.0"
   },
   "devDependencies": {

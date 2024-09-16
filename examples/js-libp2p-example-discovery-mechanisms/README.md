@@ -87,7 +87,7 @@ const createNode = () => {
     streamMuxers: [
       yamux(),mplex()
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     peerDiscovery: [

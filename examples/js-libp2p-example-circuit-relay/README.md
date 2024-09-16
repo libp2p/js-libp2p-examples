@@ -55,7 +55,7 @@ const node = await createLibp2p({
   transports: [
     webSockets()
   ],
-  connectionEncryption: [
+  connectionEncrypters: [
     noise()
   ],
   streamMuxers: [
@@ -116,7 +116,7 @@ const node = await createLibp2p({
       discoverRelays: 2
     })
   ],
-  connectionEncryption: [
+  connectionEncrypters: [
     noise()
   ],
   streamMuxers: [
@@ -186,7 +186,7 @@ if (!autoRelayNodeAddr) {
 
 const node = await createLibp2p({
   transports: [webSockets()],
-  connectionEncryption: [noise()],
+  connectionEncrypters: [noise()],
   streamMuxers: [yamux(), mplex()]
 })
 

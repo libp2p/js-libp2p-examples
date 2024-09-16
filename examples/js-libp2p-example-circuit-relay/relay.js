@@ -17,7 +17,7 @@ async function main () {
     transports: [
       webSockets()
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     streamMuxers: [

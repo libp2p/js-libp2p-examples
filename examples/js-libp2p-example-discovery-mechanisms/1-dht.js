@@ -16,7 +16,7 @@ const node = await createLibp2p({
   },
   transports: [tcp()],
   streamMuxers: [yamux(), mplex()],
-  connectionEncryption: [noise()],
+  connectionEncrypters: [noise()],
   peerDiscovery: [
     bootstrap({
       list: bootstrappers

@@ -36,7 +36,7 @@ async function spawnRelay () {
         filter: filters.all
       })
     ],
-    connectionEncryption: [noise()],
+    connectionEncrypters: [noise()],
     streamMuxers: [yamux()],
     services: {
       identify: identify(),
