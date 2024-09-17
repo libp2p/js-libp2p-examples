@@ -176,7 +176,6 @@ connecting to the auto relay node via the relay.
 import { createLibp2p } from 'libp2p'
 import { webSockets } from '@libp2p/websockets'
 import { noise } from '@chainsafe/libp2p-noise'
-import { mplex } from '@libp2p/mplex'
 import { yamux } from '@chainsafe/libp2p-yamux',
 
 const autoRelayNodeAddr = process.argv[2]
@@ -187,7 +186,7 @@ if (!autoRelayNodeAddr) {
 const node = await createLibp2p({
   transports: [webSockets()],
   connectionEncrypters: [noise()],
-  streamMuxers: [yamux(), mplex()]
+  streamMuxers: [yamux()]
 })
 
 console.log(`Node started with id ${node.peerId.toString()}`)
