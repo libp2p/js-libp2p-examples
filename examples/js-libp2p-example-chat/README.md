@@ -26,8 +26,9 @@
 
 1. Run the listener in window 1, `node listener.js`
 2. Run the dialer in window 2, `node dialer.js`
-3. Type a message in either window and hit *enter*
-4. Tell yourself secrets to your hearts content!
+3. Wait until the two peers discover each other
+4. Type a message in either window and hit *enter*
+5. Tell yourself secrets to your hearts content!
 
 ## License
 

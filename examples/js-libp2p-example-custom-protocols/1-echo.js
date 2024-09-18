@@ -13,7 +13,7 @@ async function createNode () {
         '/ip4/0.0.0.0/tcp/0'
       ]
     },
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     streamMuxers: [

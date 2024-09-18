@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
 
+import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { bootstrap } from '@libp2p/bootstrap'
-import { floodsub } from '@libp2p/floodsub'
 import { identify } from '@libp2p/identify'
-import { mplex } from '@libp2p/mplex'
 import { pubsubPeerDiscovery } from '@libp2p/pubsub-peer-discovery'
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p'
@@ -16,15 +15,15 @@ const createNode = async (bootstrappers = []) => {
       listen: ['/ip4/0.0.0.0/tcp/0']
     },
     transports: [tcp()],
-    streamMuxers: [yamux(), mplex()],
-    connectionEncryption: [noise()],
+    streamMuxers: [yamux()],
+    connectionEncrypters: [noise()],
     peerDiscovery: [
       pubsubPeerDiscovery({
         interval: 1000
       })
     ],
     services: {
-      pubsub: floodsub(),
+      pubsub: gossipsub(),
       identify: identify()
     }
   }

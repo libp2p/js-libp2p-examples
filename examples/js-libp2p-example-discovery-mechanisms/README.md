@@ -72,7 +72,6 @@ Update your libp2p configuration to include MulticastDNS.
 import { createLibp2p } from 'libp2p'
 import { mdns } from '@libp2p/mdns'
 import { tcp } from '@libp2p/tcp'
-import { mplex } from '@libp2p/mplex'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { noise } from '@chainsafe/libp2p-noise'
 
@@ -85,9 +84,9 @@ const createNode = () => {
       tcp()
     ],
     streamMuxers: [
-      yamux(),mplex()
+      yamux(),
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     peerDiscovery: [

@@ -4,7 +4,6 @@ import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { circuitRelayServer } from '@libp2p/circuit-relay-v2'
 import { identify } from '@libp2p/identify'
-import { mplex } from '@libp2p/mplex'
 import { webSockets } from '@libp2p/websockets'
 import * as filters from '@libp2p/websockets/filters'
 import { createLibp2p } from 'libp2p'
@@ -18,8 +17,8 @@ const server = await createLibp2p({
       filter: filters.all
     })
   ],
-  connectionEncryption: [noise()],
-  streamMuxers: [yamux(), mplex()],
+  connectionEncrypters: [noise()],
+  streamMuxers: [yamux()],
   services: {
     identify: identify(),
     relay: circuitRelayServer({
@@ -27,9 +26,6 @@ const server = await createLibp2p({
         maxReservations: Infinity
       }
     })
-  },
-  connectionManager: {
-    minConnections: 0
   }
 })
 
