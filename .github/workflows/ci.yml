@@ -27,6 +27,7 @@ jobs:
           - js-libp2p-example-custom-protocols
           - js-libp2p-example-delegated-routing
           - js-libp2p-example-discovery-mechanisms
+          - js-libp2p-example-peer-and-content-routing
           - js-libp2p-example-webrtc-private-to-private
     defaults:
       run:
@@ -82,6 +83,7 @@ jobs:
           - js-libp2p-example-custom-protocols
           - js-libp2p-example-delegated-routing
           - js-libp2p-example-discovery-mechanisms
+          - js-libp2p-example-peer-and-content-routing
           - js-libp2p-example-webrtc-private-to-private
     steps:
       - uses: convictional/trigger-workflow-and-wait@f69fa9eedd3c62a599220f4d5745230e237904be
