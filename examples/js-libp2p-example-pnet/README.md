@@ -7,6 +7,13 @@
 
 > How to configure a libp2p private network
 
+libp2p networks allow any peer to connect to any other peer and to communicate
+with them via protocol streams.
+
+What if you only want to allow a certain subset of peers to connect to you? It's
+possible to use a pre-shared key to create a private network on top of the
+public libp2p network using the `@libp2p/pnet` module.
+
 ## Setup
 
 1. Install the modules in the libp2p root directory, `npm install` and`npm run build`.
