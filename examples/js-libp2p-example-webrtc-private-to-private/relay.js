@@ -22,6 +22,9 @@ const server = await createLibp2p({
   services: {
     identify: identify(),
     relay: circuitRelayServer({
+      // disable max reservations limit for demo purposes. in production you
+      // should leave this set to the default of 15 to prevent abuse of your
+      // node by network peers
       reservations: {
         maxReservations: Infinity
       }
@@ -29,4 +32,6 @@ const server = await createLibp2p({
   }
 })
 
-console.log('Relay listening on multiaddr(s): ', server.getMultiaddrs().map((ma) => ma.toString()))
+console.info('The relay node is running and listening on the following multiaddrs:')
+console.info('')
+console.info(server.getMultiaddrs().map((ma) => ma.toString()).join('\n'))

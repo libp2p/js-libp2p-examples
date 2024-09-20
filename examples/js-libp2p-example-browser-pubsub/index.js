@@ -59,7 +59,7 @@ const libp2p = await createLibp2p({
     })
   ],
   // a connection encrypter is necessary to dial the relay
-  connectionEncryption: [noise()],
+  connectionEncrypters: [noise()],
   // a stream muxer is necessary to dial the relay
   streamMuxers: [yamux()],
   connectionGater: {
@@ -75,9 +75,6 @@ const libp2p = await createLibp2p({
     identify: identify(),
     pubsub: gossipsub(),
     dcutr: dcutr()
-  },
-  connectionManager: {
-    minConnections: 0
   }
 })
 

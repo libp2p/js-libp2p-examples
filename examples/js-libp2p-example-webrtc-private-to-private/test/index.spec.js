@@ -12,16 +12,12 @@ import { setup, expect } from 'test-ipfs-example/browser'
 const test = setup()
 
 // DOM
-const connectBtn = '#dial-multiaddr-button'
-const connectAddr = '#dial-multiaddr-input'
-const sendMessageInput = '#send-topic-message-input'
-const sendMessageBtn = '#send-topic-message-button'
+const connectBtn = '#connect'
+const connectAddr = '#peer'
+const messageInput = '#message'
+const sendBtn = '#send'
 const output = '#output'
-const listeningAddresses = '#listening-addresses'
-const subscribeInput = '#subscribe-topic-input'
-const subscribeBtn = '#subscribe-topic-button'
-const topicPeers = '#topic-peers'
-const peerId = '#peer-id'
+const listeningAddresses = '#multiaddrs'
 
 let url
 
@@ -49,7 +45,7 @@ async function spawnRelay () {
   return { relayNode, relayNodeAddr }
 }
 
-test.describe('pubsub browser example:', () => {
+test.describe('browser to browser example:', () => {
   let relayNode
   let relayNodeAddr
 
@@ -70,72 +66,47 @@ test.describe('pubsub browser example:', () => {
     await page.goto(url)
   })
 
-  test('should connect via a relay node', async ({ page: pageA, context }) => {
+  test('should connect to another browser peer and send a message', async ({ page: pageA, context }) => {
     // load second page
     const pageB = await context.newPage()
     await pageB.goto(url)
 
-    // load page peer ids
-    const pageAPeerId = await pageA.textContent(peerId)
-    const pageBPeerId = await pageB.textContent(peerId)
-
     // connect the first page to the relay
-    const webRTCAddressA = await dialRelay(pageA, relayNodeAddr)
+    const relayedAddressA = await dialRelay(pageA, relayNodeAddr)
 
     // dial first page from second page over relay
-    await dialPeerOverRelay(pageB, webRTCAddressA)
+    await dialPeerOverRelay(pageB, relayedAddressA)
 
     // stop the relay
     await relayNode.stop()
 
-    const topicName = `topic-${Date.now()}`
+    // send a message from a to b
+    await sendMessage(pageA, pageB, 'hello B from A')
 
-    // subscribe to pubsub topic
-    await subscribeToTopic(pageA, topicName)
-    await subscribeToTopic(pageB, topicName)
-
-    // wait for peers to appear in topic peers
-    await waitForTopicPeers(pageA, pageBPeerId)
-    await waitForTopicPeers(pageB, pageAPeerId)
-
-    // send a message from one to the other
-    await sendMessage(pageA, 'hello A', pageB)
+    // send a message from b to a
+    await sendMessage(pageB, pageA, 'hello A from B')
   })
 })
 
-async function subscribeToTopic (page, topic) {
-  // subscribe to the topic
-  await page.fill(subscribeInput, topic)
-  await page.click(subscribeBtn)
+async function sendMessage (senderPage, recipientPage, message) {
+  // send the message to the peer over webRTC
+  await senderPage.fill(messageInput, message)
+  await senderPage.click(sendBtn)
 
-  // check the message was echoed back
-  const outputLocator = page.locator(output)
-  await expect(outputLocator).toContainText(`Subscribing to '${topic}'`)
-}
-
-async function waitForTopicPeers (page, otherPeer) {
-  const outputLocator = page.locator(topicPeers)
-  await expect(outputLocator).toContainText(otherPeer)
-}
-
-async function sendMessage (pageA, message, pageB) {
-  // subscribe to the topic
-  await pageA.fill(sendMessageInput, message)
-  await pageA.click(sendMessageBtn)
-
+  // check the message was sent
+  await expect(senderPage.locator(output)).toContainText(`Sending message '${message}'`)
   // check the message was received
-  const outputLocator = pageB.locator(output)
-  await expect(outputLocator).toContainText(message)
+  await expect(recipientPage.locator(output)).toContainText(`Received message '${message}'`)
 }
 
 async function dialRelay (page, address) {
-  // add the relay multiaddr to the input field and submit
+  // add the go libp2p multiaddress to the input field and submit
   await page.fill(connectAddr, address)
   await page.click(connectBtn)
 
   const outputLocator = page.locator(output)
   await expect(outputLocator).toContainText(`Dialing '${address}'`)
-  await expect(outputLocator).toContainText(`Connected to '${address}'`)
+  await expect(outputLocator).toContainText('Connected to relay')
 
   const multiaddrsLocator = page.locator(listeningAddresses)
   await expect(multiaddrsLocator).toHaveText(/webrtc/)

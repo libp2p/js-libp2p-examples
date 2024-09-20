@@ -19,7 +19,7 @@ async function main () {
       webSockets(),
       circuitRelayTransport()
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     streamMuxers: [

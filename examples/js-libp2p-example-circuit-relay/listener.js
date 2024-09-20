@@ -21,7 +21,7 @@ async function main () {
         discoverRelays: 2
       })
     ],
-    connectionEncryption: [
+    connectionEncrypters: [
       noise()
     ],
     streamMuxers: [
