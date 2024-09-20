@@ -46,7 +46,7 @@ const createNode = async () => {
     transports: [ tcp() ],
     streamMuxers: [ yamux() ],
     // Attach noise as the crypto channel to use
-    conectionEncrypters: [ noise() ]
+    connectionEncrypters: [ noise() ]
   })
 }
 ```
