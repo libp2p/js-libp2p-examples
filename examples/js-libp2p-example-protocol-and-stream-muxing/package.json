@@ -1,7 +1,7 @@
 {
   "name": "@libp2p/example-protocol-and-stream-muxing",
   "version": "0.0.0",
-  "description": "How to use multiplex protocols streams",
+  "description": "How to use multiplexed protocol streams",
   "license": "Apache-2.0 OR MIT",
   "homepage": "https://github.com/libp2p/js-libp2p-examples/tree/master/examples/js-libp2p-example-protocol-and-stream-muxing#readme",
   "repository": {
