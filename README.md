@@ -23,7 +23,6 @@
   - [Prerequisites](#prerequisites)
   - [Understanding how libp2p works](#understanding-how-libp2p-works)
   - [Other examples](#other-examples)
-- [Documentation](#documentation)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -31,10 +30,10 @@
 
 - Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
 - Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
-- Visit https://dweb-primer.ipfs.io to learn about IPFS and the concepts that underpin it
-- Head over to https://proto.school to take interactive tutorials that cover core IPFS APIs
-- Check out https://docs.ipfs.io for tips, how-tos and more
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
 - See https://blog.libp2p.io for news and more
+- Head over to https://proto.school to take interactive tutorials that cover core libp2p APIs
 - Need help? Please ask 'How do I?' questions on https://github.com/libp2p/js-libp2p/discussions
 
 ## Getting Started
@@ -66,18 +65,6 @@ These are demo apps or examples that showcase specific modules or services:
 - [Browser Pub/Sub](https://github.com/libp2p/js-libp2p-example-browser-pubsub) - Using Pub/Sub between browsers
 
 There is also [universal connectivity](https://github.com/libp2p/universal-connectivity/tree/main) demo that shows of how many different libp2p implementations can be connected together.
-
-## Documentation
-
-- [js-libp2p docs](https://github.com/libp2p/js-libp2p/tree/main/doc)
-- [libp2p.io](https://libp2p.io)
-- [docs.libp2p.io](https://docs.libp2p.io)
-- [Specifications](https://github.com/libp2p/specs)
-- [Discussion Forums](https://github.com/libp2p/js-libp2p/discussions)
-- Talks
-  - [`libp2p <3 ethereum` at DEVCON2](https://archive.devcon.org/archive/watch/2/libp2p-devp2p-ipfs-and-ethereum-networking/)
-- Articles
-  - [The overview of libp2p](https://github.com/libp2p/libp2p#description)
 
 ## Contribute
 
