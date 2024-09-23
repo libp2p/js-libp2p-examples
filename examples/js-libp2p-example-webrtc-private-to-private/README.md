@@ -94,6 +94,14 @@ The WebRTC transport is not limited to browsers.
 
 Why don't you try to create a Node.js version of the [browser peer script](./index.js)?
 
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
+
 ## License
 
 Licensed under either of

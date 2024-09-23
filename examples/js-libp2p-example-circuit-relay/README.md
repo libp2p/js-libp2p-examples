@@ -14,6 +14,7 @@
 - [2. Set up a listener node with `discoverRelays` Enabled](#2-set-up-a-listener-node-with-discoverrelays-enabled)
 - [3. Set up a dialer node for testing connectivity](#3-set-up-a-dialer-node-for-testing-connectivity)
 - [4. What is next?](#4-what-is-next)
+- [Need help?](#need-help)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -225,6 +226,14 @@ websockets, bear in mind that due to browser’s security policies you cannot
 establish unencrypted connection from secure context. The simplest solution is
 to setup SSL with nginx and proxy to the node and setup a domain name for the
 certificate.
+
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
 
 ## License
 

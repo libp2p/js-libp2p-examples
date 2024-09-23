@@ -306,6 +306,14 @@ If you decide to implement a transport yourself, please consider adding to the l
 
 Hope this tutorial was useful. We are always looking to improve it, so contributions are welcome!
 
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
+
 ## License
 
 Licensed under either of
@@ -318,9 +326,6 @@ Licensed under either of
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
 [interface-transport]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport
-
 [interface-transport badge]: https://raw.githubusercontent.com/libp2p/js-libp2p-interfaces/master/packages/libp2p-interfaces/src/transport/img/badge.png
-
 [interface-transport implementations]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport#modules-that-implement-the-interface
-
 [interface-transport api]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport#api

@@ -16,6 +16,7 @@ This example leverages the [vite bundler](https://vitejs.dev/) to compile and se
   - [Why do I need a Relay Server?](#why-do-i-need-a-relay-server)
   - [Start the Relay Server](#start-the-relay-server)
   - [Running the Example](#running-the-example)
+- [Need help?](#need-help)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -88,6 +89,14 @@ You can now shut down the relay server if you wish.
 2. In either browser, enter a message in the `Send Message to Topic` field and click "Send"
 
 You should see the message appear in the output section towards the bottom of the other browser window.
+
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
 
 ## License
 

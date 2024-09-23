@@ -11,6 +11,7 @@
 
 - [Setup](#setup)
 - [Running](#running)
+- [Need help?](#need-help)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -29,6 +30,14 @@
 3. Wait until the two peers discover each other
 4. Type a message in either window and hit *enter*
 5. Tell yourself secrets to your hearts content!
+
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
 
 ## License
 

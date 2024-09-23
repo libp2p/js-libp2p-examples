@@ -12,6 +12,7 @@
 - [Running this example](#running-this-example)
   - [Finding Content Providers via the Delegate](#finding-content-providers-via-the-delegate)
   - [Finding Peers via the Delegate](#finding-peers-via-the-delegate)
+- [Need help?](#need-help)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -47,6 +48,14 @@ This should open your browser to <http://localhost:3000>. If it does not, go ahe
 1. Enter the PeerId of the peer you wish to find, one is pre-filled for your convenience
 2. Click "Find PeerInfo"
 3. If found, multiaddrs for the peer will appear in the box beneath the input fields
+
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
 
 ## License
 

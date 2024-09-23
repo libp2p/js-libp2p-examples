@@ -13,6 +13,7 @@
 - [2. Using MulticastDNS to find other peers on the same network](#2-using-multicastdns-to-find-other-peers-on-the-same-network)
 - [3. Pubsub based Peer Discovery](#3-pubsub-based-peer-discovery)
 - [4. Where to find other Peer Discovery Mechanisms](#4-where-to-find-other-peer-discovery-mechanisms)
+- [Need help?](#need-help)
 - [License](#license)
 - [Contribution](#contribution)
 
@@ -134,6 +135,14 @@ There are plenty more Peer Discovery Mechanisms out there, you can:
 
 - Any DHT will offer you a discovery capability. You can simple *random-walk* the routing tables to find other peers to connect to. For example [@libp2p/kad-dht](https://github.com/libp2p/js-libp2p/tree/master/packages/kad-dht) can be used for peer discovery. An example of how to configure it to enable random walks can be found [here](https://github.com/libp2p/js-libp2p/blob/v0.28.4/doc/CONFIGURATION.md#customizing-dht).
 - You can create your own Discovery service, a registry, a list, a radio beacon, you name it!
+
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
 
 ## License
 

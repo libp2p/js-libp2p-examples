@@ -34,7 +34,7 @@
 - Read the [libp2p specs](https://github.com/libp2p/specs)
 - See https://blog.libp2p.io for news and more
 - Head over to https://proto.school to take interactive tutorials that cover core libp2p APIs
-- Need help? Please ask 'How do I?' questions on https://github.com/libp2p/js-libp2p/discussions
+- Need help? Visit the discussion board: https://github.com/libp2p/js-libp2p/discussions
 
 ## Getting Started
 

@@ -44,6 +44,14 @@ directory to see how they differ, including the swarm keys. You should see a
 `swarm.key` file in each of the repos and when the nodes are on the same private
 network this contents of the `swarm.key` files should be the same.
 
+## Need help?
+
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
+- Check out the [general libp2p documentation](https://docs.libp2p.io) for tips, how-tos and more
+- Read the [libp2p specs](https://github.com/libp2p/specs)
+- Ask a question on the [js-libp2p discussion board](https://github.com/libp2p/js-libp2p/discussions)
+
 ## License
 
 Licensed under either of
