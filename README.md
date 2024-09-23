@@ -16,27 +16,26 @@
   <a href="https://github.com/libp2p/js-libp2p-examples/issues">Request Feature/Example</a>
 </p>
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
 - [About The Project](#about-the-project)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Understanding how libp2p works](#understanding-how-libp2p-works)
   - [Other examples](#other-examples)
-  - [libp2p in browsers](#libp2p-in-browsers)
 - [Documentation](#documentation)
 - [Contribute](#contribute)
 - [License](#license)
 
 ## About The Project
 
-- Read the [docs](https://ipfs.github.io/helia/modules/helia.html)
-- Look into other [examples](https://github.com/libp2p/js-libp2p-examples) to learn how to spawn a Helia node in Node.js and in the Browser
+- Read the [js-libp2p documentation](https://github.com/libp2p/js-libp2p/tree/main/doc)
+- Check out the [js-libp2p API docs](https://libp2p.github.io/js-libp2p/)
 - Visit https://dweb-primer.ipfs.io to learn about IPFS and the concepts that underpin it
 - Head over to https://proto.school to take interactive tutorials that cover core IPFS APIs
 - Check out https://docs.ipfs.io for tips, how-tos and more
-- See https://blog.ipfs.io for news and more
-- Need help? Please ask 'How do I?' questions on https://discuss.ipfs.io
+- See https://blog.libp2p.io for news and more
+- Need help? Please ask 'How do I?' questions on https://github.com/libp2p/js-libp2p/discussions
 
 ## Getting Started
 
@@ -56,19 +55,15 @@ Make sure you have installed all of the following prerequisites on your developm
 - [Delegated routing](https://github.com/libp2p/js-libp2p-example-delegated-routing) - how to offload network operations and queries onto more capable nodes
 - [Discovery mechanisms](https://github.com/libp2p/js-libp2p-example-discovery-mechanisms) - how libp2p discovers other peers on the network
 - [Custom protocols](https://github.com/libp2p/js-libp2p-example-custom-protocols) - how to create a custom protocol for your application
+- [Transports](https://github.com/libp2p/js-libp2p-example-transports) - how to connect peers together via different transports
+  - [WebRTC](https://github.com/libp2p/js-libp2p-example-webrtc-private-to-private) - a special transport for connecting browsers together
 
 ### Other examples
 
+These are demo apps or examples that showcase specific modules or services:
+
 - [Chat](https://github.com/libp2p/js-libp2p-example-chat) - a simple chat app
 - [Browser Pub/Sub](https://github.com/libp2p/js-libp2p-example-browser-pubsub) - Using Pub/Sub between browsers
-
-### libp2p in browsers
-
-There are a number of ways libp2p can be used in the browser. Here are some examples:
-
-- [webRTC](https://github.com/libp2p/js-libp2p-example-webrtc-private-to-private)
-- websockets (example pending)
-- webtransport (example pending)
 
 There is also [universal connectivity](https://github.com/libp2p/universal-connectivity/tree/main) demo that shows of how many different libp2p implementations can be connected together.
 
