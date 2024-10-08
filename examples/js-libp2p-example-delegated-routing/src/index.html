@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Delegated Routing</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <div>
+      <header class="center">
+        <h1>Delegated Routing</h1>
+      </header>
+      <section class="center">
+        <form id="findProvidersForm">
+          <label>
+            Find providers of CID:
+            <input type="text" value="" id="find-providers-input" />
+            <input type="submit" value="Find Providers" id="find-providers-button" />
+          </label>
+        </form>
+        <form id="findPeerForm">
+          <label>
+            Find peer:
+            <input type="text" value="" id="find-peer-input" />
+            <input type="submit" value="Find PeerInfo" id="find-peer-button" />
+          </label>
+        </form>
+      </section>
+      <section id="loading-notification">
+        <div class="lds-ripple"><div></div><div></div></div>
+      </section>
+      <section>
+        <pre id="output">
+        </pre>
+      </section>
+    </div>
+    <script src="index.js" type="module"></script>
+  </body>
+</html>

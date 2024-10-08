@@ -13,8 +13,9 @@
   },
   "type": "module",
   "scripts": {
-    "build": "BUILD_PATH=dist PUBLIC_URL=/ react-scripts build",
-    "start": "PUBLIC_URL=/ react-scripts start",
+    "start": "vite",
+    "build": "vite build",
+    "server": "node ./server.js",
     "test:firefox": "npm run build && playwright test --browser=firefox test",
     "test:chrome": "npm run build && playwright test test",
     "test": "npm run build && test-browser-example test"
@@ -23,20 +24,14 @@
     "@helia/delegated-routing-v1-http-api-client": "^4.0.0",
     "@helia/delegated-routing-v1-http-api-server": "^4.0.0",
     "libp2p": "^2.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.3.1"
   },
   "devDependencies": {
-    "test-ipfs-example": "^1.0.0",
     "eslint-config-ipfs": "^7.0.2",
-    "helia": "next"
+    "helia": "^5.0.0",
+    "test-ipfs-example": "^1.0.0"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "private": true
 }
