@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { createDelegatedRoutingV1HttpApiServer } from '@helia/delegated-routing-v1-http-api-server'
 import { createHelia } from 'helia'
-import { CID } from 'multiformats/cid'
 import { setup, expect } from 'test-ipfs-example/browser'
 
 // Setup
@@ -19,8 +18,6 @@ let url
 // start a libp2p node to delegate to
 async function spawnServer () {
   const helia = await createHelia()
-  helia.blockstore.put(CID.parse('bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'), new TextEncoder().encode('hello world'))
-
   const fastify = await createDelegatedRoutingV1HttpApiServer(helia, {
     listen: {
       host: '127.0.0.1',
