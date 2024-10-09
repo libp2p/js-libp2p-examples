@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { createDelegatedRoutingV1HttpApiServer } from '@helia/delegated-routing-v1-http-api-server'
+import { peerIdFromString } from '@libp2p/peer-id'
 import { createHelia } from 'helia'
 import { setup, expect } from 'test-ipfs-example/browser'
 
@@ -17,7 +18,18 @@ let url
 
 // start a libp2p node to delegate to
 async function spawnServer () {
-  const helia = await createHelia()
+  const helia = await createHelia({
+    routers: [{
+      // dummy router that always finds providers
+      findProviders: async function * () {
+        yield {
+          id: peerIdFromString('QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN'),
+          multiaddrs: [],
+          protocols: []
+        }
+      }
+    }]
+  })
   const fastify = await createDelegatedRoutingV1HttpApiServer(helia, {
     listen: {
       host: '127.0.0.1',
@@ -52,8 +64,8 @@ test.describe('delegated routing example:', () => {
   })
 
   test('should find providers using the delegate', async ({ page, context }) => {
-    // add the relay multiaddr to the input field and submit
-    await page.fill(findProvidersInput, 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e')
+    // add the empty directory CID to the input field and submit
+    await page.fill(findProvidersInput, 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354')
     await page.click(findProvidersBtn)
 
     const outputLocator = page.locator(output)

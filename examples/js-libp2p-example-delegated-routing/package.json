@@ -29,6 +29,7 @@
     "vite": "^5.3.1"
   },
   "devDependencies": {
+    "@libp2p/peer-id": "^5.0.4",
     "eslint-config-ipfs": "^7.0.2",
     "helia": "^5.0.0",
     "test-ipfs-example": "^1.0.0"
