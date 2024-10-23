@@ -38,6 +38,9 @@ const clean = (line) => line.replaceAll('\n', '')
 const libp2p = await createLibp2p({
   addresses: {
     listen: [
+      // make a reservation on any discovered relays - this will let other
+      // peers use the relay to contact us
+      '/p2p-circuit',
       // create listeners for incoming WebRTC connection attempts on on all
       // available Circuit Relay connections
       '/webrtc'
@@ -52,11 +55,7 @@ const libp2p = await createLibp2p({
     // support dialing/listening on WebRTC addresses
     webRTC(),
     // support dialing/listening on Circuit Relay addresses
-    circuitRelayTransport({
-      // make a reservation on any discovered relays - this will let other
-      // peers use the relay to contact us
-      discoverRelays: 1
-    })
+    circuitRelayTransport()
   ],
   // a connection encrypter is necessary to dial the relay
   connectionEncrypters: [noise()],

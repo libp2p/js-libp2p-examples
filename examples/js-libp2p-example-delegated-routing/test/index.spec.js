@@ -27,6 +27,12 @@ async function spawnServer () {
           multiaddrs: [],
           protocols: []
         }
+      },
+      findPeer: async function () {
+        return {
+          id: peerIdFromString('QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN'),
+          multiaddrs: []
+        }
       }
     }]
   })
@@ -69,10 +75,7 @@ test.describe('delegated routing example:', () => {
     await page.click(findProvidersBtn)
 
     const outputLocator = page.locator(output)
-    await expect(outputLocator).toContainText('[', {
-      // we depend on an external service and it can take a long time to respond
-      timeout: 5 * 60_000
-    })
+    await expect(outputLocator).toContainText('[')
   })
 
   test('should find peer using the delegate', async ({ page, context }) => {

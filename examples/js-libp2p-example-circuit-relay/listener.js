@@ -15,11 +15,14 @@ async function main () {
   }
 
   const node = await createLibp2p({
+    addresses: {
+      listen: [
+        '/p2p-circuit'
+      ]
+    },
     transports: [
       webSockets(),
-      circuitRelayTransport({
-        discoverRelays: 2
-      })
+      circuitRelayTransport()
     ],
     connectionEncrypters: [
       noise()
