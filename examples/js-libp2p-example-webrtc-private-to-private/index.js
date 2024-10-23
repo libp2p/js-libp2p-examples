@@ -27,6 +27,7 @@ let chatStream
 const node = await createLibp2p({
   addresses: {
     listen: [
+      '/p2p-circuit',
       '/webrtc'
     ]
   },
@@ -35,9 +36,7 @@ const node = await createLibp2p({
       filter: filters.all
     }),
     webRTC(),
-    circuitRelayTransport({
-      discoverRelays: 1
-    })
+    circuitRelayTransport()
   ],
   connectionEncrypters: [noise()],
   streamMuxers: [yamux()],

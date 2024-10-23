@@ -20,7 +20,7 @@
     "@chainsafe/libp2p-noise": "^16.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@libp2p/bootstrap": "^11.0.0",
-    "@libp2p/circuit-relay-v2": "^2.0.0",
+    "@libp2p/circuit-relay-v2": "^3.0.0",
     "@libp2p/identify": "^3.0.0",
     "@libp2p/kad-dht": "^14.0.0",
     "@libp2p/mdns": "^11.0.0",

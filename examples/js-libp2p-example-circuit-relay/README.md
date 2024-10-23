@@ -11,7 +11,7 @@
 
 - [0. Setup the example](#0-setup-the-example)
 - [1. Set up a relay node](#1-set-up-a-relay-node)
-- [2. Set up a listener node with `discoverRelays` Enabled](#2-set-up-a-listener-node-with-discoverrelays-enabled)
+- [2. Set up a listener node with a circuit relay address](#2-set-up-a-listener-node-with-a-circuit-relay-address)
 - [3. Set up a dialer node for testing connectivity](#3-set-up-a-dialer-node-for-testing-connectivity)
 - [4. What is next?](#4-what-is-next)
 - [Need help?](#need-help)
@@ -88,7 +88,7 @@ Listening on:
 /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3
 ```
 
-## 2. Set up a listener node with `discoverRelays` Enabled
+## 2. Set up a listener node with a circuit relay address
 
 One of the typical use cases for Circuit Relay is nodes behind a NAT or browser
 nodes due to their inability to expose a public address.
@@ -111,11 +111,14 @@ if (!relayAddr) {
 }
 
 const node = await createLibp2p({
+  addresses: {
+    listen: [
+      '/p2p-circuit'
+    ]
+  },
   transports: [
     webSockets(),
-    circuitRelayTransport({
-      discoverRelays: 2
-    })
+    circuitRelayTransport()
   ],
   connectionEncrypters: [
     noise()
