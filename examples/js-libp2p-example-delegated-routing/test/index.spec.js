@@ -61,8 +61,17 @@ test.describe('delegated routing example:', () => {
   }, {})
 
   test.afterAll(async () => {
-    await fastify.close()
-    await helia.stop()
+    try {
+      await fastify?.close()
+    } catch (err) {
+      console.error('error stopping fastify', err)
+    }
+
+    try {
+      await helia?.stop()
+    } catch (err) {
+      console.error('error stopping helia', err)
+    }
   })
 
   test.beforeEach(async ({ page }) => {
