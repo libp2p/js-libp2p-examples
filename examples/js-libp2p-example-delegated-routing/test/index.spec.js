@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { createDelegatedRoutingV1HttpApiServer } from '@helia/delegated-routing-v1-http-api-server'
 import { peerIdFromString } from '@libp2p/peer-id'
-import { createHelia } from 'helia'
+import { createHelia, libp2pDefaults } from 'helia'
 import { setup, expect } from 'test-ipfs-example/browser'
 
 // Setup
@@ -18,6 +18,13 @@ let url
 
 // start a libp2p node to delegate to
 async function spawnServer () {
+  const libp2p = libp2pDefaults()
+
+  if (process.env.CI != null) {
+    // do not use UPnP service in CI
+    delete libp2p.services.upnp
+  }
+
   const helia = await createHelia({
     routers: [{
       // dummy router that always finds providers
@@ -34,7 +41,8 @@ async function spawnServer () {
           multiaddrs: []
         }
       }
-    }]
+    }],
+    libp2p
   })
   const fastify = await createDelegatedRoutingV1HttpApiServer(helia, {
     listen: {
