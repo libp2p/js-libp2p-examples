@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 
 import fs from 'fs'
-import https from 'https'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'
@@ -10,11 +9,6 @@ import { pipe } from 'it-pipe'
 import { createLibp2p } from 'libp2p'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
-
-const httpServer = https.createServer({
-  cert: fs.readFileSync('./test_certs/cert.pem'),
-  key: fs.readFileSync('./test_certs/key.pem')
-})
 
 const createNode = async (addresses = []) => {
   if (!Array.isArray(addresses)) {
@@ -28,7 +22,10 @@ const createNode = async (addresses = []) => {
     transports: [
       tcp(),
       webSockets({
-        server: httpServer,
+        https: {
+          cert: fs.readFileSync('./test_certs/cert.pem'),
+          key: fs.readFileSync('./test_certs/key.pem')
+        },
         websocket: {
           rejectUnauthorized: false
         }
