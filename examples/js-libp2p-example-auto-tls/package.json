@@ -21,7 +21,7 @@
     "@libp2p/auto-tls": "^1.0.0",
     "@libp2p/autonat": "^2.0.13",
     "@libp2p/bootstrap": "^11.0.14",
-    "@libp2p/config": "^0.0.0",
+    "@libp2p/config": "^1.0.0",
     "@libp2p/identify": "^3.0.13",
     "@libp2p/kad-dht": "^14.1.4",
     "@libp2p/keychain": "^5.0.11",
