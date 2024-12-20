@@ -46,13 +46,13 @@ Let's configure the relevant modules:
 ```js
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { webSockets } from '@libp2p/websockets'
-import { createLibp2p } from 'libp2p'
 import { autoTLS } from '@libp2p/auto-tls'
+import { loadOrCreateSelfKey } from '@libp2p/config'
 import { identify, identifyPush } from '@libp2p/identify'
 import { keychain } from '@libp2p/keychain'
+import { webSockets } from '@libp2p/websockets'
 import { LevelDatastore } from 'datastore-level'
-import { loadOrCreateSelfKey } from '@libp2p/config'
+import { createLibp2p } from 'libp2p'
 
 const datastore = new LevelDatastore('./db')
 await datastore.open()
@@ -91,16 +91,13 @@ const libp2p = await createLibp2p({
 > set the `acmeDirectory` to a staging address, though be aware that any
 > certificates generated will be self-signed:
 >
-> ```TypeScript
-> const libp2p = await createLibp2p({
->   // other config
->   services: {
->     autoTLS: autoTLS({
->       acmeDirectory: 'https://acme-staging-v02.api.letsencrypt.org/directory'
->     }),
->     // other config
->   }
-> })
+> ```diff
+>    services: {
+> -    autoTLS: autoTLS()
+> +    autoTLS: autoTLS({
+> +      acmeDirectory: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+> +    }),
+>      identify: identify(),
 > ```
 
 ## Getting a publicly routable address
@@ -122,16 +119,18 @@ config key:
 > auto-confirmation - see the next section on confirming dialable addresses for
 > more
 
-```js
-const libp2p = await createLibp2p({
-  addresses: {
-    appendAnnounce: [
-      '/ip4/123.123.123.123/tcp/1234/ws'
-    ],
-    // other config
-  },
-  // other config
-})
+```diff
+   addresses: {
+     listen: [
+       '/ip4/0.0.0.0/tcp/0/ws',
+       '/ip6/::/tcp/0/ws'
+-    ]
++    ],
++     appendAnnounce: [
++       '/ip4/123.123.123.123/tcp/1234/ws'
++     ],
+   },
+   transports: [
 ```
 
 ### Automatic configuration via UPnP
@@ -148,15 +147,16 @@ automatically configure port forwarding for IPv4 and IPv6 networks:
 > ISP provided routers sometimes do not and most ship with UPnP disabled by
 > default - please check your router documentation for more information
 
-```TypeScript
-import { uPnPNAT } from '@libp2p/upnp-nat'
-
-const libp2p = await createLibp2p({
-  services: {
-    upnp: uPnPNAT()
-    // other config
-  }
-})
+```diff
+  import { keychain } from '@libp2p/keychain'
++ import { uPnPNAT } from '@libp2p/upnp-nat'
+  import { webSockets } from '@libp2p/websockets'
+```
+```diff
+   services: {
+     autoTLS: autoTLS(),
++    upnp: uPnPNAT(),
+     identify: identify(),
 ```
 
 ### Confirming dialable addresses
@@ -176,22 +176,19 @@ confirmed to be dialable.
 We can skip this and explicitly trust `libp2p.direct` and our router by
 auto-confirming the DNS mapping and the public IP address:
 
-```TypeScript
-import { uPnPNAT } from '@libp2p/upnp-nat'
-
-const libp2p = await createLibp2p({
-  services: {
-    autoTLS: autoTLS({
-      // automatically mark *.<peerID>.libp2p.direct as routable
-      autoConfirmAddress: true
-    }),
-    upnp: uPnPNAT({
-      // automatically mark any detected socket address as routable
-      autoConfirmAddress: true
-    })
-    // other config
-  }
-})
+```diff
+   services: {
+-    autoTLS: autoTLS(),
++    autoTLS: autoTLS({
++      // automatically mark *.<peerID>.libp2p.direct as routable
++      autoConfirmAddress: true
++    }),
+-    upnp: uPnPNAT(),
++    upnp: uPnPNAT({
++      // automatically mark any detected socket address as routable
++      autoConfirmAddress: true
++    }),
+     identify: identify(),
 ```
 
 To not trust these actors and instead require confirmation from multiple peers
@@ -220,36 +217,42 @@ Finally we need to also use the [@libp2p/bootstrap](https://www.npmjs.com/packag
 module to connect to an initial set of peers that will let us start to fill our
 routing table and perform queries:
 
-```js
-import { autoNAT } from '@libp2p/autonat'
-import { bootstrap } from '@libp2p/bootstrap'
-import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht'
-import { tcp } from '@libp2p/tcp'
+```diff
+  import { autoTLS } from '@libp2p/auto-tls'
++ import { bootstrap } from '@libp2p/bootstrap'
+  import { loadOrCreateSelfKey } from '@libp2p/config'
+  import { identify, identifyPush } from '@libp2p/identify'
++ import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht'
+  import { keychain } from '@libp2p/keychain'
++ import { tcp } from '@libp2p/tcp'
+  import { uPnPNAT } from '@libp2p/upnp-nat'
+```
 
-const libp2p = await createLibp2p({
-  // other config
-  transports: [
-    // other config
-    tcp()
-  ],
-  services: {
-    autoNAT: autoNAT(),
-    aminoDHT: kadDHT({
-      protocol: '/ipfs/kad/1.0.0',
-      peerInfoMapper: removePrivateAddressesMapper
-    }),
-    bootstrap: bootstrap({
-      list: [
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-        '/dnsaddr/va1.bootstrap.libp2p.io/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8',
-        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ'
-      ]
-    })
-    // other config
-  }
-})
+```diff
+   transports: [
++    tcp()
+     webSockets()
+   ],
+```
+
+```diff
+   services: {
+     autoNAT: autoNAT(),
++    aminoDHT: kadDHT({
++      protocol: '/ipfs/kad/1.0.0',
++      peerInfoMapper: removePrivateAddressesMapper
++    }),
++    bootstrap: bootstrap({
++      list: [
++        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
++        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
++        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
++        '/dnsaddr/va1.bootstrap.libp2p.io/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8',
++        '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ'
++      ]
++    }),
+     upnp: uPnPNAT(),
+     identify: identify(),
 ```
 
 If you are running on your own network which has better support for varied
