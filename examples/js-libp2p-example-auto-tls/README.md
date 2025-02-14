@@ -46,7 +46,7 @@ Let's configure the relevant modules:
 ```js
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { autoTLS } from '@libp2p/auto-tls'
+import { autoTLS } from '@ipshipyard/libp2p-auto-tls'
 import { loadOrCreateSelfKey } from '@libp2p/config'
 import { identify, identifyPush } from '@libp2p/identify'
 import { keychain } from '@libp2p/keychain'
@@ -159,6 +159,35 @@ automatically configure port forwarding for IPv4 and IPv6 networks:
      identify: identify(),
 ```
 
+#### Dealing with unreliable routers
+
+By default `@libp2p/upnp-nat` will use [SSDP](https://en.wikipedia.org/wiki/Simple_Service_Discovery_Protocol)
+to locate your router on the network in order to use it to map ports and
+discover it's externally routable address.
+
+Some ISP-provided routers are underpowered and require rebooting before they
+will respond to `SSDP` search messages.
+
+If you know the URL to the device descriptor of your [Internet Gateway Device](https://openconnectivity.org/developer/specifications/upnp-resources/upnp/internet-gateway-device-igd-v-2-0/)
+you can specify it manually and skip the search:
+
+```diff
+   services: {
+     autoTLS: autoTLS(),
++    upnp: uPnPNAT({
++      gateways: [
++        // manually specify URLs for device descriptor documents
++        // these can be IPv4 and/or IPv6 (if supported by your network)
++        'http://192.168.1.1:8080/path/to/descriptor.xml'
++        'http://[xx:xx:xx:xx]:8080/path/to/descriptor.xml'
++      ]
++    }),
+     identify: identify(),
+```
+
+Note that UPnP will still need to be enabled to map external ports (IPv4) and/or
+to open pinholes in the firewall if necessary (IPv6).
+
 ### Confirming dialable addresses
 
 Designing distributed systems typically involves trying to trust other system
@@ -218,7 +247,7 @@ module to connect to an initial set of peers that will let us start to fill our
 routing table and perform queries:
 
 ```diff
-  import { autoTLS } from '@libp2p/auto-tls'
+  import { autoTLS } from '@ipshipyard/libp2p-auto-tls'
 + import { bootstrap } from '@libp2p/bootstrap'
   import { loadOrCreateSelfKey } from '@libp2p/config'
   import { identify, identifyPush } from '@libp2p/identify'
