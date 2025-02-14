@@ -46,7 +46,7 @@ Let's configure the relevant modules:
 ```js
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { autoTLS } from '@libp2p/auto-tls'
+import { autoTLS } from '@ipshipyard/libp2p-auto-tls'
 import { loadOrCreateSelfKey } from '@libp2p/config'
 import { identify, identifyPush } from '@libp2p/identify'
 import { keychain } from '@libp2p/keychain'
@@ -247,7 +247,7 @@ module to connect to an initial set of peers that will let us start to fill our
 routing table and perform queries:
 
 ```diff
-  import { autoTLS } from '@libp2p/auto-tls'
+  import { autoTLS } from '@ipshipyard/libp2p-auto-tls'
 + import { bootstrap } from '@libp2p/bootstrap'
   import { loadOrCreateSelfKey } from '@libp2p/config'
   import { identify, identifyPush } from '@libp2p/identify'
