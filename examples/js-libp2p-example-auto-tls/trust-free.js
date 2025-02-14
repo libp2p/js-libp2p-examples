@@ -4,7 +4,7 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { autoTLS } from '@libp2p/auto-tls'
+import { autoTLS } from '@ipshipyard/libp2p-auto-tls'
 import { autoNAT } from '@libp2p/autonat'
 import { bootstrap } from '@libp2p/bootstrap'
 import { loadOrCreateSelfKey } from '@libp2p/config'
