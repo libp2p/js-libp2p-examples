@@ -51,7 +51,6 @@ const node = await createLibp2p({
   addresses: {
     listen: ['/ip4/0.0.0.0/tcp/0/ws']
     // TODO check "What is next?" section
-    // announce: ['/dns4/auto-relay.libp2p.io/tcp/443/wss/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3']
   },
   transports: [
     webSockets()
@@ -148,7 +147,8 @@ As you can see in the code, we need to provide the relay address, `relayAddr`,
 as a process argument. This node will dial the provided relay address and
 automatically bind to it.
 
-You should now run the following to start the node running Auto Relay:
+You should now run the following to start the listener and see it automatically
+acquire a circuit relay address:
 
 ```sh
 node listener.js /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3
@@ -159,32 +159,37 @@ This should print out something similar to the following:
 ```sh
 Node started with id QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
 Connected to the HOP relay QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3
-Advertising with a relay address of /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3/p2p-circuit/p2p/QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
+Listening on a relay address of /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3/p2p-circuit/p2p/QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
 ```
 
-Per the address, it is possible to verify that the auto relay node is listening
-on the circuit relay node address.
+Per the listening address, it is possible to verify that the listener node is
+indeed listening on the circuit relay node address.
 
 Instead of dialing this relay manually, you could set up this node with the
-Bootstrap module and provide it in the bootstrap list. Moreover, you can use
-other `peer-discovery` modules to discover peers in the network and the node
-will automatically bind to the relays that support HOP until reaching the
-maximum number of listeners.
+`@libp2p/bootstrap` module and provide it in the bootstrap list.
+
+Alternatively, you can use other `peer-discovery` modules such as
+`@libp2p/kad-dht` which allow your node to perform a random walk of the network
+to discover peers running the Circuit Relay HOP protocol and the node will
+automatically bind to these relays until reaching the maximum number of
+listeners defined by how many `/p2p-circuit` entries in the `address.listen`
+array (usually one is sufficient).
 
 ## 3. Set up a dialer node for testing connectivity
 
 Now that you have a relay node and a node bound to that relay, you can test
-connecting to the auto relay node via the relay.
+connecting to the listening node via the relay.
 
 ```js
 import { createLibp2p } from 'libp2p'
 import { webSockets } from '@libp2p/websockets'
 import { noise } from '@chainsafe/libp2p-noise'
-import { yamux } from '@chainsafe/libp2p-yamux',
+import { yamux } from '@chainsafe/libp2p-yamux'
+import { multiaddr } from '@multiformats/multiaddr'
 
-const autoRelayNodeAddr = process.argv[2]
-if (!autoRelayNodeAddr) {
-  throw new Error('the auto relay node address needs to be specified')
+const listenNodeAddr = process.argv[2]
+if (!listenNodeAddr) {
+  throw new Error('The listening node address needs to be specified')
 }
 
 const node = await createLibp2p({
@@ -195,15 +200,18 @@ const node = await createLibp2p({
 
 console.log(`Node started with id ${node.peerId.toString()}`)
 
-const conn = await node.dial(autoRelayNodeAddr)
-console.log(`Connected to the auto relay node via ${conn.remoteAddr.toString()}`)
+const ma = multiaddr(listenNodeAddr)
+const conn = await node.dial(ma, {
+  signal: AbortSignal.timeout(10_000)
+})
+console.log(`Connected to the listen node via ${conn.remoteAddr.toString()}`)
 ```
 
 You should now run the following to start the relay node using the listen
 address from step 2:
 
 ```sh
-node dialer.js /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3
+node dialer.js /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3/p2p-circuit/p2p/QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
 ```
 
 Once you start your test node, it should print out something similar to the
@@ -211,7 +219,7 @@ following:
 
 ```sh
 Node started: Qme7iEzDxFoFhhkrsrkHkMnM11aPYjysaehP4NZeUfVMKG
-Connected to the auto relay node via /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3/p2p-circuit/p2p/QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
+Connected to the listening node via /ip4/192.168.1.120/tcp/61592/ws/p2p/QmWDn2LY8nannvSWJzruUYoLZ4vV83vfCBwd8DipvdgQc3/p2p-circuit/p2p/QmerrWofKF358JE6gv3z74cEAyL7z1KqhuUoVfGEynqjRm
 ```
 
 As you can see from the output, the remote address of the established connection
@@ -223,12 +231,20 @@ Before moving into production, there are a few things that you should take into
 account.
 
 A relay node should not advertise its private address in a real world scenario,
-as the node would not be reachable by others. You should provide an array of
-public addresses in the libp2p `addresses.announce` option. If you are using
-websockets, bear in mind that due to browser’s security policies you cannot
-establish unencrypted connection from secure context. The simplest solution is
-to setup SSL with nginx and proxy to the node and setup a domain name for the
-certificate.
+as the node would not be reachable by others.
+
+If you are using websockets, bear in mind that due to browser’s security
+policies you cannot establish unencrypted connection from secure context.
+
+One solution is to setup TLS with nginx and proxy to the node and setup
+a domain name for the certificate. You can then provide an list of public
+addresses in the libp2p `addresses.announce` config option.
+
+Alternatively you can use the public [AutoTLS service](https://blog.libp2p.io/autotls/)
+(provided by [Interplanetary Shipyard](https://blog.ipfs.tech/shipyard-hello-world/))
+to automatically provision a TLS certificate and accompanying domain name - see
+the [js-libp2p-example-auto-tls](https://github.com/libp2p/js-libp2p-example-auto-tls)
+for more information.
 
 ## Need help?
 

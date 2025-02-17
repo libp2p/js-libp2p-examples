@@ -9,9 +9,9 @@ import { multiaddr } from '@multiformats/multiaddr'
 import { createLibp2p } from 'libp2p'
 
 async function main () {
-  const autoRelayNodeAddr = process.argv[2]
-  if (!autoRelayNodeAddr) {
-    throw new Error('the auto relay node address needs to be specified')
+  const listenNodeAddr = process.argv[2]
+  if (!listenNodeAddr) {
+    throw new Error('The listening node address needs to be specified')
   }
 
   const node = await createLibp2p({
@@ -32,8 +32,11 @@ async function main () {
 
   console.log(`Node started with id ${node.peerId.toString()}`)
 
-  const conn = await node.dial(multiaddr(autoRelayNodeAddr))
-  console.log(`Connected to the auto relay node via ${conn.remoteAddr.toString()}`)
+  const ma = multiaddr(listenNodeAddr)
+  const conn = await node.dial(ma, {
+    signal: AbortSignal.timeout(10_000)
+  })
+  console.log(`Connected to the listening node via ${conn.remoteAddr.toString()}`)
 }
 
 main()
