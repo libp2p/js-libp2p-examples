@@ -20,14 +20,14 @@ process.stdout.write('listener.js\n')
 const {
   process: listener,
   matches: [, autoRelayAddr]
-} = await matchOutput(/^Advertising with a relay address of (\/ip4\/.*)$/m, 'node', [path.resolve(__dirname, '../listener.js'), relayAddress])
+} = await matchOutput(/^Listening on a relay address of (\/ip4\/.*)$/m, 'node', [path.resolve(__dirname, '../listener.js'), relayAddress])
 
 process.stdout.write('==================================================================\n')
 
 // Step 3 process
 process.stdout.write('dialer.js\n')
 
-await waitForOutput(`Connected to the auto relay node via ${autoRelayAddr}`, 'node', [path.resolve(__dirname, '../dialer.js'), autoRelayAddr])
+await waitForOutput(`Connected to the listening node via ${autoRelayAddr}`, 'node', [path.resolve(__dirname, '../dialer.js'), autoRelayAddr])
 
 listener.kill()
 relay.kill()

@@ -44,7 +44,7 @@ async function main () {
   // Wait for connection and relay to be bind for the example purpose
   node.addEventListener('self:peer:update', (evt) => {
     // Updated self multiaddrs?
-    console.log(`Advertising with a relay address of ${node.getMultiaddrs()[0].toString()}`)
+    console.log(`Listening on a relay address of ${node.getMultiaddrs()[0].toString()}`)
   })
 }
 
