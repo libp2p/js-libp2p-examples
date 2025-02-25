@@ -49,24 +49,25 @@ node2.handle(['/another-protocol/1.0.0', '/another-protocol/2.0.0'], ({ protocol
     stream,
     async function (source) {
       for await (const msg of source) {
-        console.log(uint8ArrayToString(msg))
+        console.log(uint8ArrayToString(msg.subarray()))
       }
     }
   )
 })
 */
-
-const stream = await node1.dialProtocol(node2.getMultiaddrs(), ['/your-protocol'])
+console.log(node2.getMultiaddrs())
+const pId = console.log(node2.peerId.toString())
+const stream = await node1.dialProtocol(node2.peerId, ['/your-protocol'])
 await pipe(
   [uint8ArrayFromString('my own protocol, wow!')],
   stream
 )
 
 /*
-const stream = node1.dialProtocol(node2.peerId, ['/another-protocol/1.0.0'])
+const stream = await node1.dialProtocol(node2.getMultiaddrs(), ['/another-protocol/1.0.0'])
 
 await pipe(
-  ['my own protocol, wow!'],
+  [uint8ArrayFromString('my own protocol, wow!')],
   stream
 )
 */
