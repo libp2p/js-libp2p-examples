@@ -1,0 +1,32 @@
+{
+  "name": "@libp2p/example-webrtc-private-to-public",
+  "version": "1.0.0",
+  "description": "Connect a browser to a public node",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "public": "node public-peer.js",
+    "test:firefox": "npm run build && playwright test --browser=firefox test",
+    "test:chrome": "npm run build && playwright test test",
+    "test": "npm run build && test-browser-example test"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-noise": "^16.0.0",
+    "@chainsafe/libp2p-yamux": "^7.0.0",
+    "@libp2p/bootstrap": "^11.0.28",
+    "@libp2p/circuit-relay-v2": "^3.0.0",
+    "@libp2p/identify": "^3.0.1",
+    "@libp2p/ping": "^2.0.1",
+    "@libp2p/webrtc": "^5.1.0",
+    "@libp2p/websockets": "^9.0.0",
+    "@multiformats/multiaddr": "^12.0.0",
+    "express": "^4.21.2",
+    "it-pushable": "^3.2.0",
+    "libp2p": "^2.0.0",
+    "vite": "^6.0.3"
+  },
+  "devDependencies": {
+    "test-ipfs-example": "^1.0.0"
+  }
+}
