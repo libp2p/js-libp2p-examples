@@ -4,19 +4,11 @@
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { webRTCDirect } from '@libp2p/webrtc'
-import { webSockets } from '@libp2p/websockets'
-import * as filters from '@libp2p/websockets/filters'
 import { multiaddr } from '@multiformats/multiaddr'
 import { pipe } from 'it-pipe'
 import { createLibp2p } from 'libp2p'
 import { fromString, toString } from 'uint8arrays'
 
-// const output = document.getElementById('output')
-// const appendOutput = (line) => {
-//   const div = document.createElement('div')
-//   div.appendChild(document.createTextNode(line))
-//   output.append(div)
-// }
 // const WEBRTC_CODE = protocols('webrtc').code
 
 const isBrowser = typeof window !== 'undefined'
@@ -29,29 +21,45 @@ const elements = isBrowser
       inputField: document.getElementById('messageInput'),
       connections: document.getElementById('connections'),
       multiaddrs: document.getElementById('multiaddrs'),
-      status: document.getElementById('status')
+      status: document.getElementById('status'),
+      output: document.getElementById('output'),
+      peer: document.getElementById('peer'),
+      connect: document.getElementById('connect'),
+      appendOutput: (line) => {
+        const div = document.createElement('div')
+        div.appendChild(document.createTextNode(line))
+        elements.output?.appendChild(div)
+      }
     }
   : {}
 
 async function createNode () {
   try {
     if (isBrowser) {
-      return await createLibp2p({
-        transports: [webRTCDirect()],
-        connectionEncryption: [noise()],
-        streamMuxers: [yamux()]
-      })
+      try {
+        return await createLibp2p({
+          transports: [webRTCDirect()],
+          connectionEncryption: [noise()],
+          streamMuxers: [yamux()]
+        })
+      } catch (error) {
+        console.log(`Failed to create private node: ${error.message}`)
+        return null
+      }
     } else {
-      return await createLibp2p({
-        addresses: {
-          listen: ['/ip4/0.0.0.0/tcp/4001/ws']
-        },
-        transports: [webSockets({
-          filter: filters.all
-        })],
-        connectionEncryption: [noise()],
-        streamMuxers: [yamux()]
-      })
+      try {
+        return await createLibp2p({
+          addresses: {
+            listen: ['/ip4/127.0.0.1/tcp/4001/webrtc-direct', '/ip4/192.168.0.5/tcp/4001/webrtc-direct']
+          },
+          transports: [webRTCDirect()],
+          connectionEncryption: [noise()],
+          streamMuxers: [yamux()]
+        })
+      } catch (error) {
+        console.log(`Failed to create public node: ${error.message}`)
+        return null
+      }
     }
   } catch (error) {
     console.log(`Failed to create node: ${error.message}`)
@@ -86,16 +94,40 @@ async function start () {
 
 function connectToPublicPeer () {
   // eslint-disable-next-line no-alert
-  const publicPeerAddr = window.prompt('Enter public peer multiaddr:')
+  const publicPeerAddr = document.getElementById('peer').value
   if (!publicPeerAddr) return
 
   ma = multiaddr(publicPeerAddr)
   node.dial(ma)
     .then(() => {
       elements.status.textContent = `Connected to ${publicPeerAddr}`
+      updateStatus(`Connected to ${publicPeerAddr}`, 'green')
       setupMessaging()
     })
     .catch(error => updateStatus(`Failed to dial peer: ${error.message}`, 'red'))
+}
+
+if (elements.connect) {
+  elements.connect.addEventListener('click', async () => {
+    console.log('connect clicked')
+    ma = multiaddr(elements.peer.value)
+    elements.appendOutput(`Dialing '${ma}'`)
+
+    const signal = AbortSignal.timeout(5000)
+
+    try {
+      await node.dial(ma, {
+        signal
+      })
+      elements.appendOutput(`Connected to '${ma}'`)
+    } catch (err) {
+      if (signal.aborted) {
+        elements.appendOutput(`Timed out connecting to '${ma}'`)
+      } else {
+        elements.appendOutput(`Connecting to '${ma}' failed - ${err.message}`)
+      }
+    }
+  })
 }
 
 function setupMessaging () {
