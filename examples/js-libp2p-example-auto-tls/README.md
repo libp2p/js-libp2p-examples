@@ -253,6 +253,7 @@ routing table and perform queries:
   import { identify, identifyPush } from '@libp2p/identify'
 + import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht'
   import { keychain } from '@libp2p/keychain'
++ import { ping } from '@libp2p/ping'
 + import { tcp } from '@libp2p/tcp'
   import { uPnPNAT } from '@libp2p/upnp-nat'
 ```
@@ -282,6 +283,7 @@ routing table and perform queries:
 +    }),
      upnp: uPnPNAT(),
      identify: identify(),
++    ping: ping(),
 ```
 
 If you are running on your own network which has better support for varied

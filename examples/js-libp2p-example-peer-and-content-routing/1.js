@@ -4,6 +4,7 @@ import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { identify, identifyPush } from '@libp2p/identify'
 import { kadDHT, removePublicAddressesMapper } from '@libp2p/kad-dht'
+import { ping } from '@libp2p/ping'
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p'
 
@@ -23,7 +24,8 @@ const createNode = async () => {
         clientMode: false
       }),
       identify: identify(),
-      identifyPush: identifyPush()
+      identifyPush: identifyPush(),
+      ping: ping()
     }
   })
 

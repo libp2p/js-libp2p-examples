@@ -5,6 +5,7 @@ import { yamux } from '@chainsafe/libp2p-yamux'
 import { bootstrap } from '@libp2p/bootstrap'
 import { identify } from '@libp2p/identify'
 import { kadDHT, removePublicAddressesMapper } from '@libp2p/kad-dht'
+import { ping } from '@libp2p/ping'
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p'
 import bootstrappers from './bootstrappers.js'
@@ -27,7 +28,8 @@ const node = await createLibp2p({
       peerInfoMapper: removePublicAddressesMapper,
       clientMode: false
     }),
-    identify: identify()
+    identify: identify(),
+    ping: ping()
   }
 })
 
