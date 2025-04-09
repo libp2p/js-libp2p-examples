@@ -21,6 +21,7 @@
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@libp2p/identify": "^3.0.1",
     "@libp2p/kad-dht": "^14.0.0",
+    "@libp2p/ping": "^2.0.27",
     "@libp2p/tcp": "^10.0.0",
     "it-all": "^3.0.2",
     "libp2p": "^2.0.0",
