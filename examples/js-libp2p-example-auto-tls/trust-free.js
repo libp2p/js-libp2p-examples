@@ -11,6 +11,7 @@ import { loadOrCreateSelfKey } from '@libp2p/config'
 import { identify, identifyPush } from '@libp2p/identify'
 import { kadDHT, removePrivateAddressesMapper } from '@libp2p/kad-dht'
 import { keychain } from '@libp2p/keychain'
+import { ping } from '@libp2p/ping'
 import { tcp } from '@libp2p/tcp'
 import { uPnPNAT } from '@libp2p/upnp-nat'
 import { webSockets } from '@libp2p/websockets'
@@ -46,6 +47,7 @@ const libp2p = await createLibp2p({
     // needed to run KAD-DHT and to be contacted by libp2p.direct
     identify: identify(),
     identifyPush: identifyPush(),
+    ping: ping(),
 
     // used to securely store the certificate for use after a restart
     keychain: keychain(),
