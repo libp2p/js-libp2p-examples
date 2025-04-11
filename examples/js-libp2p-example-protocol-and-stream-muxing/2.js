@@ -31,12 +31,12 @@ await node1.peerStore.patch(node2.peerId, {
   multiaddrs: node2.getMultiaddrs()
 })
 
-node2.handle(['/a', '/b'], ({ protocol, stream }) => {
+node2.handle(['/a', '/b'], ({ stream }) => {
   pipe(
     stream,
     async function (source) {
       for await (const msg of source) {
-        console.log(`from: ${protocol}, msg: ${uint8ArrayToString(msg.subarray())}`)
+        console.log(`from: ${stream.protocol}, msg: ${uint8ArrayToString(msg.subarray())}`)
       }
     }
   ).finally(() => {
