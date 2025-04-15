@@ -22,7 +22,7 @@
     "@libp2p/bootstrap": "^11.0.0",
     "@libp2p/circuit-relay-v2": "^3.0.0",
     "@libp2p/identify": "^3.0.0",
-    "@libp2p/kad-dht": "^14.0.0",
+    "@libp2p/kad-dht": "^15.0.0",
     "@libp2p/mdns": "^11.0.0",
     "@libp2p/ping": "^2.0.27",
     "@libp2p/pubsub-peer-discovery": "^11.0.0",
