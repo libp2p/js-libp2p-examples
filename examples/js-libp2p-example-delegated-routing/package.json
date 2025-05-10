@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@libp2p/peer-id": "^5.0.4",
-    "eslint-config-ipfs": "^7.0.2",
+    "eslint-config-ipfs": "^8.0.0",
     "helia": "^5.0.0",
     "test-ipfs-example": "^1.0.0"
   },
