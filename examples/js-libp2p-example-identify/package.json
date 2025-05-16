@@ -1,0 +1,24 @@
+{
+  "name": "js-libp2p-example-identify",
+  "version": "1.0.0",
+  "description": "Example of using the identify protocol with js-libp2p",
+  "main": "src/listener.js",
+  "scripts": {
+    "start": "node src/listener.js",
+    "dial": "node src/dialer.js"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-noise": "^12.0.0",
+    "@chainsafe/libp2p-yamux": "^4.0.0",
+    "@libp2p/identify": "^3.0.0",
+    "@libp2p/mdns": "^8.0.0",
+    "@libp2p/tcp": "^8.0.0",
+    "@libp2p/websockets": "^7.0.0",
+    "@multiformats/multiaddr": "^12.0.0",
+    "libp2p": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module"
+} 
