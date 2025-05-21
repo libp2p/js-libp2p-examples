@@ -30,7 +30,7 @@
     }
   },
   "devDependencies": {
-    "aegir": "^45.0.8"
+    "aegir": "^47.0.10"
   },
   "workspaces": [
     "examples/*"
