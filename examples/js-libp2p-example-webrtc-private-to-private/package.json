@@ -4,7 +4,7 @@
   "description": "Connect a browser to another browser",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "start": "vite --host 0.0.0.0",
     "build": "vite build",
     "relay": "node relay.js",
     "test:firefox": "npm run build && playwright test --browser=firefox test",
