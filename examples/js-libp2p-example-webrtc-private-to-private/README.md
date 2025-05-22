@@ -30,6 +30,13 @@ At this point the browsers are directly connected and the relay plays no further
 
 ## Running the Example
 
+### Hosting and Network Configuration
+- To allow external access to the web interface, host this example on a machine that exposes web connectivity over port 5173.
+- #### If running on AWS EC2:
+  Open your EC2 instance’s Security Group settings and create an inbound TCP rule for port 5173.
+- Tip: Assign a static public IP to your machine so it remains reachable at the same address.
+- The web server scripts have been updated to listen on all network interfaces (0.0.0.0). This allows access from external clients, not just localhost.
+
 ### Build the `@libp2p/example-webrtc-private-to-private` package
 
 Build example by calling `npm i && npm run build` in the repository root.
@@ -64,6 +71,8 @@ Now open a second tab with the url `http://localhost:5173/`, perhaps in a differ
 Using the copied multiaddress from `Listening on` section in `Browser A`, paste it into the `Remote MultiAddress` input and click the `Connect` button.
 
 The peers are now connected to each other.
+### Connection Type Indicator
+- When a connection is established between peers, the UI now displays whether the connection is Direct or via Relay next to the connected address.
 
 Enter a message and click the `Send` button in either/both browsers and see the echo'd messages.
 

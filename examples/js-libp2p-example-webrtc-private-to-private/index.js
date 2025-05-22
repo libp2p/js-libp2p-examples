@@ -58,17 +58,27 @@ const node = await createLibp2p({
 
 await node.start()
 
-function updateConnList () {
+function updateConnList() {
   // Update connections list
   const connListEls = node.getConnections()
     .map((connection) => {
+      const isRelayed = connection.remoteAddr.protoCodes().includes('p2p-circuit')
+      const connectionType = isRelayed ? 'Relay' : 'Direct'
+
       if (connection.remoteAddr.protoCodes().includes(WEBRTC_CODE)) {
         ma = connection.remoteAddr
         sendSection.style.display = 'block'
       }
 
       const el = document.createElement('li')
-      el.textContent = connection.remoteAddr.toString()
+      el.textContent = `${connection.remoteAddr.toString()} (${connectionType})`
+
+      // Set color based on connection type
+      el.style.color = isRelayed ? 'black' : 'green'
+
+      const icon = document.createElement('span')
+      icon.textContent = isRelayed ? '🔄' : '✅'
+      el.appendChild(icon)
       return el
     })
   document.getElementById('connections').replaceChildren(...connListEls)
