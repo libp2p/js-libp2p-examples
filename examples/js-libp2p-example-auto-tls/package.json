@@ -28,7 +28,7 @@
     "@libp2p/ping": "^2.0.27",
     "@libp2p/upnp-nat": "^3.0.1",
     "@libp2p/websockets": "^9.1.0",
-    "@multiformats/multiaddr-matcher": "^1.6.0",
+    "@multiformats/multiaddr-matcher": "^2.0.1",
     "datastore-level": "^11.0.1",
     "libp2p": "^2.0.0"
   },
