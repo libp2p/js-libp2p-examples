@@ -20,7 +20,7 @@
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@libp2p/tcp": "^10.0.0",
     "@libp2p/websockets": "^9.0.0",
-    "@multiformats/multiaddr": "^12.1.5",
+    "@multiformats/multiaddr": "^13.0.0",
     "@nodeutils/defaults-deep": "^1.1.0",
     "it-length-prefixed-stream": "^1.1.4",
     "it-pipe": "^3.0.1",

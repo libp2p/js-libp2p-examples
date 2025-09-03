@@ -21,7 +21,7 @@
     "@libp2p/circuit-relay-v2": "^3.0.0",
     "@libp2p/identify": "^3.0.0",
     "@libp2p/websockets": "^9.0.0",
-    "@multiformats/multiaddr": "^12.3.1",
+    "@multiformats/multiaddr": "^13.0.0",
     "libp2p": "^2.0.0"
   },
   "devDependencies": {
