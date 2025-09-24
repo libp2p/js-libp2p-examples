@@ -17,7 +17,7 @@
     "@libp2p/circuit-relay-v2": "^3.0.0",
     "@libp2p/identify": "^3.0.1",
     "@libp2p/ping": "^2.0.1",
-    "@libp2p/webrtc": "^5.0.0",
+    "@libp2p/webrtc": "^6.0.0",
     "@libp2p/websockets": "^9.0.0",
     "@multiformats/multiaddr": "^12.0.0",
     "it-pushable": "^3.2.0",
