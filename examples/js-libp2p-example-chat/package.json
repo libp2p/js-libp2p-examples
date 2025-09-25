@@ -19,7 +19,7 @@
     "@chainsafe/libp2p-noise": "^16.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@libp2p/mdns": "^11.0.1",
-    "@libp2p/tcp": "^10.0.0",
+    "@libp2p/tcp": "^11.0.1",
     "@libp2p/websockets": "^9.0.0",
     "@multiformats/multiaddr": "^12.3.1",
     "@nodeutils/defaults-deep": "^1.1.0",
