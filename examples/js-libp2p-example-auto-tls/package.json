@@ -16,7 +16,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@chainsafe/libp2p-noise": "^16.0.0",
+    "@chainsafe/libp2p-noise": "^17.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@ipshipyard/libp2p-auto-tls": "^1.0.0",
     "@libp2p/autonat": "^2.0.13",
