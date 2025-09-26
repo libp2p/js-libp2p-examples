@@ -18,7 +18,7 @@ async function run () {
   })
 
   // Handle messages for the protocol
-  await listener.handle('/chat/1.0.0', async ({ stream }) => {
+  await listener.handle('/chat/1.0.0', async (stream) => {
     // Send stdin to the stream
     stdinToStream(stream)
     // Read the stream and output to console

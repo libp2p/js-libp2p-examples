@@ -3,7 +3,7 @@
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'
-import { lpStream } from 'it-length-prefixed-stream'
+import { lpStream } from '@libp2p/utils'
 import { createLibp2p } from 'libp2p'
 
 async function createNode () {
@@ -33,7 +33,7 @@ const local = await createNode()
 const REQ_RESP_PROTOCOL = '/request-response/1.0.0'
 
 // the remote will handle incoming streams opened on the protocol
-await remote.handle(REQ_RESP_PROTOCOL, ({ stream }) => {
+await remote.handle(REQ_RESP_PROTOCOL, (stream) => {
   Promise.resolve().then(async () => {
     // lpStream lets us read/write in a predetermined order
     const lp = lpStream(stream)
@@ -77,6 +77,3 @@ const res = await lp.read()
 const output = JSON.parse(new TextDecoder().decode(res.subarray()))
 
 console.info(`The answer is: "${output.answer}"`)
-
-await remote.stop()
-await local.stop()

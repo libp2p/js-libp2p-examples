@@ -3,7 +3,6 @@
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'
-import { pipe } from 'it-pipe'
 import { createLibp2p } from 'libp2p'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
@@ -31,34 +30,24 @@ await node1.peerStore.patch(node2.peerId, {
   multiaddrs: node2.getMultiaddrs()
 })
 
-node2.handle(['/a', '/b'], ({ protocol, stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(`from: ${protocol}, msg: ${uint8ArrayToString(msg.subarray())}`)
-      }
-    }
-  ).finally(() => {
+node2.handle(['/a', '/b'], (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(`from: ${stream.protocol}, msg: ${uint8ArrayToString(evt.data.subarray())}`)
+  })
+  stream.addEventListener('remoteCloseWrite', () => {
     // clean up resources
     stream.close()
+      .catch(err => {
+        stream.abort(err)
+      })
   })
 })
 
-const stream1 = await node1.dialProtocol(node2.peerId, ['/a'])
-await pipe(
-  [uint8ArrayFromString('protocol (a)')],
-  stream1
-)
+const stream = await node1.dialProtocol(node2.peerId, ['/a'])
+stream.send(uint8ArrayFromString('protocol (a)'))
 
 const stream2 = await node1.dialProtocol(node2.peerId, ['/b'])
-await pipe(
-  [uint8ArrayFromString('protocol (b)')],
-  stream2
-)
+stream2.send(uint8ArrayFromString('protocol (b)'))
 
 const stream3 = await node1.dialProtocol(node2.peerId, ['/b'])
-await pipe(
-  [uint8ArrayFromString('another stream on protocol (b)')],
-  stream3
-)
+stream3.send(uint8ArrayFromString('another stream on protocol (b)'))

@@ -13,6 +13,9 @@ We've seen many interesting use cases appear with this, here are some highlights
 - [IPFS PubSub (using libp2p-floodsub) for IoT](https://www.youtube.com/watch?v=qLpM5pBDGiE).
 - [Real Time distributed Applications](https://www.youtube.com/watch?v=vQrbxyDPSXg)
 
+> [!TIP]
+> This example uses `@libp2p/floodsub` as a pubsub implementation - it is not suitable for production use, instead use `@chainsafe/libp2p-gossipsub`
+
 ## 0. Set up the example
 
 Clone this repo and run `npm install` in the root.

@@ -27,8 +27,6 @@ for this example: `libp2p`, `@libp2p/tcp`, `@libp2p/peer-id`, `it-pipe`,
 After creating the nodes, we need to tell libp2p which protocols to handle.
 
 ```JavaScript
-import { pipe } from 'it-pipe'
-import { map } from 'streaming-iterables'
 import { toBuffer } from 'it-buffer'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
@@ -47,15 +45,10 @@ await node1.peerStore.patch(node2.peerId, {
 // Here we are telling libp2p that if someone dials this node to talk with the `/your-protocol`
 // multicodec, the protocol identifier, please call this handler and give it the stream
 // so that incomming data can be handled
-node2.handle('/your-protocol', ({ stream }) => {
-  pipe(
-    stream,
-    source => (async function () {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    })()
-  )
+node2.handle('/your-protocol', (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 ```
 
@@ -64,10 +57,7 @@ After the protocol is *handled*, now we can dial to it.
 ```JavaScript
 const stream = await node1.dialProtocol(node2.peerId, ['/your-protocol'])
 
-await pipe(
-  [uint8ArrayFromString('my own protocol, wow!')],
-  stream
-)
+stream.send(uint8ArrayFromString('my own protocol, wow!'))
 ```
 
 You might have seen this in the [Transports](../transports) examples. However,
@@ -75,23 +65,15 @@ what it was not explained is that you can do more than exact string matching,
 for example, you can use semver.
 
 ```JavaScript
-node2.handle('/another-protocol/1.0.1', ({ stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+node2.handle('/another-protocol/1.0.1', (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 // ...
 const stream = await node1.dialProtocol(node2.peerId, ['/another-protocol/1.0.0'])
 
-await pipe(
-  [uint8ArrayFromString('my own protocol, wow!')],
-  stream
-)
+stream.send(uint8ArrayFromString('my own protocol, wow!'))
 ```
 
 This feature is super power for network protocols. It works in the same way as
@@ -105,19 +87,14 @@ changes to the code, you may prefer to do protocol checking instead of having
 multiple handlers
 
 ```JavaScript
-node2.handle(['/another-protocol/1.0.0', '/another-protocol/2.0.0'], ({ stream }) => {
+node2.handle(['/another-protocol/1.0.0', '/another-protocol/2.0.0'], (stream) => {
   if (stream.protocol === '/another-protocol/2.0.0') {
     // handle backwards compatibility
   }
 
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 ```
 
@@ -164,34 +141,20 @@ With this, we can dial as many times as we want to a peer and always reuse the
 same established underlying connection.
 
 ```JavaScript
-node2.handle(['/a', '/b'], ({ stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(`from: ${stream.protocol}, msg: ${uint8ArrayToString(msg.subarray())}`)
-      }
-    }
-  )
+node2.handle(['/a', '/b'], (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(`from: ${stream.protocol}, msg: ${uint8ArrayToString(evt.data.subarray())}`)
+  })
 })
 
 const stream = await node1.dialProtocol(node2.peerId, ['/a'])
-await pipe(
-  [uint8ArrayFromString('protocol (a)')],
-  stream
-)
+stream.send(uint8ArrayFromString('protocol (a)'))
 
 const stream2 = await node1.dialProtocol(node2.peerId, ['/b'])
-await pipe(
-  [uint8ArrayFromString('protocol (b)')],
-  stream2
-)
+stream2.send(uint8ArrayFromString('protocol (b)'))
 
 const stream3 = await node1.dialProtocol(node2.peerId, ['/b'])
-await pipe(
-  [uint8ArrayFromString('another stream on protocol (b)')],
-  stream3
-)
+stream3.send(uint8ArrayFromString('another stream on protocol (b)'))
 ```
 
 By running [2.js](./2.js) you should see the following result:
@@ -257,41 +220,25 @@ because we want to dial up a bidirectional connection between these two nodes.
 Finally, let's create protocols for `node1` & `node2` and dial those protocols.
 
 ```js
-node1.handle('/node-1', ({ stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+node1.handle('/node-1', (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 
 node2.handle('/node-2', ({ stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 
 // Dialing node2 from node1
 const stream1 = await node1.dialProtocol(node2.peerId, ['/node-2'])
-await pipe(
-  [uint8ArrayFromString('from 1 to 2')],
-  stream1
-)
+stream1.send(uint8ArrayFromString('from 1 to 2'))
 
 // Dialing node1 from node2
 const stream2 = await node2.dialProtocol(node1.peerId, ['/node-1'])
-await pipe(
-  [uint8ArrayFromString('from 2 to 1')],
-  stream2
-)
+stream2.send(uint8ArrayFromString('from 2 to 1'))
 ```
 
 If we run this code, the result should look like the following:
@@ -314,17 +261,11 @@ The code below will result into an error as `the dial address is not valid`.
 ```js
 // Dialing from node2 to node1
 const stream2 = await node2.dialProtocol(node1.peerId, ['/node-1'])
-await pipe(
-  [uint8ArrayFromString('from 2 to 1')],
-  stream2
-)
+stream2.send(uint8ArrayFromString('from 2 to 1'))
 
 // Dialing from node1 to node2
 const stream1 = await node1.dialProtocol(node2.peerId, ['/node-2'])
-await pipe(
-  [uint8ArrayFromString('from 1 to 2')],
-  stream1
-)
+stream1.send(uint8ArrayFromString('from 1 to 2'))
 ```
 
 ## Need help?

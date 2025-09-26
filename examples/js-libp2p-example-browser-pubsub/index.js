@@ -1,12 +1,11 @@
-import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 import { dcutr } from '@libp2p/dcutr'
+import { floodsub } from '@libp2p/floodsub'
 import { identify } from '@libp2p/identify'
 import { webRTC } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
-import * as filters from '@libp2p/websockets/filters'
 import { multiaddr } from '@multiformats/multiaddr'
 import { createLibp2p } from 'libp2p'
 import { fromString, toString } from 'uint8arrays'
@@ -48,10 +47,7 @@ const libp2p = await createLibp2p({
   },
   transports: [
     // the WebSocket transport lets us dial a local relay
-    webSockets({
-      // this allows non-secure WebSocket connections for purposes of the demo
-      filter: filters.all
-    }),
+    webSockets(),
     // support dialing/listening on WebRTC addresses
     webRTC(),
     // support dialing/listening on Circuit Relay addresses
@@ -72,7 +68,7 @@ const libp2p = await createLibp2p({
   },
   services: {
     identify: identify(),
-    pubsub: gossipsub(),
+    pubsub: floodsub(),
     dcutr: dcutr()
   }
 })
