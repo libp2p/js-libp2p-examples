@@ -67,7 +67,7 @@ test.describe('pubsub browser example:', () => {
     await page.goto(url)
   })
 
-  test('should connect via a relay node', async ({ page: pageA, context }) => {
+  test('should send and receive a message', async ({ page: pageA, context }) => {
     // load second page
     const pageB = await context.newPage()
     await pageB.goto(url)
