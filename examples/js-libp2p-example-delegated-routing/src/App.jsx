@@ -1,7 +1,3 @@
-/* eslint-disable no-console */
-// eslint-disable-next-line
-'use strict'
-
 import { peerIdFromString } from '@libp2p/peer-id'
 import { CID } from 'multiformats/cid'
 import React from 'react'
@@ -90,30 +86,30 @@ class App extends Component {
   render () {
     return (
       <div>
-        <header className="center">
+        <header className='center'>
           <h1>Delegated Routing</h1>
         </header>
-        <section className="center">
+        <section className='center'>
           <form onSubmit={this.handleHashSubmit}>
             <label>
               Find providers of CID:
-              <input type="text" value={this.state.hash} onChange={this.handleHashChange} id="find-providers-input" />
-              <input type="submit" value="Find Providers" id="find-providers-button" />
+              <input type='text' value={this.state.hash} onChange={this.handleHashChange} id='find-providers-input' />
+              <input type='submit' value='Find Providers' id='find-providers-button' />
             </label>
           </form>
           <form onSubmit={this.handlePeerSubmit}>
             <label>
               Find peer:
-              <input type="text" value={this.state.peer} onChange={this.handlePeerChange} id="find-peer-input" />
-              <input type="submit" value="Find PeerInfo" id="find-peer-button" />
+              <input type='text' value={this.state.peer} onChange={this.handlePeerChange} id='find-peer-input' />
+              <input type='submit' value='Find PeerInfo' id='find-peer-button' />
             </label>
           </form>
         </section>
         <section className={[this.state.isLoading > 0 ? 'loading' : '', 'loader'].join(' ')}>
-          <div className="lds-ripple"><div></div><div></div></div>
+          <div className='lds-ripple'><div /><div /></div>
         </section>
         <section>
-          <pre id="output">
+          <pre id='output'>
             {this.state.response}
           </pre>
         </section>

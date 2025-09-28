@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { spawn } from 'child_process'
 import { multiaddr } from '@multiformats/multiaddr'
 import { WebRTCDirect } from '@multiformats/multiaddr-matcher'

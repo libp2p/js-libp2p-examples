@@ -18,7 +18,7 @@
     "@libp2p/identify": "^4.0.1",
     "@libp2p/ping": "^3.0.1",
     "@libp2p/utils": "^7.0.1",
-    "@libp2p/webrtc": "^6.0.2",
+    "@libp2p/webrtc": "^6.0.3",
     "@libp2p/websockets": "^10.0.1",
     "@multiformats/multiaddr": "^13.0.1",
     "@multiformats/multiaddr-matcher": "^3.0.1",

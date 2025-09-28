@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { circuitRelayServer } from '@libp2p/circuit-relay-v2'
@@ -46,7 +45,6 @@ test.describe('browser to browser example:', () => {
   let relayNode
   let relayNodeAddr
 
-  // eslint-disable-next-line no-empty-pattern
   test.beforeAll(async ({ servers }, testInfo) => {
     testInfo.setTimeout(5 * 60_000)
     const r = await spawnRelay()

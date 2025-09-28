@@ -13,7 +13,6 @@
   },
   "type": "module",
   "scripts": {
-    "lint": "aegir lint",
     "test": "test-node-example test/*"
   },
   "dependencies": {
