@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { createLibp2p } from 'libp2p'

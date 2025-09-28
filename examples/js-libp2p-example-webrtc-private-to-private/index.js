@@ -3,15 +3,13 @@ import { yamux } from '@chainsafe/libp2p-yamux'
 import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 import { identify, identifyPush } from '@libp2p/identify'
 import { ping } from '@libp2p/ping'
+import { byteStream } from '@libp2p/utils'
 import { webRTC } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
-import * as filters from '@libp2p/websockets/filters'
-import { multiaddr, protocols } from '@multiformats/multiaddr'
-import { byteStream } from 'it-byte-stream'
+import { multiaddr } from '@multiformats/multiaddr'
+import { WebRTC } from '@multiformats/multiaddr-matcher'
 import { createLibp2p } from 'libp2p'
 import { fromString, toString } from 'uint8arrays'
-
-const WEBRTC_CODE = protocols('webrtc').code
 
 const output = document.getElementById('output')
 const sendSection = document.getElementById('send-section')
@@ -32,9 +30,7 @@ const node = await createLibp2p({
     ]
   },
   transports: [
-    webSockets({
-      filter: filters.all
-    }),
+    webSockets(),
     webRTC(),
     circuitRelayTransport()
   ],
@@ -62,7 +58,7 @@ function updateConnList () {
   // Update connections list
   const connListEls = node.getConnections()
     .map((connection) => {
-      if (connection.remoteAddr.protoCodes().includes(WEBRTC_CODE)) {
+      if (WebRTC.matches(connection.remoteAddr)) {
         ma = connection.remoteAddr
         sendSection.style.display = 'block'
       }
@@ -84,7 +80,7 @@ node.addEventListener('connection:close', (event) => {
 node.addEventListener('self:peer:update', (event) => {
   // Update multiaddrs list, only show WebRTC addresses
   const multiaddrs = node.getMultiaddrs()
-    .filter(ma => isWebrtc(ma))
+    .filter(ma => WebRTC.matches(ma))
     .map((ma) => {
       const el = document.createElement('li')
       el.textContent = ma.toString()
@@ -93,7 +89,7 @@ node.addEventListener('self:peer:update', (event) => {
   document.getElementById('multiaddrs').replaceChildren(...multiaddrs)
 })
 
-node.handle(CHAT_PROTOCOL, async ({ stream }) => {
+node.handle(CHAT_PROTOCOL, async (stream) => {
   chatStream = byteStream(stream)
 
   while (true) {
@@ -102,10 +98,6 @@ node.handle(CHAT_PROTOCOL, async ({ stream }) => {
   }
 })
 
-const isWebrtc = (ma) => {
-  return ma.protoCodes().includes(WEBRTC_CODE)
-}
-
 window.connect.onclick = async () => {
   ma = multiaddr(window.peer.value)
   appendOutput(`Dialing '${ma}'`)
@@ -113,7 +105,7 @@ window.connect.onclick = async () => {
   const signal = AbortSignal.timeout(5000)
 
   try {
-    if (isWebrtc(ma)) {
+    if (WebRTC.matches(ma)) {
       const rtt = await node.services.ping.ping(ma, {
         signal
       })

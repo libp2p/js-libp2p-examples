@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { createDelegatedRoutingV1HttpApiServer } from '@helia/delegated-routing-v1-http-api-server'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { createHelia, libp2pDefaults } from 'helia'
@@ -59,7 +58,6 @@ test.describe('delegated routing example:', () => {
   let helia
   let fastify
 
-  // eslint-disable-next-line no-empty-pattern
   test.beforeAll(async ({ servers }, testInfo) => {
     testInfo.setTimeout(5 * 60_000)
     const r = await spawnServer()

@@ -127,6 +127,9 @@ Pub/sub based peer discovery is useful for deployments where other mechanisms ma
 
 You can find the complete solution at [3-pubsub.js](./3-pubsub.js).
 
+> [!TIP]
+> The pubsub example uses `@libp2p/floodsub` - it is not suitable for production use, instead use `@chainsafe/libp2p-gossipsub`
+
 In the example we create three nodes.  The first is used to bootstrap the network.  The second and third dial the bootstrapper, then discover each other via the pub/sub peer discovery topic.
 
 ## 4. Where to find other Peer Discovery Mechanisms

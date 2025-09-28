@@ -3,9 +3,8 @@
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'
-import { pipe } from 'it-pipe'
-import toBuffer from 'it-to-buffer'
 import { createLibp2p } from 'libp2p'
+import { Uint8ArrayList } from 'uint8arraylist'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 
@@ -37,17 +36,15 @@ const [node1, node2] = await Promise.all([
 printAddrs(node1, '1')
 printAddrs(node2, '2')
 
-node2.handle('/print', async ({ stream }) => {
-  const result = await pipe(
-    stream,
-    async function * (source) {
-      for await (const list of source) {
-        yield list.subarray()
-      }
-    },
-    toBuffer
-  )
-  console.log(uint8ArrayToString(result))
+node2.handle('/print', async (stream) => {
+  const bufs = new Uint8ArrayList()
+
+  stream.addEventListener('message', (evt) => {
+    bufs.append(evt.data)
+  })
+  stream.addEventListener('remoteCloseWrite', () => {
+    console.log(uint8ArrayToString(bufs.subarray()))
+  })
 })
 
 await node1.peerStore.patch(node2.peerId, {
@@ -55,7 +52,5 @@ await node1.peerStore.patch(node2.peerId, {
 })
 const stream = await node1.dialProtocol(node2.peerId, '/print')
 
-await pipe(
-  ['Hello', ' ', 'p2p', ' ', 'world', '!'].map(str => uint8ArrayFromString(str)),
-  stream
-)
+;['Hello', ' ', 'p2p', ' ', 'world', '!'].map(str => stream.send(uint8ArrayFromString(str)))
+await stream.close()

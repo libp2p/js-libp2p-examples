@@ -12,16 +12,18 @@
     "test": "npm run build && test-browser-example test"
   },
   "dependencies": {
-    "@chainsafe/libp2p-noise": "^16.0.0",
-    "@chainsafe/libp2p-yamux": "^7.0.0",
-    "@libp2p/circuit-relay-v2": "^3.0.0",
-    "@libp2p/identify": "^3.0.1",
-    "@libp2p/ping": "^2.0.1",
-    "@libp2p/webrtc": "^5.0.0",
-    "@libp2p/websockets": "^9.0.0",
-    "@multiformats/multiaddr": "^12.0.0",
-    "it-pushable": "^3.2.0",
-    "libp2p": "^2.0.0",
+    "@chainsafe/libp2p-noise": "^17.0.0",
+    "@chainsafe/libp2p-yamux": "^8.0.0",
+    "@libp2p/circuit-relay-v2": "^4.0.1",
+    "@libp2p/identify": "^4.0.1",
+    "@libp2p/ping": "^3.0.1",
+    "@libp2p/utils": "^7.0.1",
+    "@libp2p/webrtc": "^6.0.3",
+    "@libp2p/websockets": "^10.0.1",
+    "@multiformats/multiaddr": "^13.0.1",
+    "@multiformats/multiaddr-matcher": "^3.0.1",
+    "libp2p": "^3.0.2",
+    "uint8arrays": "^5.1.0",
     "vite": "^6.0.3"
   },
   "devDependencies": {

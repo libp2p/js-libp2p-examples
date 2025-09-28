@@ -9,6 +9,9 @@
 
 This example leverages the [vite bundler](https://vitejs.dev/) to compile and serve the libp2p code in the browser. You can use other bundlers such as Webpack, but we will not be covering them here.
 
+> [!TIP]
+> This example uses `@libp2p/floodsub` as a pubsub implementation - it is not suitable for production use, instead use `@chainsafe/libp2p-gossipsub`
+
 ## Table of contents <!-- omit in toc -->
 
 - [Setup](#setup)

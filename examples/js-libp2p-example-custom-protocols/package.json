@@ -16,16 +16,11 @@
     "test": "test-node-example test/*"
   },
   "dependencies": {
-    "@chainsafe/libp2p-noise": "^16.0.0",
-    "@chainsafe/libp2p-yamux": "^7.0.0",
-    "@libp2p/tcp": "^10.0.0",
-    "@libp2p/websockets": "^9.0.0",
-    "@multiformats/multiaddr": "^12.1.5",
-    "@nodeutils/defaults-deep": "^1.1.0",
-    "it-length-prefixed-stream": "^1.1.4",
-    "it-pipe": "^3.0.1",
-    "libp2p": "^2.0.0",
-    "uint8arrays": "^5.1.0"
+    "@chainsafe/libp2p-noise": "^17.0.0",
+    "@chainsafe/libp2p-yamux": "^8.0.0",
+    "@libp2p/tcp": "^11.0.1",
+    "@libp2p/utils": "^7.0.1",
+    "libp2p": "^3.0.2"
   },
   "devDependencies": {
     "test-ipfs-example": "^1.1.0"

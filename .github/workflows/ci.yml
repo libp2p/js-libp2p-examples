@@ -34,6 +34,7 @@ jobs:
           - js-libp2p-example-pubsub
           - js-libp2p-example-transports
           - js-libp2p-example-webrtc-private-to-private
+          - js-libp2p-example-webrtc-private-to-public
     defaults:
       run:
         working-directory: examples/${{ matrix.project }}
@@ -95,6 +96,7 @@ jobs:
           - js-libp2p-example-pubsub
           - js-libp2p-example-transports
           - js-libp2p-example-webrtc-private-to-private
+          - js-libp2p-example-webrtc-private-to-public
     steps:
       - uses: convictional/trigger-workflow-and-wait@f69fa9eedd3c62a599220f4d5745230e237904be
         with:

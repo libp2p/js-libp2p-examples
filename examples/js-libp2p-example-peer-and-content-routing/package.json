@@ -13,18 +13,17 @@
   },
   "type": "module",
   "scripts": {
-    "lint": "aegir lint",
     "test": "test-node-example test/*"
   },
   "dependencies": {
-    "@chainsafe/libp2p-noise": "^16.0.0",
-    "@chainsafe/libp2p-yamux": "^7.0.0",
-    "@libp2p/identify": "^3.0.1",
-    "@libp2p/kad-dht": "^15.0.0",
-    "@libp2p/ping": "^2.0.27",
-    "@libp2p/tcp": "^10.0.0",
+    "@chainsafe/libp2p-noise": "^17.0.0",
+    "@chainsafe/libp2p-yamux": "^8.0.0",
+    "@libp2p/identify": "^4.0.1",
+    "@libp2p/kad-dht": "^16.0.1",
+    "@libp2p/ping": "^3.0.1",
+    "@libp2p/tcp": "^11.0.1",
     "it-all": "^3.0.2",
-    "libp2p": "^2.0.0",
+    "libp2p": "^3.0.2",
     "multiformats": "^13.1.1"
   },
   "devDependencies": {

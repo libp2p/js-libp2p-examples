@@ -1,7 +1,6 @@
 /* eslint no-console: ["off"] */
 
 import { generateKey } from '@libp2p/pnet'
-import { pipe } from 'it-pipe'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 import { privateLibp2pNode } from './libp2p-node.js'
@@ -25,20 +24,12 @@ console.log('nodes started...')
 // connect node1 to node2
 await node1.dial(node2.getMultiaddrs())
 
-node2.handle('/private', ({ stream }) => {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+node2.handle('/private', (stream) => {
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 })
 
 const stream = await node1.dialProtocol(node2.peerId, '/private')
 
-await pipe(
-  [uint8ArrayFromString('This message is sent on a private network')],
-  stream
-)
+stream.send(uint8ArrayFromString('This message is sent on a private network'))

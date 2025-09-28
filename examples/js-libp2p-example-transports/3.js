@@ -4,7 +4,6 @@ import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'
 import { webSockets } from '@libp2p/websockets'
-import { pipe } from 'it-pipe'
 import { createLibp2p } from 'libp2p'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
@@ -31,15 +30,10 @@ function printAddrs (node, number) {
   node.getMultiaddrs().forEach((ma) => console.log(ma.toString()))
 }
 
-function print ({ stream }) {
-  pipe(
-    stream,
-    async function (source) {
-      for await (const msg of source) {
-        console.log(uint8ArrayToString(msg.subarray()))
-      }
-    }
-  )
+function print (stream) {
+  stream.addEventListener('message', (evt) => {
+    console.log(uint8ArrayToString(evt.data.subarray()))
+  })
 }
 
 const [node1, node2, node3] = await Promise.all([
@@ -68,17 +62,11 @@ await node3.peerStore.patch(node1.peerId, {
 
 // node 1 (TCP) dials to node 2 (TCP+WebSockets)
 const stream = await node1.dialProtocol(node2.peerId, '/print')
-await pipe(
-  [uint8ArrayFromString('node 1 dialed to node 2 successfully')],
-  stream
-)
+stream.send(uint8ArrayFromString('node 1 dialed to node 2 successfully'))
 
 // node 2 (TCP+WebSockets) dials to node 3 (WebSockets)
 const stream2 = await node2.dialProtocol(node3.peerId, '/print')
-await pipe(
-  [uint8ArrayFromString('node 2 dialed to node 3 successfully')],
-  stream2
-)
+stream2.send(uint8ArrayFromString('node 2 dialed to node 3 successfully'))
 
 // node 3 (listening WebSockets) can dial node 1 (TCP)
 try {
