@@ -28,7 +28,7 @@
     "libp2p": "^3.0.2",
     "multiformats": "^13.4.1",
     "react": "^18.3.1",
-    "vite": "^6.0.3"
+    "vite": "^7.1.8"
   },
   "devDependencies": {
     "eslint-config-ipfs": "^8.0.0",
