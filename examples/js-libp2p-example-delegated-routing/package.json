@@ -24,7 +24,7 @@
     "@helia/delegated-routing-v1-http-api-client": "^4.0.0",
     "@helia/delegated-routing-v1-http-api-server": "^4.0.0",
     "@libp2p/peer-id": "^6.0.1",
-    "helia": "^5.0.0",
+    "helia": "^6.0.13",
     "libp2p": "^3.0.2",
     "multiformats": "^13.4.1",
     "react": "^18.3.1",
