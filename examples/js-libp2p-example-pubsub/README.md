@@ -13,9 +13,6 @@ We've seen many interesting use cases appear with this, here are some highlights
 - [IPFS PubSub (using libp2p-floodsub) for IoT](https://www.youtube.com/watch?v=qLpM5pBDGiE).
 - [Real Time distributed Applications](https://www.youtube.com/watch?v=vQrbxyDPSXg)
 
-> [!TIP]
-> This example uses `@libp2p/floodsub` as a pubsub implementation - it is not suitable for production use, instead use `@chainsafe/libp2p-gossipsub`
-
 ## 0. Set up the example
 
 Clone this repo and run `npm install` in the root.
@@ -34,7 +31,7 @@ choice and you are ready to go. No need for extra configuration.
 First, let's update our libp2p configuration with a PubSub implementation.
 
 ```JavaScript
-import { GossipSub } from '@chainsafe/libp2p-gossipsub'
+import { gossipsub } from '@libp2p/gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { tcp } from '@libp2p/tcp'

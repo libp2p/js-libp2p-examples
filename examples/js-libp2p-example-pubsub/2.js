@@ -2,7 +2,7 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { floodsub } from '@libp2p/floodsub'
+import { gossipsub } from '@libp2p/gossipsub'
 import { identify, identifyPush } from '@libp2p/identify'
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p'
@@ -18,7 +18,7 @@ const createNode = async () => {
     streamMuxers: [yamux()],
     connectionEncrypters: [noise()],
     services: {
-      pubsub: floodsub(),
+      pubsub: gossipsub(),
       identify: identify(),
       identifyPush: identifyPush()
     }
