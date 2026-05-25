@@ -1,22 +1,22 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { waitForOutput } from 'test-ipfs-example/node'
+import { matchOutput } from 'test-ipfs-example/node'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export async function test () {
   process.stdout.write('2.js\n')
 
-  try {
-    await waitForOutput('node3 received: car', 'node', [path.join(__dirname, '../2.js')], {
-      cwd: __dirname,
-      timeout: 2000
-    })
+  // run until node3 receives the last valid fruit - this fails if a valid fruit
+  // never propagates node1 -> node2 -> node3
+  const { process: proc, matches } = await matchOutput(/node3 received: orange/, 'node', [path.join(__dirname, '../2.js')], {
+    cwd: __dirname
+  })
+  proc.kill()
 
-    throw new Error('Matched content when should not have')
-  } catch (err) {
-    if (err.message !== 'Timed out' && !err.message.includes('Did not see')) {
-      throw err
-    }
+  // 'car' fails validation, so node2 never re-shares it - it must be absent
+  // from everything printed up to the final valid message
+  if (matches.input.includes('node3 received: car')) {
+    throw new Error("node3 should not have received 'car'")
   }
 }

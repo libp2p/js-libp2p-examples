@@ -2,7 +2,7 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { floodsub } from '@libp2p/floodsub'
+import { gossipsub, TopicValidatorResult } from '@libp2p/gossipsub'
 import { identify, identifyPush } from '@libp2p/identify'
 import { tcp } from '@libp2p/tcp'
 import { createLibp2p } from 'libp2p'
@@ -18,7 +18,7 @@ const createNode = async () => {
     streamMuxers: [yamux()],
     connectionEncrypters: [noise()],
     services: {
-      pubsub: floodsub(),
+      pubsub: gossipsub(),
       identify: identify(),
       identifyPush: identifyPush()
     }
@@ -76,7 +76,9 @@ const validateFruit = (msgTopic, msg) => {
   const fruit = uint8ArrayToString(msg.data)
   const validFruit = ['banana', 'apple', 'orange']
 
-  return validFruit.includes(fruit) ? 'accept' : 'ignore'
+  return validFruit.includes(fruit)
+    ? TopicValidatorResult.Accept
+    : TopicValidatorResult.Ignore
 }
 
 // validate fruit
@@ -84,10 +86,15 @@ node1.services.pubsub.topicValidators.set(topic, validateFruit)
 node2.services.pubsub.topicValidators.set(topic, validateFruit)
 node3.services.pubsub.topicValidators.set(topic, validateFruit)
 
-// node1 publishes "fruits"
+// node1 publishes "fruits", waiting for each to reach node3 before sending the
+// next so we can watch it propagate. 'car' fails validation and is never
+// re-shared, so waitForMessage gives up on it after a short timeout.
 for (const fruit of ['banana', 'apple', 'car', 'orange']) {
   console.log('############## fruit ' + fruit + ' ##############')
+
+  const received = waitForMessage(node3, topic, fruit)
   await node1.services.pubsub.publish(topic, uint8ArrayFromString(fruit))
+  await received
 }
 
 console.log('############## all messages sent ##############')
@@ -95,6 +102,28 @@ console.log('############## all messages sent ##############')
 async function delay (ms) {
   await new Promise((resolve) => {
     setTimeout(() => resolve(), ms)
+  })
+}
+
+// Wait for `node` to receive `data` on `topic`. Fruit that fails validation is
+// never re-shared, so give up after `timeout` ms.
+async function waitForMessage (node, topic, data, timeout = 100) {
+  await new Promise((resolve) => {
+    const timer = setTimeout(done, timeout)
+
+    function done () {
+      clearTimeout(timer)
+      node.services.pubsub.removeEventListener('message', onMessage)
+      resolve()
+    }
+
+    function onMessage (evt) {
+      if (evt.detail.topic === topic && uint8ArrayToString(evt.detail.data) === data) {
+        done()
+      }
+    }
+
+    node.services.pubsub.addEventListener('message', onMessage)
   })
 }
 
