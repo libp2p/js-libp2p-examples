@@ -72,6 +72,22 @@ node3.services.pubsub.subscribe(topic)
 await hasSubscription(node1, node2, topic)
 await hasSubscription(node2, node3, topic)
 
+// Subscriptions propagating tells us the peers know who is interested, but that is
+// not enough to publish yet. gossipsub only forwards a message to the peers in its
+// mesh, and the mesh is built asynchronously, a little after subscriptions. A
+// message published before the mesh is ready is silently dropped: pubsub is
+// best-effort and makes no delivery guarantee. So also wait until the mesh has
+// formed along node1 -> node2 -> node3.
+//
+// NOTE: getMeshPeers and the 'gossipsub:graft' event used below are gossipsub
+// specific, they are not part of the general PubSub interface. They are convenient
+// here to keep the example deterministic, and you are free to use them. A real
+// application, though, is better built against the general PubSub interface and
+// treated as unreliable: republish until you observe delivery, or tolerate missed
+// messages, rather than depending on the mesh being ready.
+await waitForMeshPeer(node1, node2, topic)
+await waitForMeshPeer(node2, node3, topic)
+
 const validateFruit = (msgTopic, msg) => {
   const fruit = uint8ArrayToString(msg.data)
   const validFruit = ['banana', 'apple', 'orange']
@@ -139,4 +155,32 @@ async function hasSubscription (node1, node2, topic) {
     // wait for subscriptions to propagate
     await delay(100)
   }
+}
+
+// Wait for `node` to graft `peer` into its gossipsub mesh for `topic`, i.e. it will
+// now forward messages on that topic to `peer`. Resolves on the gossipsub specific
+// 'gossipsub:graft' event, and also checks getMeshPeers up front in case the graft
+// happened before we started listening.
+async function waitForMeshPeer (node, peer, topic) {
+  const peerId = peer.peerId.toString()
+
+  await new Promise((resolve) => {
+    function done () {
+      node.services.pubsub.removeEventListener('gossipsub:graft', onGraft)
+      resolve()
+    }
+
+    function onGraft (evt) {
+      if (evt.detail.topic === topic && evt.detail.peerId === peerId) {
+        done()
+      }
+    }
+
+    node.services.pubsub.addEventListener('gossipsub:graft', onGraft)
+
+    // the graft may already have happened before we attached the listener
+    if (node.services.pubsub.getMeshPeers(topic).includes(peerId)) {
+      done()
+    }
+  })
 }
