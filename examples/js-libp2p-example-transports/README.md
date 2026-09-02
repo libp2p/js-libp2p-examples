@@ -325,7 +325,7 @@ Licensed under either of
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
-[interface-transport]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport
+[interface-transport]: https://github.com/libp2p/js-libp2p-interfaces/blob/master/packages/interface-transport/
 [interface-transport badge]: https://raw.githubusercontent.com/libp2p/js-libp2p-interfaces/master/packages/libp2p-interfaces/src/transport/img/badge.png
-[interface-transport implementations]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport#modules-that-implement-the-interface
-[interface-transport api]: https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/libp2p-interfaces/src/transport#api
+[interface-transport implementations]: https://github.com/libp2p/js-libp2p-interfaces/blob/master/packages/interface-transport/#modules-that-implement-the-interface
+[interface-transport api]: https://github.com/libp2p/js-libp2p-interfaces/blob/master/packages/interface-transport/#api
