@@ -30,7 +30,7 @@
     "@libp2p/upnp-nat": "^4.0.0",
     "@libp2p/websockets": "^10.0.0",
     "@multiformats/multiaddr-matcher": "^3.0.1",
-    "datastore-level": "^11.0.1",
+    "datastore-level": "^12.0.2",
     "libp2p": "^3.0.0"
   },
   "private": true
