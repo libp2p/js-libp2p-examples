@@ -21,7 +21,7 @@ multistream-select at its
 Let's see *protocol multiplexing* in action! You will need the following modules
 for this example: `libp2p`, `@libp2p/tcp`, `@libp2p/peer-id`, `it-pipe`,
 `it-buffer` and `streaming-iterables`. This example reuses the base left by the
-[Transports](../transports) example. You can see the complete solution at
+[Transports](../js-libp2p-example-transports/) example. You can see the complete solution at
 [1.js](./1.js).
 
 After creating the nodes, we need to tell libp2p which protocols to handle.
